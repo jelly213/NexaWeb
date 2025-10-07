@@ -1,0 +1,15 @@
+{
+  "services": [
+    {
+      "id": 1,
+      "title": "Web Design and Development",
+        "description": "Custom websites tailored to your business needs, optimized for performance and SEO.",
+      "icon": "palette",
+      "features": [
+        "Responsive Design",
+        "UI/UX Focus",
+        "Brand Integration"
+      ]
+    }
+  ]
+}

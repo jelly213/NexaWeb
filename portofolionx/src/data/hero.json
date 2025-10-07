@@ -1,0 +1,21 @@
+{
+  "badge": {
+    "icon": "sparkles",
+    "text": "Web Development for Small Businesses"
+  },
+  "title": {
+    "main": "Build Your Digital",
+    "highlight": "Presence"
+  },
+  "description": "Fast, beautiful, and conversion-focused websites for restaurants, barbershops, clinics, and local entrepreneurs.",
+  "cta": {
+    "primary": {
+      "text": "Get Started",
+      "link": "#contact"
+    },
+    "secondary": {
+      "text": "View Our Work",
+      "link": "#work"
+    }
+  }
+}
