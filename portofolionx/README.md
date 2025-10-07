@@ -32,17 +32,23 @@ npm install
 npm run dev
 
 ```
+
+```
 nexaweb-portfolio/
+│
 ├── src/
-│   ├── assets/           # Images, logos, icônes
-│   ├── components/       # Composants UI réutilisables
-│   ├── sections/         # Sections de page (Hero, About, Work, Contact)
-│   ├── data/             # Fichiers JSON pour projets/services
-│   ├── hooks/            # Hooks personnalisés
+│   ├── assets/           # Images, logos, icons
+│   ├── components/       # Reusable UI components
+│   ├── sections/         # Page sections (Hero, About, Work, Contact)
+│   ├── data/             # JSON files for projects/services
+│   ├── hooks/            # Custom hooks
 │   ├── App.tsx
 │   └── main.tsx
+│
 ├── public/
 │   └── favicon.svg
+│
 ├── index.html
 ├── package.json
 └── tailwind.config.js
+```
