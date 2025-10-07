@@ -1,0 +1,57 @@
+{
+  "heading": {
+    "badge": "About Us",
+    "title": "Building Digital Success",
+    "highlight": "One Website at a Time"
+  },
+  "description": "We're a passionate team of web developers dedicated to helping small businesses thrive in the digital world. From restaurants to clinics, we create websites that don't just look good—they drive real results.",
+  "mission": "Our mission is to make professional web development accessible to every small business, delivering high-quality, conversion-focused websites without the enterprise price tag.",
+  "stats": [
+    {
+      "value": "50+",
+      "label": "Happy Clients",
+      "icon": "users"
+    },
+    {
+      "value": "100+",
+      "label": "Projects Completed",
+      "icon": "briefcase"
+    },
+    {
+      "value": "5.0",
+      "label": "Average Rating",
+      "icon": "star"
+    },
+    {
+      "value": "98%",
+      "label": "Client Retention",
+      "icon": "heart"
+    }
+  ],
+  "values": [
+    {
+      "title": "Quality First",
+      "description": "We never compromise on quality. Every line of code, every design element is crafted with care and attention to detail.",
+      "icon": "award"
+    },
+    {
+      "title": "Client-Focused",
+      "description": "Your success is our success. We work closely with you to understand your goals and deliver solutions that exceed expectations.",
+      "icon": "target"
+    },
+    {
+      "title": "Fast Delivery",
+      "description": "We respect your time. Most projects are delivered within 2-4 weeks without sacrificing quality.",
+      "icon": "zap"
+    },
+    {
+      "title": "Ongoing Support",
+      "description": "We're here for the long haul. Get continuous support, updates, and maintenance to keep your site running smoothly.",
+      "icon": "shield"
+    }
+  ],
+  "team": {
+    "title": "Meet the Team",
+    "description": "A small but mighty team of developers, designers, and strategists passionate about small business success."
+  }
+}

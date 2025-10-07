@@ -1,0 +1,95 @@
+{
+  "heading": {
+    "badge": "Get In Touch",
+    "title": "Let's Build Something",
+    "highlight": "Amazing Together"
+  },
+  "description": "Ready to start your project? Fill out the form below and we'll get back to you within 24 hours.",
+  "contactInfo": [
+    {
+      "icon": "mail",
+      "label": "Email",
+      "value": "contact@nexaweb.com",
+      "link": "mailto:contact@nexaweb.com"
+    },
+    {
+      "icon": "phone",
+      "label": "Phone",
+      "value": "+1 (555) 123-4567",
+      "link": "tel:+15551234567"
+    },
+    {
+      "icon": "map-pin",
+      "label": "Location",
+      "value": "Montreal, QC, Canada",
+      "link": "#"
+    }
+  ],
+  "form": {
+    "fields": [
+      {
+        "name": "name",
+        "label": "Full Name",
+        "type": "text",
+        "placeholder": "John Doe",
+        "required": true
+      },
+      {
+        "name": "email",
+        "label": "Email Address",
+        "type": "email",
+        "placeholder": "john@example.com",
+        "required": true
+      },
+      {
+        "name": "phone",
+        "label": "Phone Number",
+        "type": "tel",
+        "placeholder": "+1 (555) 000-0000",
+        "required": false
+      },
+      {
+        "name": "business",
+        "label": "Business Type",
+        "type": "select",
+        "placeholder": "Select your business type",
+        "required": false,
+        "options": [
+          "Restaurant",
+          "Barbershop/Salon",
+          "Clinic/Healthcare",
+          "Retail Store",
+          "Professional Services",
+          "Other"
+        ]
+      },
+      {
+        "name": "message",
+        "label": "Project Details",
+        "type": "textarea",
+        "placeholder": "Tell us about your project, goals, and timeline...",
+        "required": true
+      }
+    ],
+    "submitButton": "Send Message",
+    "successMessage": "Thank you! We'll get back to you within 24 hours.",
+    "errorMessage": "Something went wrong. Please try again or email us directly."
+  },
+  "features": [
+    {
+      "icon": "clock",
+      "title": "Quick Response",
+      "description": "We respond to all inquiries within 24 hours"
+    },
+    {
+      "icon": "shield",
+      "title": "Free Consultation",
+      "description": "Get expert advice at no cost"
+    },
+    {
+      "icon": "heart",
+      "title": "No Obligation",
+      "description": "Quote first, decide later"
+    }
+  ]
+}

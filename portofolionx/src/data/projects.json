@@ -1,13 +1,35 @@
 {
+  "heading": {
+    "badge": "Our Work",
+    "title": "Recent",
+    "highlight": "Projects"
+  },
+  "description": "Discover the websites we've built for real clients. Each project is crafted with attention to detail, performance, and user experience.",
   "projects": [
     {
       "id": 1,
-      "title": "Bella Vista Restaurant",
-      "category": "Restaurant",
-      "description": "Modern website with online reservation system",
-      "image": "/projects/restaurant.jpg",
-      "tags": ["React", "Node.js", "Stripe"],
-      "link": "https://example.com"
+      "title": "BenMachiche.dev",
+      "category": "Portfolio",
+      "description": "Personal developer portfolio showcasing projects, skills, and professional experience with modern design and smooth animations.",
+      "image": "/benmachiche.png",
+      "tags": ["React", "TypeScript", "Framer Motion", "Responsive"],
+      "link": "https://benmachiche.dev",
+      "featured": true
+    },
+    {
+      "id": 2,
+      "title": "Skinsations.ca",
+      "category": "Beauty & Wellness",
+      "description": "Professional esthetics clinic website with service booking, gallery, and comprehensive skincare information.",
+      "image": "/skinsations.png",
+      "tags": ["Next.js", "Booking System", "SEO", "CMS"],
+      "link": "https://skinsations.ca",
+      "featured": true
     }
-  ]
+  ],
+  "cta": {
+    "title": "Have a Project in Mind?",
+    "description": "Let's bring your vision to life with a website that truly represents your business.",
+    "buttonText": "Start Your Project"
+  }
 }

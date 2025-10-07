@@ -44,7 +44,7 @@ export default function Navbar() {
                 <div className="flex items-center justify-between h-16 lg:h-20">
                     {/* Logo */}
                     <motion.a
-                        href="#hero"
+                        href="#Hero"
                         onClick={(e) => {
                             e.preventDefault();
                             handleNavClick('#hero');

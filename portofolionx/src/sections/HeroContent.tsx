@@ -72,15 +72,7 @@ export default function HeroContent() {
                 transition={{ duration: 0.6, delay: 0.5 }}
             >
                 <div className="flex items-center gap-2">
-                    <div className="flex -space-x-2">
-                        {[1, 2, 3].map((i) => (
-                            <div
-                                key={i}
-                                className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 border-2 border-background"
-                            />
-                        ))}
-                    </div>
-                    <span className="font-medium">50+ Happy Clients</span>
+                    <span className="font-medium">Happy Clients are Our Priority</span>
                 </div>
                 <div className="h-4 w-px bg-border" />
                 <div className="flex items-center gap-1">

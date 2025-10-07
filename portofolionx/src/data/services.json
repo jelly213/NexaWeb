@@ -1,15 +1,71 @@
 {
+  "heading": {
+    "badge": "Our Services",
+    "title": "Everything You Need to",
+    "highlight": "Succeed Online"
+  },
+  "description": "From design to deployment and beyond, we provide comprehensive web solutions tailored to small businesses.",
   "services": [
     {
       "id": 1,
-      "title": "Web Design and Development",
-        "description": "Custom websites tailored to your business needs, optimized for performance and SEO.",
+      "title": "Web Design & Development",
+      "description": "Custom websites tailored to your business needs, optimized for performance and SEO.",
       "icon": "palette",
       "features": [
         "Responsive Design",
-        "UI/UX Focus",
-        "Brand Integration"
-      ]
+        "Modern UI/UX",
+        "Brand Integration",
+        "Fast Loading Times",
+        "Mobile-First Approach"
+      ],
+      "popular": true
+    },
+    {
+      "id": 2,
+      "title": "Shopify E-Commerce Solutions",
+      "description": "Complete online store setup with payment integration, inventory management, and analytics.",
+      "icon": "shopping-cart",
+      "features": [
+        "Payment Gateway Integration",
+        "Product Management",
+        "Shopping Cart",
+        "Order Tracking",
+        "Customer Accounts"
+      ],
+      "popular": false
+    },
+    {
+      "id": 3,
+      "title": "SEO Optimization",
+      "description": "Get found on Google with our comprehensive SEO strategies and local search optimization.",
+      "icon": "search",
+      "features": [
+        "Keyword Research",
+        "On-Page SEO",
+        "Local SEO",
+        "Technical SEO",
+        "Performance Tracking"
+      ],
+      "popular": false
+    },
+    {
+      "id": 4,
+      "title": "Website Maintenance",
+      "description": "Keep your site secure, updated, and running smoothly with our ongoing maintenance plans.",
+      "icon": "wrench",
+      "features": [
+        "Security Updates",
+        "Content Updates",
+        "Performance Monitoring",
+        "Backup & Recovery",
+        "24/7 Support"
+      ],
+      "popular": false
     }
-  ]
+  ],
+  "cta": {
+    "title": "Ready to Get Started?",
+    "description": "Let's discuss your project and create a custom solution for your business.",
+    "buttonText": "Schedule a Free Consultation"
+  }
 }
