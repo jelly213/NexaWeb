@@ -31,7 +31,7 @@ export default function HeroImage() {
                     style={{ y }}
                 >
                     <img
-                        src="/src/assets/hero-illustration.png"
+                        src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=600&fit=crop"
                         alt="NexaWeb - Professional Web Development"
                         className="w-full h-full object-contain drop-shadow-2xl"
                     />
