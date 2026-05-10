@@ -1,144 +1,153 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { Button } from './ui/button';
-
-const navLinks = [
-    { name: 'Home', href: '#hero' },
-    { name: 'About', href: '#about' },
-    { name: 'Services', href: '#services' },
-    { name: 'Work', href: '#work' },
-    { name: 'Contact', href: '#contact' },
-];
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Navbar() {
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { language, toggleLanguage, t } = useLanguage();
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
-    const handleNavClick = (href: string) => {
-        setIsMobileMenuOpen(false);
-        const element = document.querySelector(href);
-        element?.scrollIntoView({ behavior: 'smooth' });
-    };
+  const links = [
+    { label: t('nav.howItWorks'), href: '#how-it-works' },
+    { label: t('nav.stack'), href: '#tech-stack' },
+  ];
 
-    return (
-        <motion.nav
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.3 }}
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                isScrolled
-                    ? 'bg-background/80 backdrop-blur-lg border-b shadow-sm'
-                    : 'bg-transparent'
-            }`}
-        >
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16 lg:h-20">
-                    {/* Logo */}
-                    <motion.a
-                        href="#Hero"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            handleNavClick('#hero');
-                        }}
-                        className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        NexaWeb
-                    </motion.a>
+  const handleNavClick = (href: string) => {
+    setMobileOpen(false);
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center gap-8">
-                        {navLinks.map((link) => (
-                            <a
-                                key={link.name}
-                                href={link.href}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    handleNavClick(link.href);
-                                }}
-                                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
-                            >
-                                {link.name}
-                                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
-                            </a>
-                        ))}
-                    </div>
+  return (
+    <motion.header
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-slate-950/95 backdrop-blur-md border-b border-slate-800/60 shadow-lg shadow-black/20'
+          : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 lg:h-20">
 
-                    {/* CTA Button - Desktop */}
-                    <div className="hidden md:block">
-                        <Button
-                            size="sm"
-                            onClick={() => handleNavClick('#contact')}
-                            className="shadow-md hover:shadow-lg transition-all"
-                        >
-                            Get Started
-                        </Button>
-                    </div>
-
-                    {/* Mobile Menu Button */}
-                    <button
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="md:hidden p-2 text-foreground hover:bg-accent rounded-md transition-colors"
-                        aria-label="Toggle menu"
-                    >
-                        {isMobileMenuOpen ? (
-                            <X className="w-6 h-6" />
-                        ) : (
-                            <Menu className="w-6 h-6" />
-                        )}
-                    </button>
-                </div>
+          {/* Logo */}
+          <a
+            href="#"
+            onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            className="flex items-center gap-2.5 group"
+          >
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/30">
+              <span className="text-white font-extrabold text-sm">N</span>
             </div>
+            <span className="text-white font-bold text-lg tracking-tight">
+              NexaWeb<span className="text-blue-400">Dev</span>
+            </span>
+          </a>
 
-            {/* Mobile Menu */}
-            <AnimatePresence>
-                {isMobileMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="md:hidden border-t bg-background/95 backdrop-blur-lg"
-                    >
-                        <div className="container mx-auto px-4 py-4 space-y-3">
-                            {navLinks.map((link, index) => (
-                                <motion.a
-                                    key={link.name}
-                                    href={link.href}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        handleNavClick(link.href);
-                                    }}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ duration: 0.2, delay: index * 0.05 }}
-                                    className="block px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
-                                >
-                                    {link.name}
-                                </motion.a>
-                            ))}
-                            <div className="pt-2">
-                                <Button
-                                    className="w-full"
-                                    onClick={() => handleNavClick('#contact')}
-                                >
-                                    Get Started
-                                </Button>
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </motion.nav>
-    );
+          {/* Desktop Nav Links */}
+          <nav className="hidden lg:flex items-center gap-8">
+            {links.map(link => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={e => { e.preventDefault(); handleNavClick(link.href); }}
+                className="text-slate-400 hover:text-white transition-colors text-sm font-medium"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* Right: Language Toggle + CTA */}
+          <div className="flex items-center gap-3">
+
+            {/* FR / EN Pill Toggle */}
+            <button
+              onClick={toggleLanguage}
+              aria-label="Toggle language"
+              className="flex items-center bg-slate-800/80 border border-slate-700/60 rounded-full p-0.5 text-xs font-bold tracking-wide"
+            >
+              <span
+                className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
+                  language === 'EN'
+                    ? 'bg-blue-500 text-white shadow-md shadow-blue-500/30'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                EN
+              </span>
+              <span
+                className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
+                  language === 'FR'
+                    ? 'bg-blue-500 text-white shadow-md shadow-blue-500/30'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                FR
+              </span>
+            </button>
+
+            {/* Desktop CTA */}
+            <a
+              href="#final-cta"
+              onClick={e => { e.preventDefault(); handleNavClick('#final-cta'); }}
+              className="hidden lg:inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-400 text-white text-sm font-semibold rounded-lg transition-colors shadow-lg shadow-blue-500/20"
+            >
+              {t('nav.cta')}
+            </a>
+
+            {/* Mobile Hamburger */}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
+              aria-label="Toggle mobile menu"
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden bg-slate-950/98 backdrop-blur-md border-b border-slate-800"
+          >
+            <div className="px-4 py-5 space-y-2">
+              {links.map(link => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={e => { e.preventDefault(); handleNavClick(link.href); }}
+                  className="block px-3 py-3 text-slate-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-colors text-sm font-medium"
+                >
+                  {link.label}
+                </a>
+              ))}
+              <a
+                href="#final-cta"
+                onClick={e => { e.preventDefault(); handleNavClick('#final-cta'); }}
+                className="block w-full text-center px-4 py-3 bg-blue-500 hover:bg-blue-400 text-white text-sm font-semibold rounded-lg transition-colors mt-2"
+              >
+                {t('nav.cta')}
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
+  );
 }

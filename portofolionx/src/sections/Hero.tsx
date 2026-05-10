@@ -2,40 +2,32 @@ import HeroContent from './HeroContent';
 import HeroImage from './HeroImage';
 
 export default function Hero() {
-    return (
-        <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-accent/10">
-            {/* Background decoration */}
-            <div className="absolute inset-0 -z-10">
-                <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" />
+  return (
+    <section
+      id="hero"
+      className="relative min-h-screen flex items-center overflow-hidden bg-slate-950"
+    >
+      {/* Subtle grid pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(148,163,184,1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(148,163,184,1) 1px, transparent 1px)`,
+          backgroundSize: '64px 64px',
+        }}
+      />
 
-                {/* Grid pattern overlay */}
-                <div
-                    className="absolute inset-0 opacity-[0.02]"
-                    style={{
-                        backgroundImage: `linear-gradient(to right, hsl(var(--foreground)) 1px, transparent 1px),
-                             linear-gradient(to bottom, hsl(var(--foreground)) 1px, transparent 1px)`,
-                        backgroundSize: '4rem 4rem'
-                    }}
-                />
-            </div>
+      {/* Ambient glow blobs */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-blue-700/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-cyan-700/6 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-indigo-700/5 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="container mx-auto px-4 py-20 sm:px-6 lg:px-8">
-                <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                    {/* Content - Left side */}
-                    <HeroContent />
-
-                    {/* Image/Visual - Right side */}
-                    <HeroImage />
-                </div>
-            </div>
-
-            {/* Scroll indicator */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-                <div className="w-6 h-10 border-2 border-muted-foreground/30 rounded-full flex items-start justify-center p-2">
-                    <div className="w-1.5 h-3 bg-muted-foreground/30 rounded-full" />
-                </div>
-            </div>
-        </section>
-    );
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 lg:pt-36 lg:pb-24">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <HeroContent />
+          <HeroImage />
+        </div>
+      </div>
+    </section>
+  );
 }
