@@ -55,6 +55,10 @@ export default function TechStack() {
       title: t('stack.portfolio3.title'),
       category: t('stack.portfolio3.category'),
     },
+     {
+      title: t('stack.portfolio4.title'),
+      category: t('stack.portfolio4.category'),
+    },
   ];
 
   return (
@@ -123,7 +127,7 @@ export default function TechStack() {
             <p className="text-slate-500 text-sm">{t('stack.portfolio.sub')}</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {portfolioItems.map((item, i) => (
               <motion.div
                 key={i}

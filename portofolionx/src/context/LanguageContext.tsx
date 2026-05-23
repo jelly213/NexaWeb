@@ -84,6 +84,8 @@ const translations = {
     'stack.portfolio2.category': 'HVAC — WordPress',
     'stack.portfolio3.title': 'Premier Remodeling Group',
     'stack.portfolio3.category': 'Remodeling — Webflow',
+    'stack.portfolio4.title': 'Professional esthetics clinic',
+    'stack.portfolio4.category': 'Ecommerce — Shopify',
 
     // FinalCTA
     'cta.badge': 'Zero Risk to Start',
@@ -187,6 +189,8 @@ const translations = {
     'stack.portfolio2.category': 'HVAC — WordPress',
     'stack.portfolio3.title': 'Groupe de rénovation Premier',
     'stack.portfolio3.category': 'Rénovation — Webflow',
+    'stack.portfolio4.title': 'Clinique d’esthétique professionnelle',
+    'stack.portfolio4.category': 'E-commerce — Shopify',
 
     // FinalCTA
     'cta.badge': 'Zéro risque pour commencer',
