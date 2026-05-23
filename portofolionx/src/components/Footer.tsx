@@ -1,4 +1,5 @@
 import { useLanguage } from '../context/LanguageContext';
+import type { MouseEvent } from 'react'
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -9,7 +10,7 @@ export default function Footer() {
     { label: t('footer.nav.partner'), href: '#final-cta' },
   ];
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
   };
