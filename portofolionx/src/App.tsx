@@ -1,24 +1,26 @@
-import Navbar from "./components/Navbar";
-import Hero from "./sections/Hero";
-import Footer from "./components/Footer";
-import About from "./sections/About.tsx";
-import Services from "./sections/Services.tsx";
-import Work from "./sections/Work.tsx";
-import Contact from "./sections/Contact.tsx";
+import { LanguageProvider } from './context/LanguageContext';
+import Navbar from './components/Navbar';
+import Hero from './sections/Hero';
+import Problem from './sections/Problem';
+import HowItWorks from './sections/HowItWorks';
+import TechStack from './sections/TechStack';
+import FinalCTA from './sections/FinalCTA';
+import Footer from './components/Footer';
 
 function App() {
-    return (
-        <>
-            <Navbar />
-            <Hero />
-            {/* Les autres sections viendront ici */}
-            <About />
-            <Services />
-            <Work />
-            <Contact />
-            <Footer />
-        </>
-    )
+  return (
+    <LanguageProvider>
+      <div className="min-h-screen bg-slate-950 text-white">
+        <Navbar />
+        <Hero />
+        <Problem />
+        <HowItWorks />
+        <TechStack />
+        <FinalCTA />
+        <Footer />
+      </div>
+    </LanguageProvider>
+  );
 }
 
-export default App
+export default App;
