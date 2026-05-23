@@ -9,9 +9,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-    },
-  },
-  server: {
-    host: "0.0.0.0", // or '0.0.0.0' to expose to all network interfaces
+    }
   }
 })
