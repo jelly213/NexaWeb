@@ -2,8 +2,15 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
+const CALENDLY_URL = 'https://calendly.com/contact-nexawebdev/partner-discovery-call';
+
 export default function FinalCTA() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  const openCalendly = () => {
+    const locale = language === 'FR' ? 'fr' : 'en';
+    (window as any).Calendly?.initPopupWidget({ url: `${CALENDLY_URL}?locale=${locale}` });
+  };
 
   const riskItems = [
     t('cta.risk1'),
@@ -11,10 +18,6 @@ export default function FinalCTA() {
     t('cta.risk3'),
     t('cta.risk4'),
   ];
-
-  const email = t('footer.contact');
-  const subject = encodeURIComponent('Partner Discovery Call Request');
-  const mailto = `mailto:${email}?subject=${subject}`;
 
   return (
     <section id="final-cta" className="py-28 bg-slate-950 relative overflow-hidden">
@@ -57,15 +60,15 @@ export default function FinalCTA() {
           </p>
 
           {/* CTA Button */}
-          <motion.a
-            href={mailto}
+          <motion.button
+            onClick={openCalendly}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-xl shadow-2xl shadow-blue-500/25 text-base sm:text-lg hover:shadow-blue-500/40 transition-shadow"
           >
             {t('cta.btn')}
             <ArrowRight size={20} />
-          </motion.a>
+          </motion.button>
 
           {/* Risk-free items */}
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 pt-2">

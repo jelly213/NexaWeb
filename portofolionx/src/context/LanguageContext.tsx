@@ -60,32 +60,8 @@ const translations = {
     'stack.titleAccent': 'That Actually Perform',
     'stack.sub':
       "We don't touch page builders. Every site we build is optimized from the ground up for speed, SEO, and conversion.",
-    'stack.platform1.name': 'React / Next.js',
-    'stack.platform1.desc':
-      'Maximum performance. 90+ PageSpeed guaranteed. Ideal for local service sites, landing pages, and custom quote calculators.',
-    'stack.platform1.badge': 'Fastest Option',
-    'stack.platform2.name': 'Shopify',
-    'stack.platform2.desc':
-      'Flawless e-commerce with native bilingual product catalogs. Ideal for agencies serving retail and D2C clients.',
-    'stack.platform2.badge': 'E-Commerce',
-    'stack.platform3.name': 'WordPress',
-    'stack.platform3.desc':
-      'High-trust corporate sites with clean local SEO architecture. Built to rank. Built to convert.',
-    'stack.platform3.badge': 'SEO Powerhouse',
-    'stack.platform4.name': 'Webflow',
-    'stack.platform4.desc':
-      'Designer-grade visuals with zero compromises on speed. Best for premium service businesses and rebrands.',
-    'stack.platform4.badge': 'Premium Design',
     'stack.portfolio.title': 'Recent White-Label Deliveries',
     'stack.portfolio.sub': 'Sold by agencies. Built by us. Your clients never know.',
-    'stack.portfolio1.title': 'Emergency Plumbing Co.',
-    'stack.portfolio1.category': 'Home Services — React/Next.js',
-    'stack.portfolio2.title': 'Elite HVAC Solutions',
-    'stack.portfolio2.category': 'HVAC — WordPress',
-    'stack.portfolio3.title': 'Premier Remodeling Group',
-    'stack.portfolio3.category': 'Remodeling — Webflow',
-    'stack.portfolio4.title': 'Professional esthetics clinic',
-    'stack.portfolio4.category': 'Ecommerce — Shopify',
 
     // FinalCTA
     'cta.badge': 'Zero Risk to Start',
@@ -165,32 +141,8 @@ const translations = {
     'stack.titleAccent': 'qui performent vraiment',
     'stack.sub':
       "On ne touche pas aux constructeurs de pages. Chaque site qu'on construit est optimisé de zéro pour la vitesse, le SEO et la conversion.",
-    'stack.platform1.name': 'React / Next.js',
-    'stack.platform1.desc':
-      "Performance maximale. 90+ PageSpeed garanti. Idéal pour les sites de services locaux, les pages d'atterrissage et les calculateurs de devis personnalisés.",
-    'stack.platform1.badge': 'Option la plus rapide',
-    'stack.platform2.name': 'Shopify',
-    'stack.platform2.desc':
-      'Commerce en ligne impeccable avec des catalogues bilingues natifs. Idéal pour les agences servant des clients en retail et D2C.',
-    'stack.platform2.badge': 'E-Commerce',
-    'stack.platform3.name': 'WordPress',
-    'stack.platform3.desc':
-      'Sites corporatifs de haute confiance avec une architecture SEO local propre. Conçu pour classer. Conçu pour convertir.',
-    'stack.platform3.badge': 'Puissance SEO',
-    'stack.platform4.name': 'Webflow',
-    'stack.platform4.desc':
-      'Visuels de qualité design sans compromis sur la vitesse. Idéal pour les entreprises de services premium et les refontes de marque.',
-    'stack.platform4.badge': 'Design premium',
     'stack.portfolio.title': 'Livraisons récentes en marque blanche',
     'stack.portfolio.sub': 'Vendus par des agences. Construits par nous. Vos clients ne sauront jamais.',
-    'stack.portfolio1.title': "Services de plomberie d'urgence",
-    'stack.portfolio1.category': 'Services à domicile — React/Next.js',
-    'stack.portfolio2.title': 'Solutions HVAC Élite',
-    'stack.portfolio2.category': 'HVAC — WordPress',
-    'stack.portfolio3.title': 'Groupe de rénovation Premier',
-    'stack.portfolio3.category': 'Rénovation — Webflow',
-    'stack.portfolio4.title': 'Clinique d’esthétique professionnelle',
-    'stack.portfolio4.category': 'E-commerce — Shopify',
 
     // FinalCTA
     'cta.badge': 'Zéro risque pour commencer',
@@ -251,12 +203,76 @@ const problemRightItems: Record<Language, string[]> = {
   ],
 };
 
+const platformItems: Record<Language, { name: string; desc: string; badge: string }[]> = {
+  EN: [
+    {
+      name: 'React / Next.js',
+      desc: 'Maximum performance. 90+ PageSpeed guaranteed. Ideal for local service sites, landing pages, and custom quote calculators.',
+      badge: 'Fastest Option',
+    },
+    {
+      name: 'Shopify',
+      desc: 'Flawless e-commerce with native bilingual product catalogs. Ideal for agencies serving retail and D2C clients.',
+      badge: 'E-Commerce',
+    },
+    {
+      name: 'WordPress',
+      desc: 'High-trust corporate sites with clean local SEO architecture. Built to rank. Built to convert.',
+      badge: 'SEO Powerhouse',
+    },
+    {
+      name: 'Webflow',
+      desc: 'Designer-grade visuals with zero compromises on speed. Best for premium service businesses and rebrands.',
+      badge: 'Premium Design',
+    },
+  ],
+  FR: [
+    {
+      name: 'React / Next.js',
+      desc: "Performance maximale. 90+ PageSpeed garanti. Idéal pour les sites de services locaux, les pages d'atterrissage et les calculateurs de devis personnalisés.",
+      badge: 'Option la plus rapide',
+    },
+    {
+      name: 'Shopify',
+      desc: 'Commerce en ligne impeccable avec des catalogues bilingues natifs. Idéal pour les agences servant des clients en retail et D2C.',
+      badge: 'E-Commerce',
+    },
+    {
+      name: 'WordPress',
+      desc: 'Sites corporatifs de haute confiance avec une architecture SEO local propre. Conçu pour classer. Conçu pour convertir.',
+      badge: 'Puissance SEO',
+    },
+    {
+      name: 'Webflow',
+      desc: 'Visuels de qualité design sans compromis sur la vitesse. Idéal pour les entreprises de services premium et les refontes de marque.',
+      badge: 'Design premium',
+    },
+  ],
+};
+
+const portfolioItems: Record<Language, { title: string; category: string; image: string; link: string }[]> = {
+  EN: [
+    { title: 'Emergency Plumbing Co.', category: 'Home Services — React/Next.js', image: '' , link: '' },
+    { title: 'Elite HVAC Solutions', category: 'HVAC — WordPress', image: '', link: '' },
+    { title: 'Premier Remodeling Group', category: 'Remodeling — Webflow', image: '', link: '' },
+    { title: 'Professional Esthetics Clinic', category: 'Ecommerce — Shopify', image: '/src/assets/professional-esthetics.jpg', link: 'https://skinsations.ca' },
+  ],
+  FR: [
+    { title: "Services de plomberie d'urgence", category: 'Services à domicile — React/Next.js', image: '', link: '' },
+    { title: 'Solutions HVAC Élite', category: 'HVAC — WordPress', image: '', link: '' },
+    { title: 'Groupe de rénovation Premier', category: 'Rénovation — Webflow', image: '', link: '' },
+    { title: "Clinique d'esthétique professionnelle", category: 'E-commerce — Shopify', image: '/src/assets/professional-esthetics.jpg', link: 'https://skinsations.ca' },
+  ],
+};
+
 interface LanguageContextType {
   language: Language;
   toggleLanguage: () => void;
   t: (key: StringKey) => string;
   tProblemLeft: () => string[];
   tProblemRight: () => string[];
+  tPlatformItems: () => { name: string; desc: string; badge: string }[];
+  tPortfolioItems: () => { title: string; category: string; image: string; link: string }[];
 }
 
 const LanguageContext = createContext<LanguageContextType | null>(null);
@@ -270,9 +286,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const tProblemLeft = () => problemLeftItems[language];
   const tProblemRight = () => problemRightItems[language];
+  const tPlatformItems = () => platformItems[language];
+  const tPortfolioItems = () => portfolioItems[language];
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage, t, tProblemLeft, tProblemRight }}>
+    <LanguageContext.Provider value={{ language, toggleLanguage, t, tProblemLeft, tProblemRight, tPlatformItems, tPortfolioItems }}>
       {children}
     </LanguageContext.Provider>
   );
