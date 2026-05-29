@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Code2, ShoppingCart, Globe, Layers, ImageIcon } from 'lucide-react';
+import { Code2, ShoppingCart, Globe, Layers, ImageIcon, Eye } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 const platformIcons = [Code2, ShoppingCart, Globe, Layers];
@@ -17,49 +17,10 @@ const platformShadows = [
 ];
 
 export default function TechStack() {
-  const { t } = useLanguage();
+  const { t, tPlatformItems, tPortfolioItems } = useLanguage();
 
-  const platforms = [
-    {
-      name: t('stack.platform1.name'),
-      desc: t('stack.platform1.desc'),
-      badge: t('stack.platform1.badge'),
-    },
-    {
-      name: t('stack.platform2.name'),
-      desc: t('stack.platform2.desc'),
-      badge: t('stack.platform2.badge'),
-    },
-    {
-      name: t('stack.platform3.name'),
-      desc: t('stack.platform3.desc'),
-      badge: t('stack.platform3.badge'),
-    },
-    {
-      name: t('stack.platform4.name'),
-      desc: t('stack.platform4.desc'),
-      badge: t('stack.platform4.badge'),
-    },
-  ];
-
-  const portfolioItems = [
-    {
-      title: t('stack.portfolio1.title'),
-      category: t('stack.portfolio1.category'),
-    },
-    {
-      title: t('stack.portfolio2.title'),
-      category: t('stack.portfolio2.category'),
-    },
-    {
-      title: t('stack.portfolio3.title'),
-      category: t('stack.portfolio3.category'),
-    },
-     {
-      title: t('stack.portfolio4.title'),
-      category: t('stack.portfolio4.category'),
-    },
-  ];
+  const platforms = tPlatformItems();
+  const portfolioItems = tPortfolioItems();
 
   return (
     <section id="tech-stack" className="py-24 bg-[#070D1A]">
@@ -137,18 +98,42 @@ export default function TechStack() {
                 transition={{ delay: i * 0.1 }}
                 className="group bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500/25 transition-colors"
               >
-                {/* Image Placeholder */}
-                <div className="relative aspect-video bg-gradient-to-br from-slate-800 to-slate-900 flex flex-col items-center justify-center gap-2">
+                {/* Image / Placeholder */}
+                <div className="relative aspect-video bg-gradient-to-br from-slate-800 to-slate-900 flex flex-col items-center justify-center gap-2 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/4 to-cyan-500/4" />
-                  <ImageIcon size={28} className="text-slate-600 relative z-10" />
-                  <span className="text-slate-600 text-xs font-medium relative z-10">Mockup Coming Soon</span>
-                  <div className="absolute top-3 right-3 w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+
+                  {item.image ? (
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="absolute inset-0 object-cover w-full h-full"
+                    />
+                  ) : (
+                    <>
+                      <ImageIcon size={28} className="text-slate-600 relative z-10" />
+                      <span className="text-slate-600 text-xs font-medium relative z-10">Mockup Coming Soon</span>
+                    </>
+                  )}
+
+                  {item.link && (
+                    <a
+                      href={item.link.startsWith('http') ? item.link : `https://${item.link}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute inset-0 z-20 flex items-center justify-center bg-black/0 group-hover:bg-black/45 transition-colors"
+                    >
+                      <Eye size={22} className="text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" />
+                    </a>
+                  )}
+
+                  <div className="absolute top-3 right-3 w-2 h-2 bg-emerald-400 rounded-full animate-pulse z-30" />
                 </div>
 
                 {/* Card Body */}
                 <div className="p-5">
                   <p className="text-xs text-blue-400 font-medium mb-1">{item.category}</p>
                   <h4 className="text-white font-semibold text-sm">{item.title}</h4>
+                  
                 </div>
               </motion.div>
             ))}

@@ -44,11 +44,11 @@ export default function Navbar() {
             onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             className="flex items-center gap-2.5 group"
           >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/30">
-              <span className="text-white font-extrabold text-sm">N</span>
+            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/30">
+             <img src="/src/assets/logo2.png" alt="NexaWeb Logo" className='rounded'/>
             </div>
             <span className="text-white font-bold text-lg tracking-tight">
-              NexaWeb<span className="text-blue-400">Dev</span>
+              NexaWeb<span className="text-blue-400">.Dev</span>
             </span>
           </a>
 
