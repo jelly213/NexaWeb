@@ -257,14 +257,14 @@ const platformItems: Record<Language, { name: string; desc: string; badge: strin
 const portfolioItems: Record<Language, { title: string; category: string; image: string; link: string }[]> = {
   EN: [
     { title: 'Emergency Plumbing Co.', category: 'Home Services — React/Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/' },
-    { title: 'Marchand & Associés', category: 'Law Firm — Custom Code', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/' },
-    { title: 'Prestige Rénovation', category: 'Kitchen & Bath — Custom Code', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/' },
+    { title: 'Marchand & Associés', category: 'Law Firm — WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/' },
+    { title: 'Prestige Rénovation', category: 'Kitchen & Bath — Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/' },
     { title: 'Professional Esthetics Clinic', category: 'Ecommerce — Shopify', image: estheticsImg, link: 'https://skinsations.ca' },
   ],
   FR: [
     { title: "Services de plomberie d'urgence", category: 'Services à domicile — React/Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/' },
-    { title: 'Marchand & Associés', category: 'Cabinet juridique — Code personnalisé', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/' },
-    { title: 'Prestige Rénovation', category: 'Cuisine & Salle de bain — Code personnalisé', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/' },
+    { title: 'Marchand & Associés', category: 'Cabinet juridique — WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/' },
+    { title: 'Prestige Rénovation', category: 'Cuisine & Salle de bain — Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/' },
     { title: "Clinique d'esthétique professionnelle", category: 'E-commerce — Shopify', image: estheticsImg, link: 'https://skinsations.ca' },
   ],
 };
