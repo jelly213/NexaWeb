@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import logo from '../assets/logo2.png';
+import logo from '../assets/logo.svg';
 
 export default function Navbar() {
   const { language, toggleLanguage, t } = useLanguage();
@@ -46,7 +46,7 @@ export default function Navbar() {
             className="flex items-center gap-2.5 group"
           >
             <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/30">
-             <img src={logo} alt="NexaWeb Logo" className='rounded'/>
+             <img src={logo} alt="NexaWeb Logo" className='rounded' width="48" height="48" />
             </div>
             <span className="text-white font-bold text-lg tracking-tight">
               NexaWeb<span className="text-blue-400">.Dev</span>
