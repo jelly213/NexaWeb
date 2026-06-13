@@ -107,6 +107,8 @@ export default function TechStack() {
                       src={item.image}
                       alt={item.title}
                       className="absolute inset-0 object-cover w-full h-full"
+                      loading="lazy"
+                      decoding="async"
                     />
                   ) : (
                     <>

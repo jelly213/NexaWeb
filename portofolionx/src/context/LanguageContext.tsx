@@ -18,10 +18,10 @@ const translations = {
     'hero.headline1': 'Scale Your Agency',
     'hero.headline2': 'Without Touching a Line of Code.',
     'hero.sub':
-      'We are your invisible backend dev team. We white-label blazing-fast, natively bilingual (FR/EN) service websites delivered in 48 hours. You close the deal. We build it. You pocket the margin.',
+      'We are the dev team your clients never meet. Drop us a brief, get a custom-coded bilingual (FR/EN) website in 48 hours, and invoice your client at your own rate.',
     'hero.cta1': 'Become a Partner',
     'hero.cta2': 'See How It Works',
-    'hero.proof': 'Trusted by digital agencies across Canada & the US',
+    'hero.proof': 'Used by digital agencies across Canada and the US',
     'hero.stat1.value': '48h',
     'hero.stat1.label': 'Turnaround',
     'hero.stat2.value': '$1K',
@@ -32,11 +32,11 @@ const translations = {
     'hero.stat4.label': 'Native',
 
     // Problem
-    'problem.badge': 'The Agency Dilemma',
-    'problem.title': 'Your Clients Need Lightning-Fast Websites.',
-    'problem.titleAccent': "Your Team Isn't Built to Deliver Them.",
-    'problem.left.title': 'The Headaches Killing Your Margins',
-    'problem.right.title': 'The NexaWebDev Advantage',
+    'problem.badge': 'The Fulfillment Problem',
+    'problem.title': 'Your Clients Need Fast Websites.',
+    'problem.titleAccent': "Your Team Isn't Set Up to Deliver Them.",
+    'problem.left.title': "What's Killing Your Margins",
+    'problem.right.title': 'How NexaWebDev Fixes It',
 
     // HowItWorks
     'hiw.badge': 'The White-Label Partnership',
@@ -45,17 +45,17 @@ const translations = {
     'hiw.step1.num': '01',
     'hiw.step1.title': 'You Close the Deal',
     'hiw.step1.desc':
-      'Sell the website to your client for $2,500–$5,000+. You handle the relationship. Your brand is on the contract. NexaWebDev never appears in the picture.',
+      'Sell the website to your client at $2,500-$5,000+. You own the relationship. Your brand is on the contract. NexaWebDev never comes up.',
     'hiw.step2.num': '02',
     'hiw.step2.title': 'Send Us the Brief',
     'hiw.step2.desc':
-      "Share the logo, brand colors, and basic copy via a simple form. 15 minutes of your time — maximum. We ask the right questions so you don't have to.",
+      "Share the logo, colors, and copy through a short form. 15 minutes, tops. We ask the right questions so you don't have to chase the client for specs.",
     'hiw.step3.num': '03',
     'hiw.step3.title': 'We Deliver in 48 Hours',
     'hiw.step3.desc':
-      'Pay our flat fulfillment fee starting at $1,000. We hand you a live, blazing-fast, fully bilingual website. You deliver it to your client and pocket the difference.',
+      'Pay our flat fee starting at $1,000. We hand you a live, bilingual site that scores 90+ on PageSpeed. You deliver it to your client and keep the difference.',
     'hiw.margin.label': 'Your average margin per project',
-    'hiw.margin.value': '$1,500 – $4,000+',
+    'hiw.margin.value': '$1,500-$4,000+',
     'hiw.margin.note': 'Without writing a single line of code.',
 
     // TechStack
@@ -63,7 +63,7 @@ const translations = {
     'stack.title': 'Built on the Platforms',
     'stack.titleAccent': 'That Actually Perform',
     'stack.sub':
-      "We don't touch page builders. Every site we build is optimized from the ground up for speed, SEO, and conversion.",
+      "We skip the page builders. Every site is custom-coded for speed and SEO.",
     'stack.portfolio.title': 'Recent White-Label Deliveries',
     'stack.portfolio.sub': 'Sold by agencies. Built by us. Your clients never know.',
 
@@ -72,7 +72,7 @@ const translations = {
     'cta.title': 'You Sell One Site This Week.',
     'cta.titleAccent': "We'll Build It.",
     'cta.sub':
-      'No retainers. No contracts. No ongoing commitment. Pay only when you have a closed deal. Our first delivery will speak for itself — and your client will never know we existed.',
+      "No retainers, no contracts. Pay when you have a signed deal. The first delivery will prove the model, and your client will never know we were involved.",
     'cta.btn': 'Book Your Free Discovery Call',
     'cta.risk1': 'No monthly fees or retainers',
     'cta.risk2': 'No exclusivity agreements',
@@ -99,10 +99,10 @@ const translations = {
     'hero.headline1': 'Développez votre agence',
     'hero.headline2': 'sans écrire une seule ligne de code.',
     'hero.sub':
-      "Nous sommes votre équipe de développement invisible. On crée des sites ultra-rapides, nativement bilingues (FR/EN) livrés en 48h. Vous concluez la vente. On construit. Vous gardez la marge.",
+      "On est l'équipe de dev que vos clients ne rencontreront jamais. Envoyez-nous un brief, recevez un site bilingue (FR/EN) codé sur mesure en 48h, et facturez votre client à votre propre tarif.",
     'hero.cta1': 'Devenir partenaire',
     'hero.cta2': 'Comment ça marche',
-    'hero.proof': 'Approuvé par des agences numériques au Canada et aux États-Unis',
+    'hero.proof': 'Utilisé par des agences numériques au Canada et aux États-Unis',
     'hero.stat1.value': '48h',
     'hero.stat1.label': 'Livraison',
     'hero.stat2.value': '1 000$',
@@ -113,11 +113,11 @@ const translations = {
     'hero.stat4.label': 'Natif',
 
     // Problem
-    'problem.badge': 'Le dilemme des agences',
-    'problem.title': 'Vos clients ont besoin de sites ultra-rapides.',
-    'problem.titleAccent': "Votre équipe n'est pas faite pour ça.",
-    'problem.left.title': 'Les maux de tête qui tuent vos marges',
-    'problem.right.title': "L'avantage NexaWebDev",
+    'problem.badge': 'Le problème de livraison',
+    'problem.title': 'Vos clients ont besoin de sites rapides.',
+    'problem.titleAccent': "Votre équipe n'est pas outillée pour ça.",
+    'problem.left.title': "Ce qui ronge vos marges",
+    'problem.right.title': 'Comment NexaWebDev règle ça',
 
     // HowItWorks
     'hiw.badge': 'Le partenariat en marque blanche',
@@ -126,17 +126,17 @@ const translations = {
     'hiw.step1.num': '01',
     'hiw.step1.title': 'Vous concluez la vente',
     'hiw.step1.desc':
-      "Vendez le site à votre client entre 2 500$ et 5 000$+. Vous gérez la relation. Votre marque est sur le contrat. NexaWebDev n'apparaît jamais dans l'image.",
+      "Vendez le site à votre client entre 2 500$ et 5 000$+. Vous gérez la relation. Votre marque est sur le contrat. NexaWebDev n'est jamais mentionné.",
     'hiw.step2.num': '02',
     'hiw.step2.title': 'Envoyez-nous le brief',
     'hiw.step2.desc':
-      "Partagez le logo, les couleurs de marque et le texte de base via un formulaire simple. 15 minutes de votre temps — maximum. On pose les bonnes questions pour vous.",
+      "Partagez le logo, les couleurs et le texte via un court formulaire. 15 minutes, pas plus. On pose les bonnes questions pour que vous n'ayez pas à courir après le client.",
     'hiw.step3.num': '03',
     'hiw.step3.title': 'On livre en 48 heures',
     'hiw.step3.desc':
-      "Payez nos frais fixes à partir de 1 000$. On vous remet un site bilingue ultra-rapide et en ligne. Vous le livrez à votre client et empochez la différence.",
+      "Payez nos frais fixes à partir de 1 000$. On vous remet un site bilingue en ligne qui score 90+ sur PageSpeed. Vous le livrez à votre client et gardez la différence.",
     'hiw.margin.label': 'Votre marge moyenne par projet',
-    'hiw.margin.value': '1 500$ – 4 000$+',
+    'hiw.margin.value': '1 500$-4 000$+',
     'hiw.margin.note': "Sans écrire une seule ligne de code.",
 
     // TechStack
@@ -144,7 +144,7 @@ const translations = {
     'stack.title': 'Construit sur les plateformes',
     'stack.titleAccent': 'qui performent vraiment',
     'stack.sub':
-      "On ne touche pas aux constructeurs de pages. Chaque site qu'on construit est optimisé de zéro pour la vitesse, le SEO et la conversion.",
+      "On ne touche pas aux constructeurs de pages. Chaque site est codé sur mesure pour la vitesse et le SEO.",
     'stack.portfolio.title': 'Livraisons récentes en marque blanche',
     'stack.portfolio.sub': 'Vendus par des agences. Construits par nous. Vos clients ne sauront jamais.',
 
@@ -153,7 +153,7 @@ const translations = {
     'cta.title': 'Vous vendez un site cette semaine.',
     'cta.titleAccent': 'On le construit.',
     'cta.sub':
-      "Pas de retainers. Pas de contrats. Pas d'engagement continu. Payez seulement quand vous avez une vente conclue. Notre première livraison parlera d'elle-même — et votre client ne saura jamais qu'on a existé.",
+      "Pas de retainers, pas de contrats. Payez quand vous avez une vente signée. La première livraison prouvera le modèle, et votre client ne saura jamais qu'on était là.",
     'cta.btn': 'Réserver votre appel découverte gratuit',
     'cta.risk1': 'Aucuns frais mensuels ni retainers',
     'cta.risk2': "Aucun accord d'exclusivité",
@@ -175,35 +175,35 @@ type StringKey = keyof typeof translations.EN;
 
 const problemLeftItems: Record<Language, string[]> = {
   EN: [
-    'Bloated GoHighLevel templates destroying Core Web Vitals',
-    'Google Translate plugins that embarrass your clients — and your brand',
+    'Bloated GoHighLevel templates that tank Core Web Vitals',
+    'Google Translate plugins that embarrass your clients and your brand',
     'Offshore devs who go dark mid-project',
     'WordPress themes that take 3 weeks and 7 revision rounds',
-    'Mobile PageSpeed under 50 — your SEO campaigns are bleeding out',
+    'Mobile PageSpeed under 50. Your paid campaigns are burning budget on traffic that bounces.',
   ],
   FR: [
-    'Templates GoHighLevel boursouflés qui détruisent les Core Web Vitals',
-    'Plugins Google Translate qui font honte à vos clients — et à votre marque',
+    'Templates GoHighLevel surchargés qui détruisent les Core Web Vitals',
+    'Plugins Google Translate qui font honte à vos clients et à votre marque',
     'Développeurs offshore qui disparaissent en cours de projet',
     'Thèmes WordPress qui prennent 3 semaines et 7 tours de révisions',
-    'PageSpeed mobile sous 50 — vos campagnes SEO saignent à blanc',
+    'PageSpeed mobile sous 50. Vos campagnes payantes brûlent du budget sur du trafic qui repart.',
   ],
 };
 
 const problemRightItems: Record<Language, string[]> = {
   EN: [
-    'Custom-coded sites scoring 90+ on Mobile PageSpeed — guaranteed',
-    'Native FR/EN URL architecture (/fr/ and /en/) — not a plugin hack',
-    'Local North American team. Same timezone. Real Slack communication.',
-    '48-hour delivery, every time. Brief us today, site live by Monday.',
-    'We make your local SEO campaigns actually convert — not just rank.',
+    'Custom-coded sites that score 90+ on Mobile PageSpeed, guaranteed',
+    'Native FR/EN URL structure (/fr/ and /en/), not a plugin shortcut',
+    'Local North American team. Same timezone. You can actually reach us.',
+    '48-hour turnaround, every time. Brief us today, live site by Monday.',
+    'Sites that convert local traffic, not just rank for it.',
   ],
   FR: [
-    'Sites en code natif avec 90+ sur Mobile PageSpeed — garanti',
-    'Architecture URL FR/EN native (/fr/ et /en/) — pas un plugin bricolé',
-    'Équipe nord-américaine locale. Même fuseau horaire. Communication Slack réelle.',
+    'Sites codés sur mesure avec 90+ sur Mobile PageSpeed, garanti',
+    'Architecture URL FR/EN native (/fr/ et /en/), pas un plugin bricolé',
+    'Équipe nord-américaine locale. Même fuseau horaire. On est joignables pour de vrai.',
     "Livraison en 48h, à chaque fois. Brief aujourd'hui, site en ligne lundi.",
-    'On fait réellement convertir vos campagnes SEO local — pas juste classer.',
+    'Des sites qui convertissent le trafic local, pas seulement qui le classent.',
   ],
 };
 
@@ -211,44 +211,44 @@ const platformItems: Record<Language, { name: string; desc: string; badge: strin
   EN: [
     {
       name: 'React / Next.js',
-      desc: 'Maximum performance. 90+ PageSpeed guaranteed. Ideal for local service sites, landing pages, and custom quote calculators.',
+      desc: 'Scores 90+ on PageSpeed. Good fit for local service sites, landing pages, and quote calculators.',
       badge: 'Fastest Option',
     },
     {
       name: 'Shopify',
-      desc: 'Flawless e-commerce with native bilingual product catalogs. Ideal for agencies serving retail and D2C clients.',
+      desc: 'Native bilingual product catalogs with no translation plugin. Good for agencies with retail or D2C clients.',
       badge: 'E-Commerce',
     },
     {
       name: 'WordPress',
-      desc: 'High-trust corporate sites with clean local SEO architecture. Built to rank. Built to convert.',
+      desc: 'Clean local SEO structure built to rank. Works well for corporate clients who care about organic search.',
       badge: 'SEO Powerhouse',
     },
     {
       name: 'Webflow',
-      desc: 'Designer-grade visuals with zero compromises on speed. Best for premium service businesses and rebrands.',
+      desc: 'High-end visuals without the speed penalty. Best for premium service brands getting a refresh.',
       badge: 'Premium Design',
     },
   ],
   FR: [
     {
       name: 'React / Next.js',
-      desc: "Performance maximale. 90+ PageSpeed garanti. Idéal pour les sites de services locaux, les pages d'atterrissage et les calculateurs de devis personnalisés.",
+      desc: "Score 90+ sur PageSpeed. Bon choix pour les sites de services locaux, les pages d'atterrissage et les calculateurs de devis.",
       badge: 'Option la plus rapide',
     },
     {
       name: 'Shopify',
-      desc: 'Commerce en ligne impeccable avec des catalogues bilingues natifs. Idéal pour les agences servant des clients en retail et D2C.',
+      desc: 'Catalogues bilingues natifs sans plugin de traduction. Bon pour les agences avec des clients en retail ou D2C.',
       badge: 'E-Commerce',
     },
     {
       name: 'WordPress',
-      desc: 'Sites corporatifs de haute confiance avec une architecture SEO local propre. Conçu pour classer. Conçu pour convertir.',
+      desc: 'Architecture SEO local propre conçue pour classer. Bien adapté aux clients corporate qui misent sur la recherche organique.',
       badge: 'Puissance SEO',
     },
     {
       name: 'Webflow',
-      desc: 'Visuels de qualité design sans compromis sur la vitesse. Idéal pour les entreprises de services premium et les refontes de marque.',
+      desc: 'Visuels haut de gamme sans pénalité de vitesse. Idéal pour les marques premium en refonte.',
       badge: 'Design premium',
     },
   ],
