@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Code2, ShoppingCart, Globe, Layers, ImageIcon, Eye } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
@@ -22,7 +22,7 @@ export default function TechStack() {
     <section id="tech-stack" className="py-24" style={{ backgroundColor: c.bg, borderTop: `1px solid ${c.border}` }}>
       <div className="max-w-[1280px] mx-auto px-8 lg:px-12">
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -42,13 +42,13 @@ export default function TechStack() {
           <p className="font-mono text-sm max-w-xl" style={{ color: c.muted }}>
             {t('stack.sub')}
           </p>
-        </motion.div>
+        </m.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-[18px] mb-16">
           {platforms.map((platform, i) => {
             const Icon = platformIcons[i];
             return (
-              <motion.div
+              <m.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -75,12 +75,12 @@ export default function TechStack() {
                 <p className="font-mono text-[12px] leading-relaxed" style={{ color: c.muted }}>
                   {platform.desc}
                 </p>
-              </motion.div>
+              </m.div>
             );
           })}
         </div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -97,7 +97,7 @@ export default function TechStack() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-[18px]">
             {portfolioItems.map((item, i) => (
-              <motion.div
+              <m.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -110,7 +110,8 @@ export default function TechStack() {
                   {item.image ? (
                     <img
                       src={item.image}
-                      alt={item.title}
+                      alt=""
+                      role="presentation"
                       className="absolute inset-0 object-cover w-full h-full"
                       loading="lazy"
                       decoding="async"
@@ -126,9 +127,10 @@ export default function TechStack() {
                       href={item.link.startsWith('http') ? item.link : `https://${item.link}`}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`View ${item.title}`}
                       className="absolute inset-0 z-20 flex items-center justify-center bg-black/0 group-hover:bg-black/50 transition-colors"
                     >
-                      <Eye size={22} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <Eye size={22} aria-hidden="true" className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                     </a>
                   )}
                   <div
@@ -145,10 +147,10 @@ export default function TechStack() {
                     {item.title}
                   </h4>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

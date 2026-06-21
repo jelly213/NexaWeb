@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import { DollarSign, FileText, Rocket } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
@@ -42,10 +42,10 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="py-24" style={{ backgroundColor: c.bg, borderTop: `1px solid ${c.border}` }}>
-      <div className="max-w-[1280px] mx-auto px-8 lg:px-12">
+    <section id="how-it-works" className="py-14 sm:py-24" style={{ backgroundColor: c.bg, borderTop: `1px solid ${c.border}` }}>
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-12">
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -62,13 +62,13 @@ export default function HowItWorks() {
             {t('hiw.title')}{' '}
             <span style={{ color: c.blue }}>{t('hiw.titleAccent')}</span>
           </h2>
-        </motion.div>
+        </m.div>
 
         <div className="grid lg:grid-cols-3 gap-[18px] mb-10">
           {steps.map((step, i) => {
             const Icon = icons[i];
             return (
-              <motion.div
+              <m.div
                 key={i}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -110,7 +110,7 @@ export default function HowItWorks() {
                     {step.desc}
                   </p>
                 </div>
-              </motion.div>
+              </m.div>
             );
           })}
         </div>
@@ -118,17 +118,17 @@ export default function HowItWorks() {
         {/* Profit callout — counts up on scroll-in, resets every 30s */}
         <div
           ref={marginRef}
-          className="rounded-[6px] px-8 py-10 text-center"
+          className="rounded-[6px] px-5 py-8 sm:px-8 sm:py-10 text-center"
           style={{ border: `1px solid ${c.borderSoft}` }}
         >
-          <p className="font-mono text-sm mb-2" style={{ color: c.muted }}>{t('hiw.margin.label')}</p>
+          <p className="font-mono text-xs sm:text-sm mb-2" style={{ color: c.muted }}>{t('hiw.margin.label')}</p>
           <p
-            className="text-5xl lg:text-6xl font-bold mb-3 tabular-nums transition-none"
+            className="text-[2rem] sm:text-5xl lg:text-6xl font-bold mb-3 tabular-nums leading-tight break-all sm:break-normal"
             style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.green }}
           >
             {displayMargin}
           </p>
-          <p className="font-mono text-sm" style={{ color: c.dimmer }}>{t('hiw.margin.note')}</p>
+          <p className="font-mono text-xs sm:text-sm" style={{ color: c.dimmer }}>{t('hiw.margin.note')}</p>
         </div>
       </div>
     </section>

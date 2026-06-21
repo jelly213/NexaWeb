@@ -1,3 +1,4 @@
+import { LazyMotion, domAnimation } from 'framer-motion';
 import { LanguageProvider } from './context/LanguageContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import Navbar from './components/Navbar';
@@ -13,11 +14,13 @@ function AppInner() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: c.bg, color: c.text }}>
       <Navbar />
-      <Hero />
-      <Problem />
-      <HowItWorks />
-      <TechStack />
-      <FinalCTA />
+      <main>
+        <Hero />
+        <Problem />
+        <HowItWorks />
+        <TechStack />
+        <FinalCTA />
+      </main>
       <Footer />
     </div>
   );
@@ -27,7 +30,9 @@ function App() {
   return (
     <LanguageProvider>
       <ThemeProvider>
-        <AppInner />
+        <LazyMotion features={domAnimation}>
+          <AppInner />
+        </LazyMotion>
       </ThemeProvider>
     </LanguageProvider>
   );

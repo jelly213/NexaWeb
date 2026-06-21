@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
@@ -19,7 +19,7 @@ export default function FinalCTA() {
   return (
     <section id="final-cta" className="py-28" style={{ backgroundColor: c.bg, borderTop: `1px solid ${c.border}` }}>
       <div className="max-w-[1280px] mx-auto px-8 lg:px-12">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -49,7 +49,7 @@ export default function FinalCTA() {
             {t('cta.sub')}
           </p>
 
-          <motion.button
+          <m.button
             onClick={openCalendly}
             whileHover={{ opacity: 0.9 }}
             whileTap={{ scale: 0.98 }}
@@ -58,7 +58,7 @@ export default function FinalCTA() {
           >
             {t('cta.btn')}
             <ArrowRight size={16} />
-          </motion.button>
+          </m.button>
 
           <div className="flex flex-wrap gap-x-8 gap-y-3 pt-2">
             {riskItems.map((item, i) => (
@@ -68,7 +68,7 @@ export default function FinalCTA() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 
@@ -18,7 +18,7 @@ export default function Problem() {
       <div className="max-w-[1280px] mx-auto">
 
         {/* Section keyword */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -27,10 +27,10 @@ export default function Problem() {
         >
           <span style={{ color: c.slash, marginRight: 4 }}>//</span>
           {t('problem.badge').toLowerCase().replace(/\s+/g, '_')}
-        </motion.div>
+        </m.div>
 
         {/* Headline */}
-        <motion.h2
+        <m.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -40,13 +40,13 @@ export default function Problem() {
         >
           {t('problem.title')}{' '}
           <span style={{ color: c.blue }}>{t('problem.titleAccent')}</span>
-        </motion.h2>
+        </m.h2>
 
         {/* Comparison blocks */}
         <div className="grid lg:grid-cols-2 gap-[18px]">
 
           {/* Bad */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -62,7 +62,7 @@ export default function Problem() {
             </div>
             <div className="px-[18px] pb-3.5">
               {leftItems.map((item, i) => (
-                <motion.div
+                <m.div
                   key={i}
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -76,13 +76,13 @@ export default function Problem() {
                 >
                   <span className="shrink-0 font-bold" style={{ color: c.red }}>-</span>
                   {item}
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Good */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -98,7 +98,7 @@ export default function Problem() {
             </div>
             <div className="px-[18px] pb-3.5">
               {rightItems.map((item, i) => (
-                <motion.div
+                <m.div
                   key={i}
                   initial={{ opacity: 0, x: 10 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -112,10 +112,10 @@ export default function Problem() {
                 >
                   <span className="shrink-0 font-bold" style={{ color: c.green }}>+</span>
                   {item}
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

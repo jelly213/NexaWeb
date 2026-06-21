@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 
 export default function HeroImage() {
@@ -23,7 +23,7 @@ export default function HeroImage() {
   }, [restartKey]);
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, x: 40 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
@@ -62,7 +62,7 @@ export default function HeroImage() {
             <div className="flex items-center gap-3 text-[12px]">
               <span className="w-[110px] shrink-0" style={{ color: c.dim }}>their build</span>
               <div className="flex-1 h-2 overflow-hidden" style={{ backgroundColor: c.bgTrack }}>
-                <motion.div
+                <m.div
                   key={`bad-${restartKey}`}
                   className="h-full"
                   style={{ backgroundColor: c.barBad }}
@@ -78,7 +78,7 @@ export default function HeroImage() {
             <div className="flex items-center gap-3 text-[12px]">
               <span className="w-[110px] shrink-0" style={{ color: c.dim }}>our build</span>
               <div className="flex-1 h-2 overflow-hidden" style={{ backgroundColor: c.bgTrack }}>
-                <motion.div
+                <m.div
                   key={`good-${restartKey}`}
                   className="h-full"
                   style={{ backgroundColor: c.barGood }}
@@ -101,6 +101,6 @@ export default function HeroImage() {
           </div>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

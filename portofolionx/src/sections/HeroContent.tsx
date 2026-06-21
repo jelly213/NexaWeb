@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
@@ -47,7 +47,7 @@ export default function HeroContent() {
   };
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: 'easeOut' }}
@@ -56,7 +56,7 @@ export default function HeroContent() {
       <div className="space-y-6 max-w-xl">
 
         {/* Eyebrow */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -65,10 +65,10 @@ export default function HeroContent() {
         >
           <span style={{ color: c.blue, marginRight: 4 }}>$</span>
           {t('hero.badge')}
-        </motion.div>
+        </m.div>
 
         {/* Headline */}
-        <motion.h1
+        <m.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -77,10 +77,10 @@ export default function HeroContent() {
         >
           {t('hero.headline1')}{' '}
           <span style={{ color: c.blue }}>{t('hero.headline2')}</span>
-        </motion.h1>
+        </m.h1>
 
         {/* Sub */}
-        <motion.p
+        <m.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -90,16 +90,16 @@ export default function HeroContent() {
           <span style={{ color: c.comment }}>{'/* The dev team your clients never meet. */'}</span>
           <br />
           {t('hero.sub')}
-        </motion.p>
+        </m.p>
 
         {/* CTAs */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-col sm:flex-row gap-3"
         >
-          <motion.a
+          <m.a
             href="#final-cta"
             onClick={e => { e.preventDefault(); handleScroll('#final-cta'); }}
             whileHover={{ opacity: 0.9 }}
@@ -109,8 +109,8 @@ export default function HeroContent() {
           >
             {t('hero.cta1')}
             <ArrowRight size={15} />
-          </motion.a>
-          <motion.a
+          </m.a>
+          <m.a
             href="#how-it-works"
             onClick={e => { e.preventDefault(); handleScroll('#how-it-works'); }}
             whileHover={{ opacity: 0.8 }}
@@ -120,8 +120,8 @@ export default function HeroContent() {
           >
             <span style={{ color: c.blue }}>$</span>
             {t('hero.cta2')}
-          </motion.a>
-        </motion.div>
+          </m.a>
+        </m.div>
       </div>
 
       {/* Stats strip — each box staggers in, numbers count up */}
@@ -130,7 +130,7 @@ export default function HeroContent() {
         style={{ border: `1px solid ${c.border}` }}
       >
         {statItems.map(({ val, lbl }, i) => (
-          <motion.div
+          <m.div
             key={i}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -145,9 +145,9 @@ export default function HeroContent() {
               {val}
             </div>
             <div className="font-mono text-[11px] mt-1.5" style={{ color: c.dimmer }}>{lbl}</div>
-          </motion.div>
+          </m.div>
         ))}
       </div>
-    </motion.div>
+    </m.div>
   );
 }
