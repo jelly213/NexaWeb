@@ -1,80 +1,69 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, ShieldCheck } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 
 const CALENDLY_URL = 'https://calendly.com/contact-nexawebdev/partner-discovery-call';
 
 export default function FinalCTA() {
   const { t, language } = useLanguage();
+  const { c } = useTheme();
 
   const openCalendly = () => {
     const locale = language === 'FR' ? 'fr' : 'en';
     (window as any).Calendly?.initPopupWidget({ url: `${CALENDLY_URL}?locale=${locale}` });
   };
 
-  const riskItems = [
-    t('cta.risk1'),
-    t('cta.risk2'),
-    t('cta.risk3'),
-    t('cta.risk4'),
-  ];
+  const riskItems = [t('cta.risk1'), t('cta.risk2'), t('cta.risk3'), t('cta.risk4')];
 
   return (
-    <section id="final-cta" className="py-28 bg-slate-950 relative overflow-hidden">
-
-      {/* Background Glow */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[900px] h-[500px] bg-blue-600/7 rounded-full blur-3xl" />
-      </div>
-
-      {/* Subtle top border glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
-
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section id="final-cta" className="py-28" style={{ backgroundColor: c.bg, borderTop: `1px solid ${c.border}` }}>
+      <div className="max-w-[1280px] mx-auto px-8 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="space-y-8"
         >
-
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-sm font-medium">
-            <ShieldCheck size={14} className="shrink-0" />
-            {t('cta.badge')}
+          <div className="font-mono text-sm" style={{ color: c.green }}>
+            <span style={{ color: c.slash, marginRight: 4 }}>//</span>
+            {t('cta.badge').toLowerCase().replace(/\s+/g, '_')}
           </div>
 
-          {/* Headline */}
           <div>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-2">
+            <h2
+              className="font-bold text-[38px] sm:text-[48px] leading-[1.1] mb-1"
+              style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '-0.02em', color: c.textHead }}
+            >
               {t('cta.title')}
             </h2>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            <h2
+              className="font-bold text-[38px] sm:text-[48px] leading-[1.1]"
+              style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '-0.02em', color: c.blue }}
+            >
               {t('cta.titleAccent')}
             </h2>
           </div>
 
-          {/* Sub */}
-          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+          <p className="font-mono text-[14px] max-w-2xl leading-[1.7]" style={{ color: c.muted }}>
             {t('cta.sub')}
           </p>
 
-          {/* CTA Button */}
           <motion.button
             onClick={openCalendly}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-xl shadow-2xl shadow-blue-500/25 text-base sm:text-lg hover:shadow-blue-500/40 transition-shadow"
+            whileHover={{ opacity: 0.9 }}
+            whileTap={{ scale: 0.98 }}
+            className="inline-flex items-center gap-3 px-8 py-4 font-mono font-bold text-sm"
+            style={{ backgroundColor: c.blue, color: c.textOnBlue }}
           >
             {t('cta.btn')}
-            <ArrowRight size={20} />
+            <ArrowRight size={16} />
           </motion.button>
 
-          {/* Risk-free items */}
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 pt-2">
+          <div className="flex flex-wrap gap-x-8 gap-y-3 pt-2">
             {riskItems.map((item, i) => (
-              <div key={i} className="flex items-center gap-2 text-slate-400 text-sm">
-                <ShieldCheck size={14} className="text-emerald-400 shrink-0" />
+              <div key={i} className="flex items-center gap-2 font-mono text-[13px]" style={{ color: c.muted }}>
+                <span className="font-bold" style={{ color: c.green }}>+</span>
                 {item}
               </div>
             ))}

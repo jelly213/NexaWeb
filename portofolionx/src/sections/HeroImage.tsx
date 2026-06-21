@@ -1,149 +1,105 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Globe, Zap, CheckCircle2, TrendingUp } from 'lucide-react';
-
-const scoreMetrics = [
-  { label: 'Performance', score: 96 },
-  { label: 'SEO', score: 100 },
-  { label: 'Accessibility', score: 98 },
-];
+import { useTheme } from '../context/ThemeContext';
 
 export default function HeroImage() {
-  const circumference = 2 * Math.PI * 40;
+  const { c, restartKey } = useTheme();
+  const [counts, setCounts] = useState({ bad: 0, good: 0 });
+
+  useEffect(() => {
+    setCounts({ bad: 0, good: 0 });
+    const duration = 1400;
+    const start = performance.now();
+
+    const tick = (now: number) => {
+      const raw = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - raw, 3);
+      setCounts({ bad: Math.round(eased * 47), good: Math.round(eased * 98) });
+      if (raw < 1) requestAnimationFrame(tick);
+    };
+
+    const delay = setTimeout(() => requestAnimationFrame(tick), 200);
+    return () => clearTimeout(delay);
+  }, [restartKey]);
 
   return (
     <motion.div
       initial={{ opacity: 0, x: 40 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
-      className="relative flex items-center justify-center lg:justify-end"
+      className="flex items-center justify-center px-8 lg:px-10 py-14"
     >
-      <div className="relative w-full max-w-md">
-
-        {/* Main Dashboard Card */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl shadow-black/40">
-
-          {/* Card Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center justify-center">
-                <Zap size={15} className="text-blue-400" />
-              </div>
-              <div>
-                <p className="text-white text-sm font-semibold leading-tight">Core Web Vitals</p>
-                <p className="text-slate-500 text-xs">Mobile Performance Report</p>
-              </div>
-            </div>
-            <span className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full">
-              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-              LIVE
-            </span>
-          </div>
-
-          {/* Score + Metrics */}
-          <div className="flex items-center gap-6 mb-6">
-
-            {/* Circular Progress */}
-            <div className="relative shrink-0 w-24 h-24">
-              <svg className="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="40" fill="none" stroke="#1e293b" strokeWidth="8" />
-                <defs>
-                  <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#3B82F6" />
-                    <stop offset="100%" stopColor="#06B6D4" />
-                  </linearGradient>
-                </defs>
-                <motion.circle
-                  cx="50" cy="50" r="40"
-                  fill="none"
-                  stroke="url(#scoreGrad)"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeDasharray={circumference}
-                  initial={{ strokeDashoffset: circumference }}
-                  animate={{ strokeDashoffset: circumference * (1 - 0.96) }}
-                  transition={{ delay: 0.9, duration: 1.6, ease: 'easeOut' }}
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.3 }}
-                  className="text-2xl font-extrabold text-white"
-                >
-                  96
-                </motion.span>
-              </div>
-            </div>
-
-            {/* Metric Bars */}
-            <div className="space-y-3 flex-1">
-              {scoreMetrics.map(({ label, score }) => (
-                <div key={label}>
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-slate-400">{label}</span>
-                    <span className="text-white font-semibold">{score}</span>
-                  </div>
-                  <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${score}%` }}
-                      transition={{ delay: 1.1, duration: 1, ease: 'easeOut' }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Bilingual Row */}
-          <div className="flex items-center gap-3 p-3 bg-slate-800/60 rounded-xl mb-3">
-            <Globe size={15} className="text-blue-400 shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-white text-xs font-semibold">Native Bilingual Architecture</p>
-              <p className="text-slate-500 text-xs truncate">
-                domain.com/<span className="text-blue-400">en</span>/ · domain.com/<span className="text-blue-400">fr</span>/
-              </p>
-            </div>
-            <div className="flex items-center gap-1 shrink-0">
-              <span className="px-2 py-0.5 bg-blue-500/15 border border-blue-500/25 text-blue-400 text-xs rounded-md font-bold">EN</span>
-              <span className="px-2 py-0.5 bg-blue-500/15 border border-blue-500/25 text-blue-400 text-xs rounded-md font-bold">FR</span>
-            </div>
-          </div>
-
-          {/* Delivery Row */}
-          <div className="flex items-center gap-3 p-3 bg-slate-800/60 rounded-xl">
-            <TrendingUp size={15} className="text-cyan-400 shrink-0" />
-            <div className="flex-1">
-              <p className="text-white text-xs font-semibold">White-Label Delivery</p>
-              <p className="text-slate-500 text-xs">48-hour guaranteed turnaround</p>
-            </div>
-            <CheckCircle2 size={15} className="text-emerald-400 shrink-0" />
-          </div>
+      <div
+        className="w-full max-w-[440px] rounded-[6px] overflow-hidden"
+        style={{ border: `1px solid ${c.borderSoft}`, backgroundColor: c.bgCard }}
+      >
+        {/* Title bar */}
+        <div
+          className="flex items-center gap-[7px] px-3.5 py-3"
+          style={{ borderBottom: `1px solid ${c.border}`, backgroundColor: c.bgTermBar }}
+        >
+          <span className="w-[11px] h-[11px] rounded-full bg-[#ff5f57]" />
+          <span className="w-[11px] h-[11px] rounded-full bg-[#febc2e]" />
+          <span className="w-[11px] h-[11px] rounded-full bg-[#28c840]" />
+          <span className="ml-2.5 font-mono text-[12px]" style={{ color: c.dimmer }}>
+            ~/nexawebdev — pagespeed
+          </span>
         </div>
 
-        {/* Floating Margin Badge */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.5, type: 'spring' }}
-          className="absolute -bottom-15 -left-4 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 shadow-xl"
-        >
-          <p className="text-xs text-slate-400 mb-0.5">Avg. agency margin</p>
-          <p className="text-lg font-extrabold text-emerald-400 leading-tight">$1,500–$4K+</p>
-          <p className="text-xs text-slate-600">per project</p>
-        </motion.div>
+        {/* Body */}
+        <div className="px-[18px] py-5 font-mono text-[13px] leading-[1.9]">
+          <div>
+            <span style={{ color: c.blue }}>$</span>{' '}
+            <span style={{ color: c.textHead }}>npx pagespeed audit --mobile</span>
+          </div>
+          <div style={{ color: c.comment }}># competitor: gohighlevel template</div>
+          <div style={{ color: c.red }}>✗ performance ......... 47</div>
+          <div style={{ color: c.comment }}># nexawebdev: custom next.js</div>
+          <div style={{ color: c.green }}>✓ performance ......... 98</div>
 
-        {/* Floating Zap Icon */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.4, duration: 0.4, type: 'spring' }}
-          className="absolute -top-4 -right-4 w-11 h-11 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-xl shadow-blue-500/30"
-        >
-          <Zap size={18} className="text-white fill-white" />
-        </motion.div>
+          {/* Animated bars */}
+          <div className="mt-3.5 space-y-2">
+            <div className="flex items-center gap-3 text-[12px]">
+              <span className="w-[110px] shrink-0" style={{ color: c.dim }}>their build</span>
+              <div className="flex-1 h-2 overflow-hidden" style={{ backgroundColor: c.bgTrack }}>
+                <motion.div
+                  key={`bad-${restartKey}`}
+                  className="h-full"
+                  style={{ backgroundColor: c.barBad }}
+                  initial={{ width: 0 }}
+                  animate={{ width: '47%' }}
+                  transition={{ delay: 0.2, duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                />
+              </div>
+              <span className="w-[34px] text-right font-bold tabular-nums" style={{ color: c.barBad }}>
+                {counts.bad}
+              </span>
+            </div>
+            <div className="flex items-center gap-3 text-[12px]">
+              <span className="w-[110px] shrink-0" style={{ color: c.dim }}>our build</span>
+              <div className="flex-1 h-2 overflow-hidden" style={{ backgroundColor: c.bgTrack }}>
+                <motion.div
+                  key={`good-${restartKey}`}
+                  className="h-full"
+                  style={{ backgroundColor: c.barGood }}
+                  initial={{ width: 0 }}
+                  animate={{ width: '98%' }}
+                  transition={{ delay: 0.2, duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                />
+              </div>
+              <span className="w-[34px] text-right font-bold tabular-nums" style={{ color: c.barGood }}>
+                {counts.good}
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-2.5">
+            <span style={{ color: c.green }}>✓</span>{' '}
+            <span style={{ color: c.dim }}>deployed in</span>{' '}
+            <span style={{ color: c.textHead }}>48h</span>{' '}
+            <span style={{ color: c.dim }}>· bilingual /en /fr</span>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

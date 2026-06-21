@@ -1,54 +1,70 @@
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { DollarSign, FileText, Rocket } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 
 const icons = [DollarSign, FileText, Rocket];
 
 export default function HowItWorks() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const { c, restartKey } = useTheme();
+
+  const [marginCount, setMarginCount] = useState(0);
+  const marginRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(marginRef, { once: false, margin: '-80px' });
+
+  useEffect(() => {
+    if (!isInView) return;
+    setMarginCount(0);
+    const duration = 2000;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const raw = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - raw, 3);
+      setMarginCount(Math.round(eased * 4000));
+      if (raw < 1) requestAnimationFrame(tick);
+    };
+    const delay = setTimeout(() => requestAnimationFrame(tick), 300);
+    return () => clearTimeout(delay);
+  }, [isInView, restartKey]);
+
+  const displayMargin = marginCount >= 4000
+    ? t('hiw.margin.value')
+    : language === 'EN'
+      ? `$${marginCount.toLocaleString('en-US')}+`
+      : `${marginCount.toLocaleString('fr-FR')}$+`;
 
   const steps = [
-    {
-      num: t('hiw.step1.num'),
-      title: t('hiw.step1.title'),
-      desc: t('hiw.step1.desc'),
-    },
-    {
-      num: t('hiw.step2.num'),
-      title: t('hiw.step2.title'),
-      desc: t('hiw.step2.desc'),
-    },
-    {
-      num: t('hiw.step3.num'),
-      title: t('hiw.step3.title'),
-      desc: t('hiw.step3.desc'),
-    },
+    { num: t('hiw.step1.num'), title: t('hiw.step1.title'), desc: t('hiw.step1.desc') },
+    { num: t('hiw.step2.num'), title: t('hiw.step2.title'), desc: t('hiw.step2.desc') },
+    { num: t('hiw.step3.num'), title: t('hiw.step3.title'), desc: t('hiw.step3.desc') },
   ];
 
   return (
-    <section id="how-it-works" className="py-24 bg-slate-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="how-it-works" className="py-24" style={{ backgroundColor: c.bg, borderTop: `1px solid ${c.border}` }}>
+      <div className="max-w-[1280px] mx-auto px-8 lg:px-12">
 
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="mb-14"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-sm font-medium mb-6">
-            {t('hiw.badge')}
+          <div className="font-mono text-sm mb-4" style={{ color: c.blue }}>
+            <span style={{ color: c.slash, marginRight: 4 }}>//</span>
+            {t('hiw.badge').toLowerCase().replace(/\s+/g, '_')}
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white">
+          <h2
+            className="font-bold text-[32px] sm:text-[38px]"
+            style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '-0.02em', color: c.textHead }}
+          >
             {t('hiw.title')}{' '}
-            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              {t('hiw.titleAccent')}
-            </span>
+            <span style={{ color: c.blue }}>{t('hiw.titleAccent')}</span>
           </h2>
         </motion.div>
 
-        {/* Steps */}
-        <div className="grid lg:grid-cols-3 gap-6 mb-14">
+        <div className="grid lg:grid-cols-3 gap-[18px] mb-10">
           {steps.map((step, i) => {
             const Icon = icons[i];
             return (
@@ -57,46 +73,63 @@ export default function HowItWorks() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
+                transition={{ delay: i * 0.12 }}
                 className="relative"
               >
-                {/* Connector (desktop only) */}
                 {i < 2 && (
-                  <div className="hidden lg:block absolute top-10 left-[calc(100%_-_1rem)] w-full h-px bg-gradient-to-r from-slate-700 to-transparent z-0" />
+                  <div
+                    className="hidden lg:block absolute top-10 left-[calc(100%_-_1rem)] w-full h-px z-0"
+                    style={{ backgroundColor: c.borderSoft }}
+                  />
                 )}
-
-                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 h-full relative z-10 hover:border-blue-500/25 transition-colors duration-300 group">
-
+                <div
+                  className="rounded-[6px] p-7 h-full relative z-10 transition-colors duration-300"
+                  style={{ backgroundColor: c.bgCard, border: `1px solid ${c.borderSoft}` }}
+                >
                   <div className="flex items-center justify-between mb-6">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                      <Icon size={20} className="text-white" />
+                    <div
+                      className="w-11 h-11 rounded-[4px] flex items-center justify-center"
+                      style={{ backgroundColor: c.blue }}
+                    >
+                      <Icon size={18} style={{ color: c.textOnBlue }} />
                     </div>
-                    <span className="text-5xl font-extrabold text-slate-800 group-hover:text-slate-700 transition-colors select-none">
+                    <span
+                      className="font-mono text-4xl font-bold select-none"
+                      style={{ color: c.borderSoft }}
+                    >
                       {step.num}
                     </span>
                   </div>
-
-                  <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">{step.desc}</p>
+                  <h3
+                    className="font-bold text-base mb-2"
+                    style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.textHead }}
+                  >
+                    {step.title}
+                  </h3>
+                  <p className="font-mono text-[13px] leading-relaxed" style={{ color: c.muted }}>
+                    {step.desc}
+                  </p>
                 </div>
               </motion.div>
             );
           })}
         </div>
 
-        {/* Margin Callout Banner */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="bg-gradient-to-r from-blue-600/8 via-cyan-600/8 to-blue-600/8 border border-blue-500/20 rounded-2xl px-8 py-10 text-center"
+        {/* Profit callout — counts up on scroll-in, resets every 30s */}
+        <div
+          ref={marginRef}
+          className="rounded-[6px] px-8 py-10 text-center"
+          style={{ border: `1px solid ${c.borderSoft}` }}
         >
-          <p className="text-slate-400 text-sm mb-2">{t('hiw.margin.label')}</p>
-          <p className="text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-3">
-            {t('hiw.margin.value')}
+          <p className="font-mono text-sm mb-2" style={{ color: c.muted }}>{t('hiw.margin.label')}</p>
+          <p
+            className="text-5xl lg:text-6xl font-bold mb-3 tabular-nums transition-none"
+            style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.green }}
+          >
+            {displayMargin}
           </p>
-          <p className="text-slate-500 text-sm">{t('hiw.margin.note')}</p>
-        </motion.div>
+          <p className="font-mono text-sm" style={{ color: c.dimmer }}>{t('hiw.margin.note')}</p>
+        </div>
       </div>
     </section>
   );

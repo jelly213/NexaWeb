@@ -1,11 +1,13 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 import logo from '../assets/logo.svg';
 
 export default function Navbar() {
-  const { language, toggleLanguage, t } = useLanguage();
+  const { language, toggleLanguage } = useLanguage();
+  const { theme, toggleTheme, c } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -16,8 +18,9 @@ export default function Navbar() {
   }, []);
 
   const links = [
-    { label: t('nav.howItWorks'), href: '#how-it-works' },
-    { label: t('nav.stack'), href: '#tech-stack' },
+    { label: 'how-it-works', href: '#how-it-works' },
+    { label: 'stack', href: '#tech-stack' },
+    { label: 'work', href: '#tech-stack' },
   ];
 
   const handleNavClick = (href: string) => {
@@ -30,94 +33,111 @@ export default function Navbar() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-slate-950/95 backdrop-blur-md border-b border-slate-800/60 shadow-lg shadow-black/20'
-          : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 ${scrolled ? 'shadow-lg shadow-black/20' : ''}`}
+      style={{ backgroundColor: c.navBg, borderBottom: `1px solid ${c.border}` }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+      <div className="flex items-center justify-between px-8 lg:px-12 h-[65px]">
 
-          {/* Logo */}
-          <a
-            href="#"
-            onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className="flex items-center gap-2.5 group"
+        {/* Logo */}
+        <a
+          href="#"
+          onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          className="flex items-center gap-2.5"
+        >
+          <img src={logo} alt="NexaWebDev" className="w-6 h-6" />
+          <span
+            className="font-bold text-[18px]"
+            style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '-0.01em', color: c.textHead }}
           >
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/30">
-             <img src={logo} alt="NexaWeb Logo" className='rounded' width="48" height="48" />
-            </div>
-            <span className="text-white font-bold text-lg tracking-tight">
-              NexaWeb<span className="text-blue-400">.Dev</span>
+            nexawebdev
+          </span>
+        </a>
+
+        {/* Desktop nav */}
+        <nav className="hidden lg:flex items-center gap-7">
+          {links.map(link => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={e => { e.preventDefault(); handleNavClick(link.href); }}
+              className="font-mono text-[13px] transition-colors"
+              style={{ color: c.dim }}
+              onMouseEnter={e => (e.currentTarget.style.color = c.text)}
+              onMouseLeave={e => (e.currentTarget.style.color = c.dim)}
+            >
+              <span style={{ color: c.slash, marginRight: 4 }}>//</span>
+              {link.label}
+            </a>
+          ))}
+        </nav>
+
+        {/* Right controls */}
+        <div className="flex items-center gap-2">
+
+          {/* Dark/Light toggle */}
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="flex items-center justify-center w-9 h-9 font-mono transition-colors"
+            style={{
+              border: `1px solid ${c.borderSoft}`,
+              backgroundColor: c.bgCard,
+              color: c.dim,
+            }}
+          >
+            {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+          </button>
+
+          {/* EN/FR toggle */}
+          <button
+            onClick={toggleLanguage}
+            aria-label="Toggle language"
+            className="flex items-center p-0.5 text-xs font-mono font-bold"
+            style={{ backgroundColor: c.bgCard, border: `1px solid ${c.borderSoft}` }}
+          >
+            <span
+              className="px-3 py-1.5 transition-all duration-200"
+              style={{
+                backgroundColor: language === 'EN' ? c.blue : 'transparent',
+                color: language === 'EN' ? c.textOnBlue : c.dimmer,
+              }}
+            >
+              EN
             </span>
+            <span
+              className="px-3 py-1.5 transition-all duration-200"
+              style={{
+                backgroundColor: language === 'FR' ? c.blue : 'transparent',
+                color: language === 'FR' ? c.textOnBlue : c.dimmer,
+              }}
+            >
+              FR
+            </span>
+          </button>
+
+          {/* Desktop CTA */}
+          <a
+            href="#final-cta"
+            onClick={e => { e.preventDefault(); handleNavClick('#final-cta'); }}
+            className="hidden lg:inline-flex items-center px-4 py-2 text-[13px] font-mono font-bold hover:opacity-90 transition-opacity"
+            style={{ backgroundColor: c.blue, color: c.textOnBlue }}
+          >
+            book_a_call()
           </a>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center gap-8">
-            {links.map(link => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={e => { e.preventDefault(); handleNavClick(link.href); }}
-                className="text-slate-400 hover:text-white transition-colors text-sm font-medium"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-
-          {/* Right: Language Toggle + CTA */}
-          <div className="flex items-center gap-3">
-
-            {/* FR / EN Pill Toggle */}
-            <button
-              onClick={toggleLanguage}
-              aria-label="Toggle language"
-              className="flex items-center bg-slate-800/80 border border-slate-700/60 rounded-full p-0.5 text-xs font-bold tracking-wide"
-            >
-              <span
-                className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
-                  language === 'EN'
-                    ? 'bg-blue-500 text-white shadow-md shadow-blue-500/30'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                EN
-              </span>
-              <span
-                className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
-                  language === 'FR'
-                    ? 'bg-blue-500 text-white shadow-md shadow-blue-500/30'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                FR
-              </span>
-            </button>
-
-            {/* Desktop CTA */}
-            <a
-              href="#final-cta"
-              onClick={e => { e.preventDefault(); handleNavClick('#final-cta'); }}
-              className="hidden lg:inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-400 text-white text-sm font-semibold rounded-lg transition-colors shadow-lg shadow-blue-500/20"
-            >
-              {t('nav.cta')}
-            </a>
-
-            {/* Mobile Hamburger */}
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
-              aria-label="Toggle mobile menu"
-            >
-              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          </div>
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="lg:hidden p-2 transition-colors"
+            style={{ color: c.dim }}
+            aria-label="Toggle mobile menu"
+          >
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -125,25 +145,29 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="lg:hidden bg-slate-950/98 backdrop-blur-md border-b border-slate-800"
+            className="lg:hidden"
+            style={{ backgroundColor: c.navBg, borderBottom: `1px solid ${c.border}` }}
           >
-            <div className="px-4 py-5 space-y-2">
+            <div className="px-6 py-4 space-y-1 font-mono">
               {links.map(link => (
                 <a
                   key={link.href}
                   href={link.href}
                   onClick={e => { e.preventDefault(); handleNavClick(link.href); }}
-                  className="block px-3 py-3 text-slate-300 hover:text-white hover:bg-slate-800/50 rounded-lg transition-colors text-sm font-medium"
+                  className="block px-3 py-3 text-sm transition-colors"
+                  style={{ color: c.dim }}
                 >
+                  <span style={{ color: c.slash, marginRight: 4 }}>//</span>
                   {link.label}
                 </a>
               ))}
               <a
                 href="#final-cta"
                 onClick={e => { e.preventDefault(); handleNavClick('#final-cta'); }}
-                className="block w-full text-center px-4 py-3 bg-blue-500 hover:bg-blue-400 text-white text-sm font-semibold rounded-lg transition-colors mt-2"
+                className="block w-full text-center px-4 py-3 text-sm font-bold mt-3"
+                style={{ backgroundColor: c.blue, color: c.textOnBlue }}
               >
-                {t('nav.cta')}
+                book_a_call()
               </a>
             </div>
           </motion.div>
