@@ -46,4 +46,4 @@ export const light = {
   barGood: '#15945a',
 } as const;
 
-export type ColorPalette = typeof dark;
+export type ColorPalette = { [K in keyof typeof dark]: string };
