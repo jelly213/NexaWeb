@@ -8,7 +8,7 @@ const icons = [DollarSign, FileText, Rocket];
 
 export default function HowItWorks() {
   const { t, language } = useLanguage();
-  const { c, restartKey } = useTheme();
+  const { c } = useTheme();
 
   const [marginCount, setMarginCount] = useState(0);
   const marginRef = useRef<HTMLDivElement>(null);
@@ -27,7 +27,7 @@ export default function HowItWorks() {
     };
     const delay = setTimeout(() => requestAnimationFrame(tick), 300);
     return () => clearTimeout(delay);
-  }, [isInView, restartKey]);
+  }, [isInView]);
 
   const displayMargin = marginCount >= 4000
     ? t('hiw.margin.value')

@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import plumbingImg from '../assets/plumbing-mockup.JPG';
-import lawfirmImg from '../assets/lawfirm-mockup.JPG';
-import kitchenImg from '../assets/kitchen-mokcup.JPG';
-import estheticsImg from '../assets/professional-esthetics.JPG';
+import plumbingImg from '../assets/plumbing-mockup.webp';
+import lawfirmImg from '../assets/lawfirm-mockup.webp';
+import kitchenImg from '../assets/kitchen-mockup.webp';
+import estheticsImg from '../assets/professional-esthetics.webp';
 
 type Language = 'EN' | 'FR';
 

@@ -44,7 +44,7 @@ export default function Navbar() {
           onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
           className="flex items-center gap-2.5"
         >
-          <img src={logo} alt="NexaWebDev" className="w-6 h-6" />
+          <img src={logo} alt="" aria-hidden="true" className="w-6 h-6" width="24" height="24" />
           <span
             className="font-bold text-[18px]"
             style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '-0.01em', color: c.textHead }}

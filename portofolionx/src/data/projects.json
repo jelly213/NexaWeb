@@ -11,7 +11,7 @@
       "title": "BenMachiche.dev",
       "category": "Portfolio",
       "description": "Personal developer portfolio showcasing projects, skills, and professional experience with modern design and smooth animations.",
-      "image": "/benmachiche.png",
+      "image": "/benmachiche.webp",
       "tags": ["React", "TypeScript", "Framer Motion", "Responsive"],
       "link": "https://benmachiche.dev",
       "featured": true
@@ -21,7 +21,7 @@
       "title": "Skinsations.ca",
       "category": "Beauty & Wellness",
       "description": "Professional esthetics clinic website with service booking, gallery, and comprehensive skincare information.",
-      "image": "/skinsations.png",
+      "image": "/skinsations.webp",
       "tags": ["Next.js", "Booking System", "SEO", "CMS"],
       "link": "https://skinsations.ca",
       "featured": true

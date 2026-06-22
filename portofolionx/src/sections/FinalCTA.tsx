@@ -11,6 +11,13 @@ export default function FinalCTA() {
 
   const openCalendly = () => {
     const locale = language === 'FR' ? 'fr' : 'en';
+    if (!document.querySelector('link[data-calendly]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://assets.calendly.com/assets/external/widget.css';
+      link.dataset.calendly = '1';
+      document.head.appendChild(link);
+    }
     (window as any).Calendly?.initPopupWidget({ url: `${CALENDLY_URL}?locale=${locale}` });
   };
 
@@ -30,20 +37,14 @@ export default function FinalCTA() {
             {t('cta.badge').toLowerCase().replace(/\s+/g, '_')}
           </div>
 
-          <div>
-            <h2
-              className="font-bold text-[38px] sm:text-[48px] leading-[1.1] mb-1"
-              style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '-0.02em', color: c.textHead }}
-            >
-              {t('cta.title')}
-            </h2>
-            <h2
-              className="font-bold text-[38px] sm:text-[48px] leading-[1.1]"
-              style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '-0.02em', color: c.blue }}
-            >
-              {t('cta.titleAccent')}
-            </h2>
-          </div>
+          <h2
+            className="font-bold text-[38px] sm:text-[48px] leading-[1.1]"
+            style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '-0.02em', color: c.textHead }}
+          >
+            {t('cta.title')}
+            <br />
+            <span style={{ color: c.blue }}>{t('cta.titleAccent')}</span>
+          </h2>
 
           <p className="font-mono text-[14px] max-w-2xl leading-[1.7]" style={{ color: c.muted }}>
             {t('cta.sub')}

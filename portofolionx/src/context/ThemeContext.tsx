@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, type ReactNode } from 'react';
 import { dark, light, type ColorPalette } from '../lib/colors';
 
 type Theme = 'dark' | 'light';
@@ -7,25 +7,17 @@ interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
   c: ColorPalette;
-  restartKey: number;
 }
 
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('dark');
-  const [restartKey, setRestartKey] = useState(0);
-
   const toggleTheme = () => setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   const c = theme === 'dark' ? dark : light;
 
-  useEffect(() => {
-    const id = setInterval(() => setRestartKey(k => k + 1), 30000);
-    return () => clearInterval(id);
-  }, []);
-
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, c, restartKey }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, c }}>
       {children}
     </ThemeContext.Provider>
   );

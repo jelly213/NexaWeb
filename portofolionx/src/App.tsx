@@ -1,13 +1,15 @@
+import { lazy, Suspense } from 'react';
 import { LazyMotion, domAnimation } from 'framer-motion';
 import { LanguageProvider } from './context/LanguageContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Hero from './sections/Hero';
-import Problem from './sections/Problem';
-import HowItWorks from './sections/HowItWorks';
-import TechStack from './sections/TechStack';
-import FinalCTA from './sections/FinalCTA';
 import Footer from './components/Footer';
+
+const Problem = lazy(() => import('./sections/Problem'));
+const HowItWorks = lazy(() => import('./sections/HowItWorks'));
+const TechStack = lazy(() => import('./sections/TechStack'));
+const FinalCTA = lazy(() => import('./sections/FinalCTA'));
 
 function AppInner() {
   const { c } = useTheme();
@@ -16,10 +18,12 @@ function AppInner() {
       <Navbar />
       <main>
         <Hero />
-        <Problem />
-        <HowItWorks />
-        <TechStack />
-        <FinalCTA />
+        <Suspense fallback={null}>
+          <Problem />
+          <HowItWorks />
+          <TechStack />
+          <FinalCTA />
+        </Suspense>
       </main>
       <Footer />
     </div>

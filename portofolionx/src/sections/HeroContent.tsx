@@ -1,45 +1,17 @@
-import { useState, useEffect } from 'react';
 import { m } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 
 export default function HeroContent() {
-  const { t, language } = useLanguage();
-  const { c, restartKey } = useTheme();
-
-  const [nums, setNums] = useState({ n48: 0, nK: 0, n90: 0 });
-
-  useEffect(() => {
-    setNums({ n48: 0, nK: 0, n90: 0 });
-    const duration = 1300;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const raw = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - raw, 3);
-      setNums({
-        n48: Math.round(eased * 48),
-        nK: Math.round(eased * 1000),
-        n90: Math.round(eased * 90),
-      });
-      if (raw < 1) requestAnimationFrame(tick);
-    };
-    const delay = setTimeout(() => requestAnimationFrame(tick), 700);
-    return () => clearTimeout(delay);
-  }, [restartKey]);
-
-  const disp48 = `${nums.n48}h`;
-  const dispK = language === 'EN'
-    ? (nums.nK >= 1000 ? '$1K' : `$${nums.nK}`)
-    : (nums.nK >= 1000 ? '1K$' : `${nums.nK}$`);
-  const disp90 = `${nums.n90}+`;
-  const dispFREN = t('hero.stat4.value');
+  const { t } = useLanguage();
+  const { c } = useTheme();
 
   const statItems = [
-    { val: disp48, lbl: t('hero.stat1.label') },
-    { val: dispK,  lbl: t('hero.stat2.label') },
-    { val: disp90, lbl: t('hero.stat3.label') },
-    { val: dispFREN, lbl: t('hero.stat4.label') },
+    { val: t('hero.stat1.value'), lbl: t('hero.stat1.label') },
+    { val: t('hero.stat2.value'), lbl: t('hero.stat2.label') },
+    { val: t('hero.stat3.value'), lbl: t('hero.stat3.label') },
+    { val: t('hero.stat4.value'), lbl: t('hero.stat4.label') },
   ];
 
   const handleScroll = (id: string) => {
@@ -48,9 +20,9 @@ export default function HeroContent() {
 
   return (
     <m.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: 'easeOut' }}
+      initial={{ y: 24 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.55, ease: 'easeOut' }}
       className="flex flex-col px-8 lg:px-12 pt-14 pb-0"
     >
       <div className="space-y-6 max-w-xl">
@@ -67,11 +39,11 @@ export default function HeroContent() {
           {t('hero.badge')}
         </m.div>
 
-        {/* Headline */}
+        {/* Headline — no opacity:0 so Lighthouse registers LCP immediately */}
         <m.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          initial={{ y: 12 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.5, delay: 0.05 }}
           className="font-bold text-[48px] sm:text-[52px] lg:text-[56px] leading-[1.06]"
           style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '-0.02em', color: c.textHead }}
         >
@@ -124,7 +96,7 @@ export default function HeroContent() {
         </m.div>
       </div>
 
-      {/* Stats strip — each box staggers in, numbers count up */}
+      {/* Stats strip */}
       <div
         className="mt-11 flex overflow-hidden"
         style={{ border: `1px solid ${c.border}` }}

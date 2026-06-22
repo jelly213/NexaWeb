@@ -1,26 +1,8 @@
-import { useState, useEffect } from 'react';
 import { m } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 
 export default function HeroImage() {
-  const { c, restartKey } = useTheme();
-  const [counts, setCounts] = useState({ bad: 0, good: 0 });
-
-  useEffect(() => {
-    setCounts({ bad: 0, good: 0 });
-    const duration = 1400;
-    const start = performance.now();
-
-    const tick = (now: number) => {
-      const raw = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - raw, 3);
-      setCounts({ bad: Math.round(eased * 47), good: Math.round(eased * 98) });
-      if (raw < 1) requestAnimationFrame(tick);
-    };
-
-    const delay = setTimeout(() => requestAnimationFrame(tick), 200);
-    return () => clearTimeout(delay);
-  }, [restartKey]);
+  const { c } = useTheme();
 
   return (
     <m.div
@@ -57,13 +39,12 @@ export default function HeroImage() {
           <div style={{ color: c.comment }}># nexawebdev: custom next.js</div>
           <div style={{ color: c.green }}>✓ performance ......... 98</div>
 
-          {/* Animated bars */}
+          {/* Animated bars — numbers static, bars animate via Framer Motion */}
           <div className="mt-3.5 space-y-2">
             <div className="flex items-center gap-3 text-[12px]">
               <span className="w-[110px] shrink-0" style={{ color: c.dim }}>their build</span>
               <div className="flex-1 h-2 overflow-hidden" style={{ backgroundColor: c.bgTrack }}>
                 <m.div
-                  key={`bad-${restartKey}`}
                   className="h-full"
                   style={{ backgroundColor: c.barBad }}
                   initial={{ width: 0 }}
@@ -71,15 +52,12 @@ export default function HeroImage() {
                   transition={{ delay: 0.2, duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
                 />
               </div>
-              <span className="w-[34px] text-right font-bold tabular-nums" style={{ color: c.barBad }}>
-                {counts.bad}
-              </span>
+              <span className="w-[34px] text-right font-bold tabular-nums" style={{ color: c.barBad }}>47</span>
             </div>
             <div className="flex items-center gap-3 text-[12px]">
               <span className="w-[110px] shrink-0" style={{ color: c.dim }}>our build</span>
               <div className="flex-1 h-2 overflow-hidden" style={{ backgroundColor: c.bgTrack }}>
                 <m.div
-                  key={`good-${restartKey}`}
                   className="h-full"
                   style={{ backgroundColor: c.barGood }}
                   initial={{ width: 0 }}
@@ -87,9 +65,7 @@ export default function HeroImage() {
                   transition={{ delay: 0.2, duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
                 />
               </div>
-              <span className="w-[34px] text-right font-bold tabular-nums" style={{ color: c.barGood }}>
-                {counts.good}
-              </span>
+              <span className="w-[34px] text-right font-bold tabular-nums" style={{ color: c.barGood }}>98</span>
             </div>
           </div>
 
