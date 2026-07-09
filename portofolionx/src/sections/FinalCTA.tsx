@@ -2,24 +2,11 @@ import { m } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
-
-const CALENDLY_URL = 'https://calendly.com/contact-nexawebdev/partner-discovery-call';
+import { openCalendly } from '../lib/calendly';
 
 export default function FinalCTA() {
   const { t, language } = useLanguage();
   const { c } = useTheme();
-
-  const openCalendly = () => {
-    const locale = language === 'FR' ? 'fr' : 'en';
-    if (!document.querySelector('link[data-calendly]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'https://assets.calendly.com/assets/external/widget.css';
-      link.dataset.calendly = '1';
-      document.head.appendChild(link);
-    }
-    (window as any).Calendly?.initPopupWidget({ url: `${CALENDLY_URL}?locale=${locale}` });
-  };
 
   const riskItems = [t('cta.risk1'), t('cta.risk2'), t('cta.risk3'), t('cta.risk4')];
 
@@ -51,7 +38,7 @@ export default function FinalCTA() {
           </p>
 
           <m.button
-            onClick={openCalendly}
+            onClick={() => openCalendly('final', language)}
             whileHover={{ opacity: 0.9 }}
             whileTap={{ scale: 0.98 }}
             className="inline-flex items-center gap-3 px-8 py-4 font-mono font-bold text-sm"

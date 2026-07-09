@@ -1,6 +1,6 @@
 import { m } from 'framer-motion';
 import { Code2, ShoppingCart, Globe, Layers, ImageIcon, Eye } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage, type PortfolioItem } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 
 const platformIcons = [Code2, ShoppingCart, Globe, Layers];
@@ -80,78 +80,97 @@ export default function TechStack() {
           })}
         </div>
 
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className="mb-6">
-            <h3
-              className="font-bold text-xl mb-1"
-              style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.textHead }}
-            >
-              {t('stack.portfolio.title')}
-            </h3>
-            <p className="font-mono text-[13px]" style={{ color: c.dim }}>{t('stack.portfolio.sub')}</p>
-          </div>
+        {/* Client work and demo builds are labelled separately on purpose. Three of these were
+            never sold to a client, and a prospect who clicks through to a *.pages.dev URL under
+            a "recent deliveries" heading has every reason to distrust the rest of the page. */}
+        <PortfolioGroup
+          title={t('stack.clientwork.title')}
+          sub={t('stack.clientwork.sub')}
+          items={portfolioItems.filter(i => i.kind === 'client')}
+        />
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-[18px]">
-            {portfolioItems.map((item, i) => (
-              <m.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="group rounded-[6px] overflow-hidden transition-colors"
-                style={{ backgroundColor: c.bgCard, border: `1px solid ${c.borderSoft}` }}
-              >
-                <div className="relative aspect-video flex flex-col items-center justify-center gap-2 overflow-hidden" style={{ backgroundColor: c.bgTrack }}>
-                  {item.image ? (
-                    <img
-                      src={item.image}
-                      alt=""
-                      role="presentation"
-                      className="absolute inset-0 object-cover w-full h-full"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <>
-                      <ImageIcon size={28} className="relative z-10" style={{ color: c.dim }} />
-                      <span className="font-mono text-xs relative z-10" style={{ color: c.dim }}>Coming Soon</span>
-                    </>
-                  )}
-                  {item.link && (
-                    <a
-                      href={item.link.startsWith('http') ? item.link : `https://${item.link}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`View ${item.title}`}
-                      className="absolute inset-0 z-20 flex items-center justify-center bg-black/0 group-hover:bg-black/50 transition-colors"
-                    >
-                      <Eye size={22} aria-hidden="true" className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
-                  )}
-                  <div
-                    className="absolute top-3 right-3 w-2 h-2 rounded-full animate-pulse z-30"
-                    style={{ backgroundColor: c.green }}
-                  />
-                </div>
-                <div className="p-4">
-                  <p className="font-mono text-xs mb-1" style={{ color: c.blue }}>{item.category}</p>
-                  <h4
-                    className="font-semibold text-sm"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.textHead }}
-                  >
-                    {item.title}
-                  </h4>
-                </div>
-              </m.div>
-            ))}
-          </div>
-        </m.div>
+        <div className="mt-14">
+          <PortfolioGroup
+            title={t('stack.demo.title')}
+            sub={t('stack.demo.sub')}
+            items={portfolioItems.filter(i => i.kind === 'demo')}
+          />
+        </div>
       </div>
     </section>
+  );
+}
+
+function PortfolioGroup({ title, sub, items }: { title: string; sub: string; items: PortfolioItem[] }) {
+  const { c } = useTheme();
+  if (items.length === 0) return null;
+
+  return (
+    <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+      <div className="mb-6">
+        <h3
+          className="font-bold text-xl mb-1"
+          style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.textHead }}
+        >
+          {title}
+        </h3>
+        <p className="font-mono text-[13px]" style={{ color: c.dim }}>{sub}</p>
+      </div>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-[18px]">
+        {items.map((item, i) => (
+          <m.div
+            key={item.link}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.08 }}
+            className="group rounded-[6px] overflow-hidden transition-colors"
+            style={{ backgroundColor: c.bgCard, border: `1px solid ${c.borderSoft}` }}
+          >
+            <div className="relative aspect-video flex flex-col items-center justify-center gap-2 overflow-hidden" style={{ backgroundColor: c.bgTrack }}>
+              {item.image ? (
+                <img
+                  src={item.image}
+                  alt={`${item.title} — ${item.category}`}
+                  className="absolute inset-0 object-cover w-full h-full"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <>
+                  <ImageIcon size={28} className="relative z-10" style={{ color: c.dim }} />
+                  <span className="font-mono text-xs relative z-10" style={{ color: c.dim }}>Coming Soon</span>
+                </>
+              )}
+              {item.link && (
+                <a
+                  href={item.link.startsWith('http') ? item.link : `https://${item.link}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`View ${item.title}`}
+                  className="absolute inset-0 z-20 flex items-center justify-center bg-black/0 group-hover:bg-black/50 transition-colors"
+                >
+                  <Eye size={22} aria-hidden="true" className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
+              )}
+              <div
+                className="absolute top-3 right-3 w-2 h-2 rounded-full animate-pulse z-30"
+                style={{ backgroundColor: c.green }}
+              />
+            </div>
+            <div className="p-4">
+              <p className="font-mono text-xs mb-1" style={{ color: c.blue }}>{item.category}</p>
+              <h4
+                className="font-semibold text-sm"
+                style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.textHead }}
+              >
+                {item.title}
+              </h4>
+            </div>
+          </m.div>
+        ))}
+      </div>
+    </m.div>
   );
 }

@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { track } from '../lib/analytics';
 import plumbingImg from '../assets/plumbing-mockup.webp';
 import lawfirmImg from '../assets/lawfirm-mockup.webp';
 import kitchenImg from '../assets/kitchen-mockup.webp';
@@ -19,7 +20,7 @@ const translations = {
     'hero.headline2': 'without touching code.',
     'hero.sub':
       'Send a brief, get a custom-coded bilingual site in 48 hours. Invoice at your own rate.',
-    'hero.cta1': 'become_a_partner',
+    'hero.cta1': 'book_a_call()',
     'hero.cta2': 'how-it-works',
     'hero.proof': 'Used by digital agencies across Canada and the US',
     'hero.stat1.value': '48h',
@@ -64,8 +65,18 @@ const translations = {
     'stack.titleAccent': 'That Actually Perform',
     'stack.sub':
       "We skip the page builders. Every site is custom-coded for speed and SEO.",
-    'stack.portfolio.title': 'Recent White-Label Deliveries',
-    'stack.portfolio.sub': 'Sold by agencies. Built by us. Your clients never know.',
+    'stack.clientwork.title': 'Client Work',
+    'stack.clientwork.sub': 'Live sites. Sold by agencies, built by us. Their clients never knew.',
+    'stack.demo.title': 'Demo Builds',
+    'stack.demo.sub': 'Built to show the work, not sold to a client. Same stack, same 48 hours.',
+
+    // Consent banner (Law 25 — opt-in, must name Google Analytics)
+    'consent.text':
+      'We use Google Analytics to understand how this page is used. It sets cookies and sends data to Google. Nothing loads until you choose.',
+    'consent.accept': 'Accept',
+    'consent.refuse': 'Refuse',
+    'consent.manage': 'Manage cookies',
+    'consent.aria': 'Cookie consent',
 
     // FinalCTA
     'cta.badge': 'Zero Risk to Start',
@@ -84,7 +95,7 @@ const translations = {
     'footer.nav.howItWorks': 'How It Works',
     'footer.nav.stack': 'Our Stack',
     'footer.nav.partner': 'Become a Partner',
-    'footer.contact': 'contact@nexawebdev.com',
+    'footer.contact': 'contact@nexawebdev.ca',
     'footer.copyright': '© 2025 NexaWebDev. All rights reserved.',
     'footer.legal': 'Built for agencies. Invisible by design.',
   },
@@ -100,7 +111,7 @@ const translations = {
     'hero.headline2': 'sans toucher une ligne de code.',
     'hero.sub':
       "Envoyez un brief, recevez un site bilingue codé sur mesure en 48h. Facturez à votre propre tarif.",
-    'hero.cta1': 'devenir_partenaire',
+    'hero.cta1': 'réserver_un_appel()',
     'hero.cta2': 'comment-ça-marche',
     'hero.proof': 'Utilisé par des agences numériques au Canada et aux États-Unis',
     'hero.stat1.value': '48h',
@@ -145,8 +156,18 @@ const translations = {
     'stack.titleAccent': 'qui performent vraiment',
     'stack.sub':
       "On ne touche pas aux constructeurs de pages. Chaque site est codé sur mesure pour la vitesse et le SEO.",
-    'stack.portfolio.title': 'Livraisons récentes en marque blanche',
-    'stack.portfolio.sub': 'Vendus par des agences. Construits par nous. Vos clients ne sauront jamais.',
+    'stack.clientwork.title': 'Travaux clients',
+    'stack.clientwork.sub': 'Sites en ligne. Vendus par des agences, construits par nous. Leurs clients ne l\'ont jamais su.',
+    'stack.demo.title': 'Démos',
+    'stack.demo.sub': 'Construits pour montrer le travail, pas vendus à un client. Même stack, mêmes 48h.',
+
+    // Consent banner (Loi 25 — opt-in, doit nommer Google Analytics)
+    'consent.text':
+      'On utilise Google Analytics pour comprendre comment cette page est utilisée. Ça dépose des témoins et envoie des données à Google. Rien ne se charge avant votre choix.',
+    'consent.accept': 'Accepter',
+    'consent.refuse': 'Refuser',
+    'consent.manage': 'Gérer les témoins',
+    'consent.aria': 'Consentement aux témoins',
 
     // FinalCTA
     'cta.badge': 'Zéro risque pour commencer',
@@ -165,7 +186,7 @@ const translations = {
     'footer.nav.howItWorks': 'Comment ça marche',
     'footer.nav.stack': 'Notre stack',
     'footer.nav.partner': 'Devenir partenaire',
-    'footer.contact': 'contact@nexawebdev.com',
+    'footer.contact': 'contact@nexawebdev.ca',
     'footer.copyright': '© 2025 NexaWebDev. Tous droits réservés.',
     'footer.legal': 'Conçu pour les agences. Invisible par design.',
   },
@@ -254,18 +275,31 @@ const platformItems: Record<Language, { name: string; desc: string; badge: strin
   ],
 };
 
-const portfolioItems: Record<Language, { title: string; category: string; image: string; link: string }[]> = {
+export type PortfolioKind = 'client' | 'demo';
+
+export interface PortfolioItem {
+  title: string;
+  category: string;
+  image: string;
+  link: string;
+  kind: PortfolioKind;
+}
+
+// `kind` is load-bearing, not cosmetic: three of these are demo builds, not sold client work.
+// Labelling them as deliveries is an over-claim a prospect catches the moment they see
+// `mockup.pages.dev` in the URL bar.
+const portfolioItems: Record<Language, PortfolioItem[]> = {
   EN: [
-    { title: 'Emergency Plumbing Co.', category: 'Home Services — React/Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/' },
-    { title: 'Marchand & Associés', category: 'Law Firm — WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/' },
-    { title: 'Prestige Rénovation', category: 'Kitchen & Bath — Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/' },
-    { title: 'Professional Esthetics Clinic', category: 'Ecommerce — Shopify', image: estheticsImg, link: 'https://skinsations.ca' },
+    { title: 'Professional Esthetics Clinic', category: 'Ecommerce — Shopify', image: estheticsImg, link: 'https://skinsations.ca', kind: 'client' },
+    { title: 'Emergency Plumbing Co.', category: 'Home Services — React/Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/', kind: 'demo' },
+    { title: 'Marchand & Associés', category: 'Law Firm — WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/', kind: 'demo' },
+    { title: 'Prestige Rénovation', category: 'Kitchen & Bath — Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/', kind: 'demo' },
   ],
   FR: [
-    { title: "Services de plomberie d'urgence", category: 'Services à domicile — React/Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/' },
-    { title: 'Marchand & Associés', category: 'Cabinet juridique — WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/' },
-    { title: 'Prestige Rénovation', category: 'Cuisine & Salle de bain — Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/' },
-    { title: "Clinique d'esthétique professionnelle", category: 'E-commerce — Shopify', image: estheticsImg, link: 'https://skinsations.ca' },
+    { title: "Clinique d'esthétique professionnelle", category: 'E-commerce — Shopify', image: estheticsImg, link: 'https://skinsations.ca', kind: 'client' },
+    { title: "Services de plomberie d'urgence", category: 'Services à domicile — React/Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/', kind: 'demo' },
+    { title: 'Marchand & Associés', category: 'Cabinet juridique — WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/', kind: 'demo' },
+    { title: 'Prestige Rénovation', category: 'Cuisine & Salle de bain — Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/', kind: 'demo' },
   ],
 };
 
@@ -276,15 +310,37 @@ interface LanguageContextType {
   tProblemLeft: () => string[];
   tProblemRight: () => string[];
   tPlatformItems: () => { name: string; desc: string; badge: string }[];
-  tPortfolioItems: () => { title: string; category: string; image: string; link: string }[];
+  tPortfolioItems: () => PortfolioItem[];
 }
 
 const LanguageContext = createContext<LanguageContextType | null>(null);
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>('EN');
+const LANG_KEY = 'nx_lang';
 
-  const toggleLanguage = () => setLanguage(prev => (prev === 'EN' ? 'FR' : 'EN'));
+/** Stored choice wins; then the browser's own preference; then EN. */
+function initialLanguage(): Language {
+  if (typeof window === 'undefined') return 'EN';
+  const stored = window.localStorage.getItem(LANG_KEY);
+  if (stored === 'EN' || stored === 'FR') return stored;
+  return navigator.language.toLowerCase().startsWith('fr') ? 'FR' : 'EN';
+}
+
+export function LanguageProvider({ children }: { children: ReactNode }) {
+  const [language, setLanguage] = useState<Language>(initialLanguage);
+
+  // The document must declare the language it is actually rendering, or a screen reader
+  // pronounces French copy with an English voice.
+  useEffect(() => {
+    document.documentElement.lang = language === 'FR' ? 'fr' : 'en';
+    window.localStorage.setItem(LANG_KEY, language);
+  }, [language]);
+
+  const toggleLanguage = () =>
+    setLanguage(prev => {
+      const next = prev === 'EN' ? 'FR' : 'EN';
+      track({ name: 'lang_toggle', to: next });
+      return next;
+    });
 
   const t = (key: StringKey): string => translations[language][key];
 

@@ -1,15 +1,17 @@
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
+import { useConsent } from '../context/ConsentContext';
+import { openCalendly } from '../lib/calendly';
 import type { MouseEvent } from 'react';
 
 export default function Footer() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { c } = useTheme();
+  const { status, reopen } = useConsent();
 
   const navLinks = [
     { label: t('footer.nav.howItWorks'), href: '#how-it-works' },
     { label: t('footer.nav.stack'), href: '#tech-stack' },
-    { label: t('footer.nav.partner'), href: '#final-cta' },
   ];
 
   const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -48,6 +50,16 @@ export default function Footer() {
                 {link.label}
               </a>
             ))}
+            <button
+              type="button"
+              onClick={() => openCalendly('footer', language)}
+              className="transition-colors"
+              style={{ color: c.dim }}
+              onMouseEnter={e => (e.currentTarget.style.color = c.text)}
+              onMouseLeave={e => (e.currentTarget.style.color = c.dim)}
+            >
+              {t('footer.nav.partner')}
+            </button>
           </nav>
 
           <a
@@ -64,7 +76,20 @@ export default function Footer() {
           style={{ borderTop: `1px solid ${c.border}` }}
         >
           <p className="font-mono text-xs" style={{ color: c.slash }}>{t('footer.copyright')}</p>
-          <p className="font-mono text-xs" style={{ color: c.slash }}>{t('footer.legal')}</p>
+          <div className="flex items-center gap-5">
+            {/* Law 25: consent must be as easy to withdraw as it was to give. */}
+            {status !== 'unknown' && (
+              <button
+                type="button"
+                onClick={reopen}
+                className="font-mono text-xs underline underline-offset-2 hover:opacity-80 transition-opacity"
+                style={{ color: c.slash }}
+              >
+                {t('consent.manage')}
+              </button>
+            )}
+            <p className="font-mono text-xs" style={{ color: c.slash }}>{t('footer.legal')}</p>
+          </div>
         </div>
       </div>
     </footer>

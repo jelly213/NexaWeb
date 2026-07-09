@@ -2,6 +2,9 @@ import { lazy, Suspense } from 'react';
 import { LazyMotion, domAnimation } from 'framer-motion';
 import { LanguageProvider } from './context/LanguageContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { ConsentProvider } from './context/ConsentContext';
+import ConsentBanner from './components/ConsentBanner';
+import PageAnalytics from './components/PageAnalytics';
 import Navbar from './components/Navbar';
 import Hero from './sections/Hero';
 import Footer from './components/Footer';
@@ -15,6 +18,7 @@ function AppInner() {
   const { c } = useTheme();
   return (
     <div className="min-h-screen" style={{ backgroundColor: c.bg, color: c.text }}>
+      <PageAnalytics />
       <Navbar />
       <main>
         <Hero />
@@ -26,6 +30,7 @@ function AppInner() {
         </Suspense>
       </main>
       <Footer />
+      <ConsentBanner />
     </div>
   );
 }
@@ -34,9 +39,11 @@ function App() {
   return (
     <LanguageProvider>
       <ThemeProvider>
-        <LazyMotion features={domAnimation}>
-          <AppInner />
-        </LazyMotion>
+        <ConsentProvider>
+          <LazyMotion features={domAnimation}>
+            <AppInner />
+          </LazyMotion>
+        </ConsentProvider>
       </ThemeProvider>
     </LanguageProvider>
   );

@@ -1,0 +1,21 @@
+# Cloudflare Pages configuration for nexaweb.dev
+#
+# The Analytics Engine binding below is what `functions/api/e.ts` writes to. It must also
+# exist in the Pages project settings (Settings → Functions → Analytics Engine bindings).
+#
+# Secrets are NOT declared here. Set these as *encrypted* environment variables in the Pages
+# dashboard, never in this file and never with a VITE_ prefix:
+#   STATS_BEARER   — bearer token guarding GET /api/stats
+#   CF_API_TOKEN   — Account · Account Analytics · Read
+#   CF_ACCOUNT_ID  — c03d3d92284dac3986c4e79fec1ba417
+#
+# Public build-time vars (safe to inline in the client bundle) go in the Pages UI too:
+#   VITE_GA4_ID    — G-XXXXXXX
+
+name = "nexaweb"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-07-09"
+
+[[analytics_engine_datasets]]
+binding = "AE"
+dataset = "nexaweb_events"

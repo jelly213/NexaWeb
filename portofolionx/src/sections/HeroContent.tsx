@@ -2,9 +2,10 @@ import { m } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
+import { openCalendly } from '../lib/calendly';
 
 export default function HeroContent() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { c } = useTheme();
 
   const statItems = [
@@ -71,9 +72,9 @@ export default function HeroContent() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-col sm:flex-row gap-3"
         >
-          <m.a
-            href="#final-cta"
-            onClick={e => { e.preventDefault(); handleScroll('#final-cta'); }}
+          <m.button
+            type="button"
+            onClick={() => openCalendly('hero', language)}
             whileHover={{ opacity: 0.9 }}
             whileTap={{ scale: 0.98 }}
             className="inline-flex items-center justify-center gap-2 px-[22px] py-[13px] font-mono font-bold text-[13px]"
@@ -81,7 +82,7 @@ export default function HeroContent() {
           >
             {t('hero.cta1')}
             <ArrowRight size={15} />
-          </m.a>
+          </m.button>
           <m.a
             href="#how-it-works"
             onClick={e => { e.preventDefault(); handleScroll('#how-it-works'); }}

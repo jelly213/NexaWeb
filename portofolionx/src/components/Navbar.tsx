@@ -3,6 +3,7 @@ import { m, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
+import { openCalendly } from '../lib/calendly';
 import logo from '../assets/logo.svg';
 
 export default function Navbar() {
@@ -116,14 +117,14 @@ export default function Navbar() {
           </button>
 
           {/* Desktop CTA */}
-          <a
-            href="#final-cta"
-            onClick={e => { e.preventDefault(); handleNavClick('#final-cta'); }}
+          <button
+            type="button"
+            onClick={() => openCalendly('nav', language)}
             className="hidden lg:inline-flex items-center px-4 py-2 text-[13px] font-mono font-bold hover:opacity-90 transition-opacity"
             style={{ backgroundColor: c.blue, color: c.textOnBlue }}
           >
             book_a_call()
-          </a>
+          </button>
 
           {/* Mobile hamburger */}
           <button
@@ -161,14 +162,14 @@ export default function Navbar() {
                   {link.label}
                 </a>
               ))}
-              <a
-                href="#final-cta"
-                onClick={e => { e.preventDefault(); handleNavClick('#final-cta'); }}
+              <button
+                type="button"
+                onClick={() => { setMobileOpen(false); openCalendly('nav', language); }}
                 className="block w-full text-center px-4 py-3 text-sm font-bold mt-3"
                 style={{ backgroundColor: c.blue, color: c.textOnBlue }}
               >
                 book_a_call()
-              </a>
+              </button>
             </div>
           </m.div>
         )}
