@@ -40,22 +40,32 @@ Cloudflare session.
 |---|---|
 | `CF_ACCOUNT_ID` | `c03d3d92284dac3986c4e79fec1ba417` (from `npx wrangler whoami`) |
 | `CF_API_TOKEN` * | https://dash.cloudflare.com/profile/api-tokens → Create Custom Token → **Account · Account Analytics · Read** |
-| `CF_SITE_TAG` * | Pages project → Metrics → Web Analytics → Enable. The site tag is the `token` in the beacon config. |
-| `STATS_BEARER` * | Any long random string. Set it as an **encrypted** Pages env var *and* export it locally. |
+| `CF_SITE_TAG` * | Web Analytics → the `nexaweb.dev` site → **Manage site → Advanced Options**. (Already enabled; don't create a second site for `nexaweb-czn.pages.dev`.) |
+| `STATS_BEARER` * | Any long random string. Set it as a **Worker secret** *and* export it locally. |
 
 The `wrangler` OAuth token **cannot** read analytics. Its scopes are `account:read, user:read,
 workers:*, workers_tail:read` — `account:read` is account *metadata*, not analytics. A dedicated
 API token is required.
 
-Also needed once, in the Pages project, for `/api/stats` to work:
+### Where the sink lives
 
-- Settings → Functions → **Analytics Engine bindings** → binding `AE`, dataset `nexaweb_events`
-  (matches `wrangler.toml`)
-- Settings → Environment variables → **encrypted**: `STATS_BEARER`, `CF_API_TOKEN`, `CF_ACCOUNT_ID`
+`nexaweb.dev` is hosted on **Vercel**. The beacon is a standalone Cloudflare Worker,
+`website/events-worker/` → `events.nexaweb.dev`, and it stores events in **Workers KV** (namespace
+`EVENTS_KV`, id `2adcfe78f2a3495ebbf715dbc914807f`). It reads/writes KV directly, so the only
+secret it needs is `STATS_BEARER`:
+
+```bash
+cd ../events-worker
+npx wrangler secret put STATS_BEARER   # the same value you export locally for events.mjs
+npx wrangler deploy
+```
+
+`CF_API_TOKEN`, `CF_ACCOUNT_ID` and `CF_SITE_TAG` are **not** used by the Worker. They belong to
+`cf_rum.mjs` only (reading Cloudflare Web Analytics), and stay in your local shell.
 
 > **Never give these a `VITE_` prefix.** Vite inlines every `VITE_*` value into the public client
-> bundle, which would publish the secret to anyone who opens devtools. Only `VITE_GA4_ID` is safe
-> there, because gtag exposes the Measurement ID anyway.
+> bundle, which would publish the secret to anyone who opens devtools. Only `VITE_GA4_ID` and
+> `VITE_EVENTS_URL` are safe there — and those go in **Vercel's** env vars, not Cloudflare's.
 
 ### Google (both scripts share one service account)
 

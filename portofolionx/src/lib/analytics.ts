@@ -11,7 +11,14 @@
 
 import { gtagEvent } from './ga';
 
-const ENDPOINT = '/api/e';
+// The site is hosted on Vercel; the sink is a Cloudflare Worker (Analytics Engine only accepts
+// writes through a Cloudflare binding). So this is a cross-origin POST. Override per-environment
+// with VITE_EVENTS_URL; see website/events-worker/.
+const ENDPOINT = import.meta.env.VITE_EVENTS_URL ?? 'https://events.nexaweb.dev/e';
+
+// text/plain keeps this a CORS "simple request", so the browser sends it straight through with
+// no preflight. application/json would trigger an OPTIONS round-trip that sendBeacon cannot make.
+const CONTENT_TYPE = 'text/plain;charset=UTF-8';
 
 export type CtaLocation = 'hero' | 'nav' | 'footer' | 'final';
 export type ScrollDepth = 25 | 50 | 75 | 100;
@@ -45,7 +52,7 @@ function dedupeKey(e: AnalyticsEvent): string | null {
 
 function send(body: string): void {
   if (navigator.sendBeacon) {
-    const blob = new Blob([body], { type: 'application/json' });
+    const blob = new Blob([body], { type: CONTENT_TYPE });
     if (navigator.sendBeacon(ENDPOINT, blob)) return;
   }
   // keepalive lets the request outlive a page that is unloading, which sendBeacon
@@ -54,7 +61,8 @@ function send(body: string): void {
     method: 'POST',
     body,
     keepalive: true,
-    headers: { 'Content-Type': 'application/json' },
+    mode: 'cors',
+    headers: { 'Content-Type': CONTENT_TYPE },
   }).catch(() => {
     /* analytics must never break the page */
   });

@@ -3,7 +3,10 @@
  * First-party event stream — cta_click, section_view, scroll_depth, call_booked, lang_toggle.
  *
  * Usage:  node analytics/events.mjs [--days 7]
- * Needs:  STATS_BEARER, STATS_URL (defaults to https://nexaweb.dev/api/stats)
+ * Needs:  STATS_BEARER, STATS_URL (defaults to https://events.nexaweb.dev/stats)
+ *
+ * The sink is a standalone Cloudflare Worker (`website/events-worker/`), not a route on the
+ * site — nexaweb.dev is hosted on Vercel, and Analytics Engine only accepts Cloudflare bindings.
  *
  * THIS is the source you compute conversion rates from. It fires for every visitor, consented
  * or not. GA4 only ever sees the subset who clicked Accept, so a GA4 numerator over a
@@ -20,7 +23,7 @@ function argDays() {
 
 async function main() {
   const [bearer] = requireEnv('STATS_BEARER');
-  const base = process.env.STATS_URL ?? 'https://nexaweb.dev/api/stats';
+  const base = process.env.STATS_URL ?? 'https://events.nexaweb.dev/stats';
   const days = argDays();
 
   const res = await fetch(`${base}?days=${days}`, {

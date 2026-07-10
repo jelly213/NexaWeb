@@ -1,0 +1,20 @@
+# Standalone event sink for nexaweb.dev.
+#
+# The site itself is hosted on VERCEL, not Cloudflare Pages — so a Pages Function cannot serve
+# this. This Worker is the only Cloudflare-side runtime.
+#
+# Storage is Workers KV (Analytics Engine was declined by the account; KV is free and ample at
+# this site's volume). The `id` below is filled in after `wrangler kv namespace create EVENTS_KV`.
+#
+# Deploy:  cd website/events-worker && npx wrangler deploy
+#
+# One secret (set once, never committed):
+#   npx wrangler secret put STATS_BEARER
+
+name = "nexaweb-events"
+main = "src/index.ts"
+compatibility_date = "2026-07-09"
+
+[[kv_namespaces]]
+binding = "EVENTS_KV"
+id = "2adcfe78f2a3495ebbf715dbc914807f"

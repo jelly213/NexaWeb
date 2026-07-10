@@ -13,6 +13,12 @@ interface ImportMetaEnv {
    * Vite inlines every VITE_* value into the public client bundle.
    */
   readonly VITE_GA4_ID?: string;
+
+  /**
+   * Event-sink URL. Defaults to https://events.nexaweb.dev/e (the nexaweb-events Worker).
+   * Public by design — it is a write-only, cookieless endpoint.
+   */
+  readonly VITE_EVENTS_URL?: string;
 }
 
 interface ImportMeta {

@@ -6,7 +6,20 @@
 Main portfolio and agency site for NexaWebDev.
 
 ## Project Location
-`website/portofolionx/` — React/Vite SPA deployed on Cloudflare Pages
+`website/portofolionx/` — React/Vite SPA.
+
+**Hosting (verified 2026-07-09 from response headers — this file previously said Cloudflare Pages,
+which was wrong and cost a debugging cycle):**
+
+| What | Where |
+|---|---|
+| `nexaweb.dev` | **Vercel**, auto-deploying from `github.com/jelly213/NexaWeb` on push to `main` |
+| DNS for `nexaweb.dev` | Cloudflare (proxied) — hence `Server: cloudflare`; the origin is Vercel |
+| `events.nexaweb.dev` | Cloudflare Worker (`website/events-worker/`) — the event sink |
+| `nexaweb-czn.pages.dev` | A stale Cloudflare Pages project on the same repo. **Not production.** |
+
+Check with `curl -sI https://nexaweb.dev/ | grep -i vercel`. Do **not** add Cloudflare Pages
+Functions (`functions/`) to this project — Vercel ignores that directory.
 
 ## Commands
 ```bash
@@ -34,7 +47,7 @@ Three layers, two consent rules. Get this wrong and it is a legal problem, not a
 
 | Layer | What | Consent |
 |---|---|---|
-| A | Cloudflare Web Analytics + our `/api/e` beacon (`src/lib/analytics.ts` → `functions/api/e.ts`) | **None needed** — cookieless, no identifier, no IP |
+| A | Cloudflare Web Analytics + our own beacon (`src/lib/analytics.ts` → `events.nexaweb.dev/e`, a Worker in `../events-worker/`) | **None needed** — cookieless, no identifier, no IP |
 | B | GA4 (`src/lib/ga.ts`) | **Explicit opt-in.** `gtag.js` is never injected until Accept |
 | C | Read-only APIs (`../analytics/*.mjs`) | Server-side, no browser impact |
 
@@ -43,8 +56,13 @@ Three layers, two consent rules. Get this wrong and it is a legal problem, not a
 - We gate by *not loading the script*, not by Consent Mode v2 — its `denied` state still pings Google.
 - Layer A's lawfulness rests on storing nothing that identifies a person. **If you ever add a visitor
   ID to `/api/e`, it must move behind the gate.**
-- `VITE_GA4_ID` is public and safe. `STATS_BEARER` / `CF_API_TOKEN` / `CF_ACCOUNT_ID` are secrets and
-  **must never carry a `VITE_` prefix** — Vite inlines those into the client bundle.
+- Event storage is **Workers KV** (namespace `EVENTS_KV`), not Analytics Engine — the account
+  returned code 10089 ("enable Analytics Engine") in a loop, and KV is free + ample at this volume.
+- `VITE_GA4_ID` and `VITE_EVENTS_URL` are public and safe (set them in **Vercel** → Project →
+  Settings → Environment Variables). The Worker's only secret is `STATS_BEARER`, set via
+  `npx wrangler secret put` — **never** with a `VITE_` prefix (Vite inlines those into the public
+  bundle). `CF_API_TOKEN` / `CF_ACCOUNT_ID` / `CF_SITE_TAG` are for `analytics/cf_rum.mjs` only and
+  live in the local shell, not on the Worker.
 - With `VITE_GA4_ID` unset, GA4 tree-shakes out of the bundle entirely and the banner does not render.
   That is the correct default, not a broken state.
 
