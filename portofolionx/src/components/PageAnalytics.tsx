@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { track, type ScrollDepth } from '../lib/analytics';
-import { onCalendlyBooked } from '../lib/calendly';
+import { onCalendlyBooked, onCalendlyStep } from '../lib/calendly';
 
 const SECTION_IDS = ['hero', 'problem', 'how-it-works', 'tech-stack', 'final-cta'] as const;
 const DEPTHS: readonly ScrollDepth[] = [25, 50, 75, 100];
@@ -60,12 +60,14 @@ export default function PageAnalytics() {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     const offBooked = onCalendlyBooked(() => track({ name: 'call_booked' }));
+    const offStep = onCalendlyStep(step => track({ name: 'booking_step', step }));
 
     return () => {
       observer.disconnect();
       mutationObserver?.disconnect();
       window.removeEventListener('scroll', onScroll);
       offBooked();
+      offStep();
     };
   }, []);
 

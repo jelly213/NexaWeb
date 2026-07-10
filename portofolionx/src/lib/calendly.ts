@@ -3,7 +3,7 @@
  * a location and the booking itself is observable.
  */
 
-import { track, type CtaLocation } from './analytics';
+import { track, type CtaLocation, type BookingStep } from './analytics';
 
 const CALENDLY_URL = 'https://calendly.com/contact-nexawebdev/partner-discovery-call';
 const CALENDLY_ORIGIN = 'https://calendly.com';
@@ -39,6 +39,29 @@ export function onCalendlyBooked(callback: () => void): () => void {
     if (typeof e.data !== 'object' || e.data === null) return;
     const { event } = e.data as CalendlyMessage;
     if (event === 'calendly.event_scheduled') callback();
+  };
+
+  window.addEventListener('message', handler);
+  return () => window.removeEventListener('message', handler);
+}
+
+/**
+ * The two intermediate steps between opening the popup and booking, mapped to our own labels.
+ * `event_type_viewed` fires when the calendar renders; `date_and_time_selected` when a slot is
+ * picked. The other Calendly messages are ignored — these two are what make the drop-off visible.
+ */
+const STEP_EVENTS: Record<string, BookingStep> = {
+  'calendly.event_type_viewed': 'calendar_viewed',
+  'calendly.date_and_time_selected': 'time_selected',
+};
+
+export function onCalendlyStep(callback: (step: BookingStep) => void): () => void {
+  const handler = (e: MessageEvent<unknown>): void => {
+    if (e.origin !== CALENDLY_ORIGIN) return;
+    if (typeof e.data !== 'object' || e.data === null) return;
+    const { event } = e.data as CalendlyMessage;
+    const step = typeof event === 'string' ? STEP_EVENTS[event] : undefined;
+    if (step) callback(step);
   };
 
   window.addEventListener('message', handler);

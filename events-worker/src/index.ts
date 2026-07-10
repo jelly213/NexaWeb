@@ -42,6 +42,7 @@ const ALLOWED_EVENTS = new Set([
   'cta_click',
   'section_view',
   'scroll_depth',
+  'booking_step',
   'call_booked',
   'lang_toggle',
 ]);
@@ -51,6 +52,7 @@ interface Payload {
   location?: unknown;
   section?: unknown;
   to?: unknown;
+  step?: unknown;
   depth?: unknown;
 }
 
@@ -90,7 +92,7 @@ async function handleEvent(request: Request, env: Env): Promise<Response> {
   // sink is an invitation to fill the store with junk.
   if (!ALLOWED_EVENTS.has(name)) return new Response(null, { status: 204, headers: cors });
 
-  let label = str(payload.location) || str(payload.section) || str(payload.to);
+  let label = str(payload.location) || str(payload.section) || str(payload.to) || str(payload.step);
   if (name === 'scroll_depth' && typeof payload.depth === 'number') label = String(payload.depth);
 
   const day = dayNumber(Date.now());

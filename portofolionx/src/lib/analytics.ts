@@ -22,11 +22,15 @@ const CONTENT_TYPE = 'text/plain;charset=UTF-8';
 
 export type CtaLocation = 'hero' | 'nav' | 'footer' | 'final';
 export type ScrollDepth = 25 | 50 | 75 | 100;
+// The Calendly popup is a black box between cta_click and call_booked. These two steps split
+// "clicked but never booked" into "never reached the calendar" vs "picked a time, then bailed".
+export type BookingStep = 'calendar_viewed' | 'time_selected';
 
 export type AnalyticsEvent =
   | { name: 'cta_click'; location: CtaLocation }
   | { name: 'section_view'; section: string }
   | { name: 'scroll_depth'; depth: ScrollDepth }
+  | { name: 'booking_step'; step: BookingStep }
   | { name: 'call_booked' }
   | { name: 'lang_toggle'; to: 'EN' | 'FR' };
 
@@ -46,6 +50,7 @@ const fired = new Set<string>();
 function dedupeKey(e: AnalyticsEvent): string | null {
   if (e.name === 'section_view') return `section_view:${e.section}`;
   if (e.name === 'scroll_depth') return `scroll_depth:${e.depth}`;
+  if (e.name === 'booking_step') return `booking_step:${e.step}`;
   if (e.name === 'call_booked') return 'call_booked';
   return null; // cta_click and lang_toggle are legitimately repeatable
 }
