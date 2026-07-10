@@ -70,6 +70,15 @@ const translations = {
     'stack.demo.title': 'Demo Builds',
     'stack.demo.sub': 'Built to show the work, not sold to a client. Same stack, same 48 hours.',
 
+    // Pricing
+    'pricing.badge': 'Partner Pricing',
+    'pricing.title': 'What You Pay Us.',
+    'pricing.titleAccent': 'What You Keep Is Yours.',
+    'pricing.sub':
+      'Flat fees, no retainers. You resell at $2,500-$5,000+ and keep the difference. Half to start, half on delivery.',
+    'pricing.popular': 'Most Booked',
+    'pricing.per': 'flat',
+
     // Consent banner (Law 25 — opt-in, must name Google Analytics)
     'consent.text':
       'We use Google Analytics to understand how this page is used. It sets cookies and sends data to Google. Nothing loads until you choose.',
@@ -89,9 +98,11 @@ const translations = {
     'cta.risk2': 'No exclusivity agreements',
     'cta.risk3': 'No commitment beyond the project',
     'cta.risk4': 'Your brand. Your client. Your margin.',
+    'cta.guarantee': '48 hours or your deposit back. Guaranteed in writing.',
 
     // Footer
     'footer.tagline': 'Your invisible dev team. Your full margin.',
+    'footer.founders': 'Built by Yassine Kreifeur & Abdessalem Benmachiche',
     'footer.nav.howItWorks': 'How It Works',
     'footer.nav.stack': 'Our Stack',
     'footer.nav.partner': 'Become a Partner',
@@ -161,6 +172,15 @@ const translations = {
     'stack.demo.title': 'Démos',
     'stack.demo.sub': 'Construits pour montrer le travail, pas vendus à un client. Même stack, mêmes 48h.',
 
+    // Pricing
+    'pricing.badge': 'Tarifs partenaires',
+    'pricing.title': 'Ce que vous nous payez.',
+    'pricing.titleAccent': 'Ce que vous gardez est à vous.',
+    'pricing.sub':
+      'Prix fixes, pas de retainers. Vous revendez entre 2 500$ et 5 000$+ et gardez la différence. Moitié pour commencer, moitié à la livraison.',
+    'pricing.popular': 'Le plus réservé',
+    'pricing.per': 'fixe',
+
     // Consent banner (Loi 25 — opt-in, doit nommer Google Analytics)
     'consent.text':
       'On utilise Google Analytics pour comprendre comment cette page est utilisée. Ça dépose des témoins et envoie des données à Google. Rien ne se charge avant votre choix.',
@@ -180,9 +200,11 @@ const translations = {
     'cta.risk2': "Aucun accord d'exclusivité",
     'cta.risk3': 'Aucun engagement au-delà du projet',
     'cta.risk4': 'Votre marque. Votre client. Votre marge.',
+    'cta.guarantee': '48 heures ou on vous remet votre dépôt. Garanti par écrit.',
 
     // Footer
     'footer.tagline': 'Votre équipe de dev invisible. Votre marge complète.',
+    'footer.founders': 'Conçu par Yassine Kreifeur & Abdessalem Benmachiche',
     'footer.nav.howItWorks': 'Comment ça marche',
     'footer.nav.stack': 'Notre stack',
     'footer.nav.partner': 'Devenir partenaire',
@@ -275,6 +297,68 @@ const platformItems: Record<Language, { name: string; desc: string; badge: strin
   ],
 };
 
+export interface PricingTier {
+  name: string;
+  price: string;
+  delivery: string;
+  desc: string;
+  features: string[];
+  featured?: boolean;
+}
+
+// Fees the agency pays us, from the service-tier table. Delivery is per-tier and honest:
+// the 48h promise is the Sprinter's, not a blanket claim we can't keep on a storefront.
+const pricingTiers: Record<Language, PricingTier[]> = {
+  EN: [
+    {
+      name: 'Lead-Gen Sprinter',
+      price: '$1,000',
+      delivery: '48-hour delivery',
+      desc: 'React or static. Landing pages, local service sites, and quote calculators.',
+      features: ['Custom-coded, no page builders', '90+ mobile PageSpeed', 'Native FR/EN'],
+      featured: true,
+    },
+    {
+      name: 'Authority CMS',
+      price: '$1,500',
+      delivery: '72-hour delivery',
+      desc: 'Webflow or Elementor, up to 5 pages. Corporate sites built to rank.',
+      features: ['Local SEO structure', 'Up to 5 pages', 'A CMS you can hand the client'],
+    },
+    {
+      name: 'Digital Storefront',
+      price: '$2,000+',
+      delivery: '5-day delivery',
+      desc: 'Shopify or custom API. Bilingual catalogs, product pages, and checkout.',
+      features: ['Bilingual catalog, no plugin', 'Product pages + checkout', 'Payment-ready at handoff'],
+    },
+  ],
+  FR: [
+    {
+      name: 'Lead-Gen Sprinter',
+      price: '1 000$',
+      delivery: 'Livraison en 48h',
+      desc: "React ou statique. Pages d'atterrissage, sites de services locaux et calculateurs de devis.",
+      features: ['Codé sur mesure, aucun constructeur', '90+ PageSpeed mobile', 'FR/EN natif'],
+      featured: true,
+    },
+    {
+      name: 'Authority CMS',
+      price: '1 500$',
+      delivery: 'Livraison en 72h',
+      desc: 'Webflow ou Elementor, jusqu\'à 5 pages. Sites corporatifs conçus pour classer.',
+      features: ['Architecture SEO local', "Jusqu'à 5 pages", 'Un CMS remettable au client'],
+    },
+    {
+      name: 'Digital Storefront',
+      price: '2 000$+',
+      delivery: 'Livraison en 5 jours',
+      desc: 'Shopify ou API sur mesure. Catalogues bilingues, fiches produits et paiement.',
+      features: ['Catalogue bilingue, sans plugin', 'Fiches produits + caisse', 'Paiement prêt à la livraison'],
+    },
+  ],
+};
+
 export type PortfolioKind = 'client' | 'demo';
 
 export interface PortfolioItem {
@@ -311,6 +395,7 @@ interface LanguageContextType {
   tProblemRight: () => string[];
   tPlatformItems: () => { name: string; desc: string; badge: string }[];
   tPortfolioItems: () => PortfolioItem[];
+  tPricingTiers: () => PricingTier[];
 }
 
 const LanguageContext = createContext<LanguageContextType | null>(null);
@@ -348,9 +433,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const tProblemRight = () => problemRightItems[language];
   const tPlatformItems = () => platformItems[language];
   const tPortfolioItems = () => portfolioItems[language];
+  const tPricingTiers = () => pricingTiers[language];
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage, t, tProblemLeft, tProblemRight, tPlatformItems, tPortfolioItems }}>
+    <LanguageContext.Provider value={{ language, toggleLanguage, t, tProblemLeft, tProblemRight, tPlatformItems, tPortfolioItems, tPricingTiers }}>
       {children}
     </LanguageContext.Provider>
   );

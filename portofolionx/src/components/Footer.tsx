@@ -12,6 +12,7 @@ export default function Footer() {
   const navLinks = [
     { label: t('footer.nav.howItWorks'), href: '#how-it-works' },
     { label: t('footer.nav.stack'), href: '#tech-stack' },
+    { label: t('pricing.badge'), href: '#pricing' },
   ];
 
   const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -33,6 +34,9 @@ export default function Footer() {
             </span>
             <p className="font-mono text-xs max-w-xs leading-relaxed" style={{ color: c.dim }}>
               {t('footer.tagline')}
+            </p>
+            <p className="font-mono text-xs" style={{ color: c.slash }}>
+              {t('footer.founders')}
             </p>
           </div>
 

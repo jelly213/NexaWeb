@@ -21,7 +21,7 @@ export default function Navbar() {
   const links = [
     { label: 'how-it-works', href: '#how-it-works' },
     { label: 'stack', href: '#tech-stack' },
-    { label: 'work', href: '#tech-stack' },
+    { label: 'pricing', href: '#pricing' },
   ];
 
   const handleNavClick = (href: string) => {

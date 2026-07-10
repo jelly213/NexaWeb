@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 const Problem = lazy(() => import('./sections/Problem'));
 const HowItWorks = lazy(() => import('./sections/HowItWorks'));
 const TechStack = lazy(() => import('./sections/TechStack'));
+const Pricing = lazy(() => import('./sections/Pricing'));
 const FinalCTA = lazy(() => import('./sections/FinalCTA'));
 
 function AppInner() {
@@ -26,6 +27,7 @@ function AppInner() {
           <Problem />
           <HowItWorks />
           <TechStack />
+          <Pricing />
           <FinalCTA />
         </Suspense>
       </main>

@@ -1,5 +1,5 @@
 import { m } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import { openCalendly } from '../lib/calendly';
@@ -47,6 +47,14 @@ export default function FinalCTA() {
             {t('cta.btn')}
             <ArrowRight size={16} />
           </m.button>
+
+          <div
+            className="inline-flex items-center gap-2.5 px-4 py-3 rounded-[4px] font-mono text-[13px] font-bold"
+            style={{ border: `1px solid ${c.green}`, color: c.green }}
+          >
+            <ShieldCheck size={16} className="shrink-0" />
+            {t('cta.guarantee')}
+          </div>
 
           <div className="flex flex-wrap gap-x-8 gap-y-3 pt-2">
             {riskItems.map((item, i) => (
