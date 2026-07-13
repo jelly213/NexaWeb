@@ -75,7 +75,7 @@ const translations = {
     'pricing.title': 'What You Pay Us.',
     'pricing.titleAccent': 'What You Keep Is Yours.',
     'pricing.sub':
-      'Flat fees, no retainers. You resell at $2,500-$5,000+ and keep the difference. Half to start, half on delivery.',
+      'Flat build fees, no required retainer. You resell at $2,500-$5,000+ and keep the difference. Half to start, half on delivery.',
     'pricing.popular': 'Most Booked',
     'pricing.per': 'flat',
 
@@ -92,9 +92,9 @@ const translations = {
     'cta.title': 'You Sell One Site This Week.',
     'cta.titleAccent': "We'll Build It.",
     'cta.sub':
-      "No retainers, no contracts. Pay when you have a signed deal. The first delivery will prove the model, and your client will never know we were involved.",
+      "No lock-in, no contracts. Pay when you have a signed deal. The first delivery will prove the model, and your client will never know we were involved.",
     'cta.btn': 'Book Your Free Discovery Call',
-    'cta.risk1': 'No monthly fees or retainers',
+    'cta.risk1': 'Care plan optional — never required',
     'cta.risk2': 'No exclusivity agreements',
     'cta.risk3': 'No commitment beyond the project',
     'cta.risk4': 'Your brand. Your client. Your margin.',
@@ -177,7 +177,7 @@ const translations = {
     'pricing.title': 'Ce que vous nous payez.',
     'pricing.titleAccent': 'Ce que vous gardez est à vous.',
     'pricing.sub':
-      'Prix fixes, pas de retainers. Vous revendez entre 2 500$ et 5 000$+ et gardez la différence. Moitié pour commencer, moitié à la livraison.',
+      'Prix de construction fixes, aucun retainer requis. Vous revendez entre 2 500$ et 5 000$+ et gardez la différence. Moitié pour commencer, moitié à la livraison.',
     'pricing.popular': 'Le plus réservé',
     'pricing.per': 'fixe',
 
@@ -194,9 +194,9 @@ const translations = {
     'cta.title': 'Vous vendez un site cette semaine.',
     'cta.titleAccent': 'On le construit.',
     'cta.sub':
-      "Pas de retainers, pas de contrats. Payez quand vous avez une vente signée. La première livraison prouvera le modèle, et votre client ne saura jamais qu'on était là.",
+      "Aucun engagement, pas de contrats. Payez quand vous avez une vente signée. La première livraison prouvera le modèle, et votre client ne saura jamais qu'on était là.",
     'cta.btn': 'Réserver votre appel découverte gratuit',
-    'cta.risk1': 'Aucuns frais mensuels ni retainers',
+    'cta.risk1': 'Forfait entretien optionnel — jamais requis',
     'cta.risk2': "Aucun accord d'exclusivité",
     'cta.risk3': 'Aucun engagement au-delà du projet',
     'cta.risk4': 'Votre marque. Votre client. Votre marge.',
@@ -304,6 +304,7 @@ export interface PricingTier {
   desc: string;
   features: string[];
   featured?: boolean;
+  carePlan?: string; // optional recurring add-on (hosting, backups, updates, edits)
 }
 
 // Fees the agency pays us, from the service-tier table. Delivery is per-tier and honest:
@@ -317,6 +318,7 @@ const pricingTiers: Record<Language, PricingTier[]> = {
       desc: 'React or static. Landing pages, local service sites, and quote calculators.',
       features: ['Custom-coded, no page builders', '90+ mobile PageSpeed', 'Native FR/EN'],
       featured: true,
+      carePlan: '+$99/mo Care Plan',
     },
     {
       name: 'Authority CMS',
@@ -324,6 +326,7 @@ const pricingTiers: Record<Language, PricingTier[]> = {
       delivery: '72-hour delivery',
       desc: 'Webflow or Elementor, up to 5 pages. Corporate sites built to rank.',
       features: ['Local SEO structure', 'Up to 5 pages', 'A CMS you can hand the client'],
+      carePlan: '+$99/mo Care Plan',
     },
     {
       name: 'Digital Storefront',
@@ -331,6 +334,7 @@ const pricingTiers: Record<Language, PricingTier[]> = {
       delivery: '5-day delivery',
       desc: 'Shopify or custom API. Bilingual catalogs, product pages, and checkout.',
       features: ['Bilingual catalog, no plugin', 'Product pages + checkout', 'Payment-ready at handoff'],
+      carePlan: '+$99/mo Care Plan',
     },
   ],
   FR: [
@@ -341,6 +345,7 @@ const pricingTiers: Record<Language, PricingTier[]> = {
       desc: "React ou statique. Pages d'atterrissage, sites de services locaux et calculateurs de devis.",
       features: ['Codé sur mesure, aucun constructeur', '90+ PageSpeed mobile', 'FR/EN natif'],
       featured: true,
+      carePlan: '+99$/mois Forfait entretien',
     },
     {
       name: 'Authority CMS',
@@ -348,6 +353,7 @@ const pricingTiers: Record<Language, PricingTier[]> = {
       delivery: 'Livraison en 72h',
       desc: 'Webflow ou Elementor, jusqu\'à 5 pages. Sites corporatifs conçus pour classer.',
       features: ['Architecture SEO local', "Jusqu'à 5 pages", 'Un CMS remettable au client'],
+      carePlan: '+99$/mois Forfait entretien',
     },
     {
       name: 'Digital Storefront',
@@ -355,6 +361,7 @@ const pricingTiers: Record<Language, PricingTier[]> = {
       delivery: 'Livraison en 5 jours',
       desc: 'Shopify ou API sur mesure. Catalogues bilingues, fiches produits et paiement.',
       features: ['Catalogue bilingue, sans plugin', 'Fiches produits + caisse', 'Paiement prêt à la livraison'],
+      carePlan: '+99$/mois Forfait entretien',
     },
   ],
 };

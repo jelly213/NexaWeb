@@ -73,6 +73,9 @@ export default function Pricing() {
                 </span>
                 <span className="font-mono text-xs" style={{ color: c.slash }}>{t('pricing.per')}</span>
               </div>
+              {tier.carePlan && (
+                <p className="font-mono text-[12px] mb-1" style={{ color: c.slash }}>{tier.carePlan}</p>
+              )}
               <p className="font-mono text-[12px] mb-5" style={{ color: c.green }}>{tier.delivery}</p>
 
               <p className="font-mono text-[13px] leading-relaxed mb-6" style={{ color: c.muted }}>
