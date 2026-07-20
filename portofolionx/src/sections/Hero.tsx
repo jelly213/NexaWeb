@@ -8,7 +8,7 @@ export default function Hero() {
     <section id="hero" className="pt-[65px]" style={{ backgroundColor: c.bg }}>
       <div className="max-w-[1280px] mx-auto">
         <div className="grid lg:grid-cols-2" style={{ borderBottom: `1px solid ${c.border}` }}>
-          <div style={{ borderRight: `1px solid ${c.border}` }}>
+          <div className="min-w-0" style={{ borderRight: `1px solid ${c.border}` }}>
             <HeroContent />
           </div>
           <HeroImage />

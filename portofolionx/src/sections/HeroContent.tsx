@@ -108,7 +108,7 @@ export default function HeroContent() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.55 + i * 0.1, ease: 'easeOut' }}
-            className="flex-1 px-[18px] py-4"
+            className="flex-1 min-w-0 px-[18px] py-4"
             style={{ borderRight: i < statItems.length - 1 ? `1px solid ${c.border}` : 'none' }}
           >
             <div

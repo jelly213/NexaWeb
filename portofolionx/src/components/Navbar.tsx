@@ -37,7 +37,7 @@ export default function Navbar() {
       className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-300 ${scrolled ? 'shadow-lg shadow-black/20' : ''}`}
       style={{ backgroundColor: c.navBg, borderBottom: `1px solid ${c.border}` }}
     >
-      <div className="flex items-center justify-between px-8 lg:px-12 h-[65px]">
+      <div className="flex items-center justify-between px-4 sm:px-8 lg:px-12 h-[65px]">
 
         {/* Logo */}
         <a
@@ -73,7 +73,7 @@ export default function Navbar() {
         </nav>
 
         {/* Right controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
 
           {/* Dark/Light toggle */}
           <button
@@ -97,7 +97,7 @@ export default function Navbar() {
             style={{ backgroundColor: c.bgCard, border: `1px solid ${c.borderSoft}` }}
           >
             <span
-              className="px-3 py-1.5 transition-all duration-200"
+              className="px-2.5 sm:px-3 py-1.5 transition-all duration-200"
               style={{
                 backgroundColor: language === 'EN' ? c.blue : 'transparent',
                 color: language === 'EN' ? c.textOnBlue : c.dimmer,
@@ -106,7 +106,7 @@ export default function Navbar() {
               EN
             </span>
             <span
-              className="px-3 py-1.5 transition-all duration-200"
+              className="px-2.5 sm:px-3 py-1.5 transition-all duration-200"
               style={{
                 backgroundColor: language === 'FR' ? c.blue : 'transparent',
                 color: language === 'FR' ? c.textOnBlue : c.dimmer,

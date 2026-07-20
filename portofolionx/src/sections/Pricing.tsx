@@ -3,6 +3,7 @@ import { ArrowRight, Check } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import { openCalendly } from '../lib/calendly';
+import { track } from '../lib/analytics';
 
 export default function Pricing() {
   const { t, language, tPricingTiers } = useLanguage();
@@ -73,6 +74,9 @@ export default function Pricing() {
                 </span>
                 <span className="font-mono text-xs" style={{ color: c.slash }}>{t('pricing.per')}</span>
               </div>
+              {tier.carePlan && (
+                <p className="font-mono text-[12px] mb-1" style={{ color: c.slash }}>{tier.carePlan}</p>
+              )}
               <p className="font-mono text-[12px] mb-5" style={{ color: c.green }}>{tier.delivery}</p>
 
               <p className="font-mono text-[13px] leading-relaxed mb-6" style={{ color: c.muted }}>
@@ -105,6 +109,85 @@ export default function Pricing() {
             </m.div>
           ))}
         </div>
+
+        {/* Scroll Story — premium tier banner. Deliberately below the grid so the
+            entry tiers keep the "Most Booked" anchor; the demo link is the pitch. */}
+        <m.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="mt-[26px] rounded-[6px] p-7 relative"
+          style={{ backgroundColor: c.bgCard, border: `1px solid ${c.green}` }}
+        >
+          <span
+            className="absolute -top-3 left-7 px-2.5 py-1 font-mono text-[11px] font-bold rounded-[3px]"
+            style={{ backgroundColor: c.green, color: c.bg }}
+          >
+            {t('story.badge')}
+          </span>
+
+          <div className="grid gap-7 lg:grid-cols-[1.2fr_1fr_auto] lg:items-center">
+            <div>
+              <h3
+                className="font-bold text-base mb-2"
+                style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.textHead }}
+              >
+                {t('story.name')}
+              </h3>
+              <p className="font-mono text-[13px] leading-relaxed" style={{ color: c.muted }}>
+                {t('story.pitch')}
+              </p>
+            </div>
+
+            <ul className="space-y-2.5">
+              {(['story.b1', 'story.b2', 'story.b3'] as const).map(k => (
+                <li key={k} className="flex items-start gap-2 font-mono text-[13px]" style={{ color: c.muted }}>
+                  <Check size={15} className="mt-0.5 shrink-0" style={{ color: c.green }} />
+                  {t(k)}
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex flex-col gap-3 lg:items-end lg:text-right">
+              <div>
+                <div className="flex items-baseline gap-2 lg:justify-end">
+                  <span
+                    className="font-bold text-[34px] tabular-nums"
+                    style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.textHead }}
+                  >
+                    {t('story.price')}
+                  </span>
+                  <span className="font-mono text-xs" style={{ color: c.slash }}>{t('pricing.per')}</span>
+                </div>
+                <p className="font-mono text-[12px]" style={{ color: c.green }}>{t('story.delivery')}</p>
+              </div>
+              <m.a
+                href="https://story.nexaweb.dev"
+                target="_blank"
+                rel="noopener"
+                onClick={() => track({ name: 'cta_click', location: 'story_demo' })}
+                whileHover={{ opacity: 0.9 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 font-mono font-bold text-[13px] rounded-[4px]"
+                style={{ backgroundColor: c.green, color: c.bg }}
+              >
+                {t('story.cta')}
+                <ArrowRight size={14} />
+              </m.a>
+              <button
+                onClick={() => {
+                  track({ name: 'cta_click', location: 'story_call' });
+                  openCalendly('final', language);
+                }}
+                className="font-mono text-[13px] underline-offset-4 hover:underline"
+                style={{ color: c.muted }}
+              >
+                {t('story.cta2')}
+              </button>
+            </div>
+          </div>
+        </m.div>
       </div>
     </section>
   );
