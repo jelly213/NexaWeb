@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VERSO — Résidences | Montréal</title>
+  <meta name="description" content="VERSO — 12 étages de résidences boutique à Griffintown, Montréal. Site démo par NexaWebDev." />
+  <meta property="og:title" content="VERSO — Résidences" />
+  <meta property="og:description" content="La ville, autrement. 12 étages de résidences boutique à Griffintown." />
+  <meta name="theme-color" content="#101014" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23101014'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23c8a06a' font-family='Georgia'>V</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Demo badge (agency lead capture, fixed) -->
+  <a class="demo-badge" id="demo-badge" href="#nexa" data-copy="demo.badge"></a>
+
+  <header class="nav" id="nav">
+    <a class="nav__logo" href="#top">VERSO</a>
+    <nav class="nav__links" id="nav-links" aria-label="Navigation">
+      <a href="#residences" data-copy="nav.links.0"></a>
+      <a href="#vie" data-copy="nav.links.1"></a>
+      <a href="#quartier" data-copy="nav.links.2"></a>
+      <a href="#galerie" data-copy="nav.links.3"></a>
+      <a href="#contact" data-copy="nav.links.4"></a>
+    </nav>
+    <div class="nav__right">
+      <button class="nav__lang" id="lang-toggle" aria-label="Switch language">EN</button>
+      <a class="btn btn--small" href="#contact" data-copy="nav.cta"></a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ==================== 3D scroll story ==================== -->
+    <section class="story" id="story" aria-label="VERSO">
+      <div class="story__gl" id="gl"></div>
+
+      <div class="story__brand" id="act-0">
+        <p class="overline" data-copy="acts.0.overline"></p>
+        <h1 class="story__title">VERSO</h1>
+        <p class="story__tagline" data-copy="acts.0.headline"></p>
+      </div>
+
+      <div class="story__caption story__caption--day" id="act-1">
+        <p class="overline" data-copy="acts.1.overline"></p>
+        <h2 data-copy="acts.1.headline"></h2>
+        <p class="sub" data-copy="acts.1.sub"></p>
+      </div>
+      <div class="story__caption story__caption--day" id="act-2">
+        <p class="overline" data-copy="acts.2.overline"></p>
+        <h2 data-copy="acts.2.headline"></h2>
+        <p class="sub" data-copy="acts.2.sub"></p>
+      </div>
+      <div class="story__caption story__caption--night" id="act-3">
+        <p class="overline" data-copy="acts.3.overline"></p>
+        <h2 data-copy="acts.3.headline"></h2>
+        <p class="sub" data-copy="acts.3.sub"></p>
+      </div>
+      <div class="story__caption story__caption--night story__caption--cta" id="act-4">
+        <p class="overline" data-copy="acts.4.overline"></p>
+        <h2 data-copy="acts.4.headline"></h2>
+        <a class="btn" href="#contact" data-copy="nav.cta"></a>
+      </div>
+
+      <p class="scroll-hint" id="scroll-hint" data-copy="hint"></p>
+    </section>
+
+    <!-- ==================== Residences ==================== -->
+    <section class="section residences" id="residences">
+      <p class="overline reveal" data-copy="residences.overline"></p>
+      <h2 class="section__title reveal" data-copy="residences.intro"></h2>
+      <div class="units">
+        <article class="unit reveal">
+          <div class="unit__plan" aria-hidden="true"><span class="unit__glyph">01</span></div>
+          <h3 data-copy="residences.units.0.name"></h3>
+          <p class="unit__size" data-copy="residences.units.0.size"></p>
+          <p class="unit__desc" data-copy="residences.units.0.desc"></p>
+          <p class="unit__price" data-copy="residences.units.0.price"></p>
+        </article>
+        <article class="unit reveal">
+          <div class="unit__plan" aria-hidden="true"><span class="unit__glyph">02</span></div>
+          <h3 data-copy="residences.units.1.name"></h3>
+          <p class="unit__size" data-copy="residences.units.1.size"></p>
+          <p class="unit__desc" data-copy="residences.units.1.desc"></p>
+          <p class="unit__price" data-copy="residences.units.1.price"></p>
+        </article>
+        <article class="unit reveal">
+          <div class="unit__plan" aria-hidden="true"><span class="unit__glyph">03</span></div>
+          <h3 data-copy="residences.units.2.name"></h3>
+          <p class="unit__size" data-copy="residences.units.2.size"></p>
+          <p class="unit__desc" data-copy="residences.units.2.desc"></p>
+          <p class="unit__price" data-copy="residences.units.2.price"></p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== Amenities ==================== -->
+    <section class="section vie" id="vie">
+      <p class="overline reveal" data-copy="amenities.overline"></p>
+      <h2 class="section__title reveal" data-copy="amenities.title"></h2>
+      <div class="amenities">
+        <div class="amenity reveal"><h3 data-copy="amenities.items.0.title"></h3><p data-copy="amenities.items.0.line"></p></div>
+        <div class="amenity reveal"><h3 data-copy="amenities.items.1.title"></h3><p data-copy="amenities.items.1.line"></p></div>
+        <div class="amenity reveal"><h3 data-copy="amenities.items.2.title"></h3><p data-copy="amenities.items.2.line"></p></div>
+        <div class="amenity reveal"><h3 data-copy="amenities.items.3.title"></h3><p data-copy="amenities.items.3.line"></p></div>
+        <div class="amenity reveal"><h3 data-copy="amenities.items.4.title"></h3><p data-copy="amenities.items.4.line"></p></div>
+        <div class="amenity reveal"><h3 data-copy="amenities.items.5.title"></h3><p data-copy="amenities.items.5.line"></p></div>
+      </div>
+    </section>
+
+    <!-- ==================== Neighbourhood ==================== -->
+    <section class="section quartier" id="quartier">
+      <p class="overline reveal" data-copy="neighbourhood.overline"></p>
+      <h2 class="section__title reveal" data-copy="neighbourhood.title"></h2>
+      <p class="quartier__para reveal" data-copy="neighbourhood.para"></p>
+      <div class="stats">
+        <div class="stat reveal"><span class="stat__value" data-copy="neighbourhood.stats.0.value"></span><span class="stat__label" data-copy="neighbourhood.stats.0.label"></span></div>
+        <div class="stat reveal"><span class="stat__value" data-copy="neighbourhood.stats.1.value"></span><span class="stat__label" data-copy="neighbourhood.stats.1.label"></span></div>
+        <div class="stat reveal"><span class="stat__value" data-copy="neighbourhood.stats.2.value"></span><span class="stat__label" data-copy="neighbourhood.stats.2.label"></span></div>
+        <div class="stat reveal"><span class="stat__value" data-copy="neighbourhood.stats.3.value"></span><span class="stat__label" data-copy="neighbourhood.stats.3.label"></span></div>
+      </div>
+    </section>
+
+    <!-- ==================== Gallery ==================== -->
+    <section class="section galerie" id="galerie">
+      <p class="overline reveal" data-copy="gallery.overline"></p>
+      <h2 class="section__title reveal" data-copy="gallery.title"></h2>
+      <div class="gallery">
+        <figure class="gallery__item reveal"><img id="g-0" src="/gallery/lobby.webp" width="1200" height="805" alt="" loading="lazy" /><figcaption data-copy="gallery.captions.0"></figcaption></figure>
+        <figure class="gallery__item reveal"><img id="g-1" src="/gallery/unit.webp" width="1200" height="805" alt="" loading="lazy" /><figcaption data-copy="gallery.captions.1"></figcaption></figure>
+        <figure class="gallery__item reveal"><img id="g-2" src="/gallery/terrace.webp" width="1200" height="805" alt="" loading="lazy" /><figcaption data-copy="gallery.captions.2"></figcaption></figure>
+        <figure class="gallery__item reveal"><img id="g-3" src="/gallery/canal.webp" width="1200" height="805" alt="" loading="lazy" /><figcaption data-copy="gallery.captions.3"></figcaption></figure>
+      </div>
+    </section>
+
+    <!-- ==================== Contact / lead capture ==================== -->
+    <section class="section contact" id="contact">
+      <div class="contact__inner">
+        <div>
+          <p class="overline reveal" data-copy="contact.overline"></p>
+          <h2 class="section__title reveal" data-copy="contact.headline"></h2>
+          <p class="contact__line reveal" data-copy="contact.line"></p>
+        </div>
+        <form class="form reveal" id="lead-form" novalidate>
+          <label><span data-copy="contact.labels.name"></span><input name="name" type="text" autocomplete="name" required /></label>
+          <label><span data-copy="contact.labels.email"></span><input name="email" type="email" autocomplete="email" required /></label>
+          <label><span data-copy="contact.labels.phone"></span><input name="phone" type="tel" autocomplete="tel" /></label>
+          <label><span data-copy="contact.labels.unit"></span>
+            <select name="unit">
+              <option data-copy="contact.labels.unitOptions.0"></option>
+              <option data-copy="contact.labels.unitOptions.1"></option>
+              <option data-copy="contact.labels.unitOptions.2"></option>
+              <option data-copy="contact.labels.unitOptions.3"></option>
+            </select>
+          </label>
+          <button class="btn" type="submit" data-copy="contact.labels.submit"></button>
+          <p class="form__success" id="form-success" data-copy="contact.labels.success" hidden></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== NexaWebDev demo banner ==================== -->
+    <section class="section nexa" id="nexa">
+      <p class="overline reveal">NexaWebDev</p>
+      <h2 class="section__title reveal" data-copy="demo.headline"></h2>
+      <p class="nexa__line reveal" data-copy="demo.line"></p>
+      <a class="btn btn--gold reveal" id="nexa-cta" href="https://nexaweb.dev/?utm_source=verso-demo&utm_medium=demo-site&utm_campaign=scroll-story-3d#contact" data-copy="demo.cta"></a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <p class="footer__logo">VERSO</p>
+      <p data-copy="footer.blurb"></p>
+      <p class="footer__addr" data-copy="footer.address"></p>
+    </div>
+    <p class="footer__legal" data-copy="footer.legal"></p>
+  </footer>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
