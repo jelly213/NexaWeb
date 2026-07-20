@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { dark, light, type ColorPalette } from '../lib/colors';
 
 type Theme = 'dark' | 'light';
@@ -15,6 +15,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('dark');
   const toggleTheme = () => setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   const c = theme === 'dark' ? dark : light;
+
+  // The page background must follow the theme outside the React tree too:
+  // overscroll rubber-banding and any horizontal overflow expose html/body,
+  // which index.css paints dark — a black band in light mode otherwise.
+  useEffect(() => {
+    document.documentElement.style.backgroundColor = c.bg;
+    document.body.style.backgroundColor = c.bg;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', c.navBg);
+  }, [c]);
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, c }}>
