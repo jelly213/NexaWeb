@@ -12,7 +12,7 @@ export default function HeroImage() {
       className="flex items-center justify-center px-8 lg:px-10 py-14"
     >
       <div
-        className="w-full max-w-[440px] rounded-[6px] overflow-hidden"
+        className="w-full min-w-0 max-w-[440px] rounded-[6px] overflow-hidden"
         style={{ border: `1px solid ${c.borderSoft}`, backgroundColor: c.bgCard }}
       >
         {/* Title bar */}

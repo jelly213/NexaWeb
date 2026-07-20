@@ -4,6 +4,7 @@ import plumbingImg from '../assets/plumbing-mockup.webp';
 import lawfirmImg from '../assets/lawfirm-mockup.webp';
 import kitchenImg from '../assets/kitchen-mockup.webp';
 import estheticsImg from '../assets/professional-esthetics.webp';
+import scrollStoryImg from '../assets/scroll-story-demo.webp';
 
 type Language = 'EN' | 'FR';
 
@@ -408,12 +409,14 @@ export interface PortfolioItem {
 const portfolioItems: Record<Language, PortfolioItem[]> = {
   EN: [
     { title: 'Professional Esthetics Clinic', category: 'Ecommerce — Shopify', image: estheticsImg, link: 'https://skinsations.ca', kind: 'client' },
+    { title: 'Nordvia — Scroll Story', category: 'SaaS Launch — GSAP Scroll Story', image: scrollStoryImg, link: 'https://story.nexaweb.dev', kind: 'demo' },
     { title: 'Emergency Plumbing Co.', category: 'Home Services — React/Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/', kind: 'demo' },
     { title: 'Marchand & Associés', category: 'Law Firm — WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/', kind: 'demo' },
     { title: 'Prestige Rénovation', category: 'Kitchen & Bath — Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/', kind: 'demo' },
   ],
   FR: [
     { title: "Clinique d'esthétique professionnelle", category: 'E-commerce — Shopify', image: estheticsImg, link: 'https://skinsations.ca', kind: 'client' },
+    { title: 'Nordvia — Scroll Story', category: 'Lancement SaaS — GSAP Scroll Story', image: scrollStoryImg, link: 'https://story.nexaweb.dev', kind: 'demo' },
     { title: "Services de plomberie d'urgence", category: 'Services à domicile — React/Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/', kind: 'demo' },
     { title: 'Marchand & Associés', category: 'Cabinet juridique — WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/', kind: 'demo' },
     { title: 'Prestige Rénovation', category: 'Cuisine & Salle de bain — Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/', kind: 'demo' },

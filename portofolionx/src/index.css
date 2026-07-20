@@ -118,6 +118,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html,
+  body {
+    /* clip, not hidden: no new scroll container, position:sticky keeps working */
+    overflow-x: clip;
+  }
   body {
     @apply bg-background text-foreground;
     font-family: 'JetBrains Mono', monospace;
