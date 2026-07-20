@@ -20,7 +20,7 @@ const ENDPOINT = import.meta.env.VITE_EVENTS_URL ?? 'https://events.nexaweb.dev/
 // no preflight. application/json would trigger an OPTIONS round-trip that sendBeacon cannot make.
 const CONTENT_TYPE = 'text/plain;charset=UTF-8';
 
-export type CtaLocation = 'hero' | 'nav' | 'footer' | 'final';
+export type CtaLocation = 'hero' | 'nav' | 'footer' | 'final' | 'story_demo' | 'story_call';
 export type ScrollDepth = 25 | 50 | 75 | 100;
 // The Calendly popup is a black box between cta_click and call_booked. These two steps split
 // "clicked but never booked" into "never reached the calendar" vs "picked a time, then bailed".

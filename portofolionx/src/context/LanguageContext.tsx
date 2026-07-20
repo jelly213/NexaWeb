@@ -75,9 +75,22 @@ const translations = {
     'pricing.title': 'What You Pay Us.',
     'pricing.titleAccent': 'What You Keep Is Yours.',
     'pricing.sub':
-      'Flat build fees, no required retainer. You resell at $2,500-$5,000+ and keep the difference. Half to start, half on delivery.',
+      'Flat build fees, no required retainer. Standard builds resell at $2,500-$5,000+; the Scroll Story tier resells well above it. Half to start, half on delivery.',
     'pricing.popular': 'Most Booked',
     'pricing.per': 'flat',
+
+    // Scroll Story — premium banner under the pricing grid (demo: story.nexaweb.dev)
+    'story.badge': 'Premium Tier',
+    'story.name': 'Scroll Story',
+    'story.pitch':
+      'The scrollbar becomes a video playhead. A layered scene plays as your client scrolls, and rewinds when they scroll back. No video file.',
+    'story.b1': 'Pinned GSAP scenes, scrubbed by scroll. Not a theme plugin',
+    'story.b2': 'Under 150 KB of art per scene. PageSpeed stays green',
+    'story.b3': 'Drops into WordPress, Shopify, or React',
+    'story.price': '$5,000',
+    'story.delivery': 'Live in 7 business days',
+    'story.cta': 'scroll_the_demo()',
+    'story.cta2': 'Book a Call →',
 
     // Consent banner (Law 25 — opt-in, must name Google Analytics)
     'consent.text':
@@ -177,9 +190,22 @@ const translations = {
     'pricing.title': 'Ce que vous nous payez.',
     'pricing.titleAccent': 'Ce que vous gardez est à vous.',
     'pricing.sub':
-      'Prix de construction fixes, aucun retainer requis. Vous revendez entre 2 500$ et 5 000$+ et gardez la différence. Moitié pour commencer, moitié à la livraison.',
+      'Prix de construction fixes, aucun retainer requis. Les sites standards se revendent entre 2 500$ et 5 000$+; le forfait Scroll Story se revend bien au-dessus. Moitié pour commencer, moitié à la livraison.',
     'pricing.popular': 'Le plus réservé',
     'pricing.per': 'fixe',
+
+    // Scroll Story — bannière haut de gamme sous la grille (démo : story.nexaweb.dev)
+    'story.badge': 'Forfait haut de gamme',
+    'story.name': 'Scroll Story',
+    'story.pitch':
+      "La barre de défilement devient une tête de lecture. Une scène en couches se joue pendant que votre client fait défiler la page, et se rembobine quand il remonte. Aucun fichier vidéo.",
+    'story.b1': 'Scènes GSAP épinglées, animées par le défilement. Pas un plugin de thème',
+    'story.b2': "Moins de 150 Ko d'images par scène. PageSpeed reste vert",
+    'story.b3': "S'intègre à WordPress, Shopify ou React",
+    'story.price': '5 000$',
+    'story.delivery': 'En ligne en 7 jours ouvrables',
+    'story.cta': 'faites_défiler_la_démo()',
+    'story.cta2': 'Réserver un appel →',
 
     // Consent banner (Loi 25 — opt-in, doit nommer Google Analytics)
     'consent.text':
