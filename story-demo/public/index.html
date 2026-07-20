@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nordvia · Scroll Story demo | NexaWebDev</title>
+<meta name="description" content="A SaaS landing page that builds itself as you scroll. Built white-label in 7 business days for $5,000 flat. A Scroll Story by NexaWebDev." />
+<meta name="theme-color" content="#070a18" />
+<link rel="preload" href="assets/fonts/archivo-800.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23070a18'/%3E%3Cpath d='M8 22V10l8 8V10' stroke='%234fd8c8' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
+<link rel="canonical" href="https://story.nexaweb.dev/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://story.nexaweb.dev/" />
+<meta property="og:title" content="Scroll the demo: the site builds itself under your finger" />
+<meta property="og:description" content="A scroll-driven SaaS page assembled from wireframe to product. White-label, $5,000 flat, live in 7 business days. By NexaWebDev." />
+<meta property="og:image" content="https://story.nexaweb.dev/assets/og.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://story.nexaweb.dev/assets/og.jpg" />
+<style>
+  :root {
+    --bg: #070a18;
+    --panel: #0d1226;
+    --panel-2: #111834;
+    --line: #232c52;
+    --ink: #eef1ff;
+    --muted: #98a2c8;
+    --indigo: #6d6bf5;
+    --violet: #a06bf5;
+    --teal: #4fd8c8;
+    --wire: #3a4576;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { color-scheme: dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  @font-face {
+    font-family: "Archivo";
+    src: url(assets/fonts/archivo-800.woff2) format("woff2");
+    font-weight: 800; font-style: normal; font-display: swap;
+  }
+  html, body { background: var(--bg); color: var(--ink); }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  section { position: relative; }
+  a { color: inherit; }
+
+  /* ---------- fixed nav ---------- */
+  .nav {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.1rem clamp(1rem, 4vw, 2.5rem);
+    background: linear-gradient(180deg, rgba(7,10,24,.85), rgba(7,10,24,0));
+  }
+  .brand { font-weight: 800; letter-spacing: .06em; font-size: 1.05rem; }
+  .brand, .hero h1, .scene .caption h2, .outro h2, .kpi-value, .offer-name, .offer-price { font-family: "Archivo", "Segoe UI", system-ui, sans-serif; }
+  .brand em { font-style: normal; color: var(--teal); }
+  .nav-right { display: flex; gap: .6rem; align-items: center; }
+  .skip-link {
+    font-size: .78rem; color: var(--muted); text-decoration: none;
+    border: 1px solid transparent; border-radius: 999px; padding: .35rem .85rem;
+    opacity: 0; pointer-events: none; transition: opacity .4s ease, color .2s ease;
+  }
+  .skip-link.on { opacity: 1; pointer-events: auto; }
+  .skip-link:hover { color: var(--ink); }
+  .demo-badge {
+    font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--muted); border: 1px solid var(--line); border-radius: 999px;
+    padding: .3rem .7rem;
+  }
+  .lang-toggle {
+    font: inherit; font-size: .78rem; font-weight: 700; letter-spacing: .08em;
+    color: var(--ink); background: var(--panel); border: 1px solid var(--line);
+    border-radius: 999px; padding: .6rem 1rem; min-height: 44px; min-width: 44px; cursor: pointer;
+    transition: border-color .2s ease, color .2s ease;
+  }
+  .lang-toggle:hover { border-color: var(--indigo); }
+  .lang-toggle:focus-visible, .cta:focus-visible, .cta-ghost:focus-visible, .skip-link:focus-visible {
+    outline: 2px solid var(--teal); outline-offset: 3px;
+  }
+  .cta:active { transform: translateY(-1px) scale(.99); }
+
+  /* ---------- hero ---------- */
+  .hero {
+    min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    padding: 6rem 2rem 2rem; gap: 1.4rem; overflow: hidden; isolation: isolate;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: center bottom; opacity: .9; z-index: -2;
+  }
+  .hero-vignette {
+    position: absolute; inset: 0; z-index: -1;
+    background:
+      linear-gradient(180deg, transparent 62%, var(--bg) 98%),
+      radial-gradient(ellipse at 50% 70%, transparent 55%, rgba(7,10,24,.55) 100%);
+  }
+  /* ghost fragments of the product, drifting before assembly */
+  .ghost {
+    position: absolute; z-index: 0; pointer-events: none;
+    background: rgba(17,24,52,.5); border: 1px solid rgba(35,44,82,.8);
+    border-radius: 12px; backdrop-filter: blur(4px);
+    padding: clamp(.5rem, 1.5vw, .8rem) clamp(.65rem, 2vw, 1rem);
+    box-shadow: 0 20px 60px rgba(0,0,0,.4); opacity: .55;
+    animation: drift 9s ease-in-out infinite;
+  }
+  .ghost .kpi-label { font-size: clamp(.52rem, 1.3vw, .62rem); }
+  .ghost .kpi-value { font-size: clamp(.85rem, 2.4vw, 1.15rem); }
+  .ghost--1 { top: 15%; left: clamp(.75rem, 6vw, 8vw); animation-delay: 0s; }
+  .ghost--2 { top: 24%; right: clamp(.75rem, 7vw, 9vw); animation-delay: -3s; }
+  .ghost--3 { bottom: 15%; left: clamp(1rem, 10vw, 14vw); animation-delay: -6s; }
+  .ghost--bars { bottom: 23%; right: clamp(1rem, 9vw, 13vw); width: clamp(88px, 16vw, 130px); animation-delay: -4.5s; }
+  .ghost--bars svg { width: 100%; height: clamp(30px, 5vw, 44px); display: block; }
+  .ghost--bars rect { fill: url(#gradBarGhost); rx: 1.2; }
+  @keyframes drift { 50% { transform: translateY(-16px) rotate(-1.2deg); } }
+  @media (max-width: 900px) { .ghost { opacity: .45; } }
+  /* gradient accent on the last word of the headline */
+  .hero h1 .line:last-child > span { color: var(--teal); }
+  .kicker {
+    font-size: clamp(.75rem, 1.4vw, .95rem); letter-spacing: .35em;
+    text-transform: uppercase; color: var(--teal);
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 7.5vw, 6rem); line-height: 1.04;
+    font-weight: 800; letter-spacing: -0.02em; max-width: 14ch;
+  }
+  .hero h1 .line { display: inline-block; overflow: hidden; vertical-align: bottom; }
+  .hero h1 .line > span { display: inline-block; will-change: transform; }
+  .hero p { max-width: 46ch; font-size: clamp(1rem, 2vw, 1.2rem); color: var(--muted); }
+  .scroll-hint {
+    position: absolute; bottom: 2rem; font-size: .8rem; letter-spacing: .25em;
+    text-transform: uppercase; color: var(--muted); animation: bob 2s ease-in-out infinite;
+  }
+  @keyframes bob { 50% { transform: translateY(8px); } }
+  body.reduced .scroll-hint, body.reduced .ghost { animation: none; }
+
+  /* ---------- pinned scene ---------- */
+  .scene { height: 100vh; height: 100dvh; overflow: hidden; }
+  .scene .backdrop {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: .85; will-change: transform;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 18%);
+    mask-image: linear-gradient(180deg, transparent 0%, black 18%);
+  }
+  /* light halo the dashboard sits in */
+  .db-glow {
+    position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%);
+    width: min(120vw, 1500px); height: 72vh; z-index: 3; pointer-events: none;
+    background: radial-gradient(ellipse at center,
+      rgba(109,107,245,.32) 0%, rgba(160,107,245,.16) 35%, transparent 70%);
+    will-change: opacity, transform;
+  }
+  .scene .caption {
+    position: absolute; left: 50%; top: 12.5%; transform: translateX(-50%);
+    text-align: center; width: min(92vw, 720px); z-index: 6;
+  }
+  .scene .caption h2 {
+    font-size: clamp(1.5rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.02em;
+    text-shadow: 0 4px 30px rgba(0,0,0,.7);
+  }
+  .caption--2, .caption--3, .caption--4 { opacity: 0; }
+
+  /* the dashboard */
+  .db-wrap {
+    position: absolute; left: 50%; top: 54%;
+    transform: translate(-50%, -50%);
+    width: min(94vw, 1040px); z-index: 4; will-change: transform;
+  }
+  .db {
+    position: relative;
+    background: linear-gradient(180deg, rgba(13,18,38,.92), rgba(10,14,30,.92));
+    border: 1px solid var(--line); border-radius: 18px;
+    box-shadow: 0 30px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(109,107,245,.06);
+    overflow: hidden;
+  }
+  .db-outline {  /* dashed wireframe ghost that fades away as the product materializes */
+    position: absolute; inset: 0; border: 2px dashed var(--wire);
+    border-radius: 18px; pointer-events: none; z-index: 5; opacity: 0;
+  }
+  .db-top {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .8rem 1.1rem; border-bottom: 1px solid var(--line);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+
+  .db-title { margin-left: .6rem; font-size: .8rem; color: var(--muted); letter-spacing: .04em; }
+  .db-body { display: grid; grid-template-columns: 168px 1fr; }
+  .db-side { border-right: 1px solid var(--line); padding: 1rem .9rem; display: flex; flex-direction: column; gap: .45rem; }
+  .side-item {
+    font-size: .8rem; color: var(--muted); padding: .5rem .7rem; border-radius: 8px;
+  }
+  .side-item.active { background: rgba(109,107,245,.14); color: var(--ink); }
+  .db-main { padding: 1rem; display: grid; gap: .9rem; grid-template-columns: repeat(3, 1fr); }
+  .card {
+    position: relative; background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: 12px; padding: .9rem 1rem; min-height: 86px;
+  }
+  .card .skel {  /* wireframe state, revealed by JS then crossfaded out */
+    position: absolute; inset: 0; border-radius: 12px; padding: .9rem 1rem;
+    border: 1.5px dashed var(--wire); background: var(--panel);
+    display: none; flex-direction: column; gap: .55rem; z-index: 2;
+  }
+  .skel i { display: block; height: 10px; border-radius: 5px; background: var(--wire); opacity: .5; }
+  .skel i:nth-child(1) { width: 45%; } .skel i:nth-child(2) { width: 70%; height: 16px; } .skel i:nth-child(3) { width: 30%; }
+  .kpi-label { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .kpi-value { font-size: clamp(1.2rem, 2.6vw, 1.7rem); font-weight: 800; margin-top: .35rem; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .kpi-delta { font-size: .74rem; margin-top: .3rem; color: var(--teal); }
+  .kpi-delta.bad { color: #ff8f8f; }
+  .card--chart { grid-column: 1 / 3; min-height: 190px; }
+  .card--bars { grid-column: 3 / 4; min-height: 190px; }
+  .chart-title { font-size: .78rem; color: var(--muted); margin-bottom: .6rem; }
+  .chart-svg { width: 100%; height: 130px; display: block; }
+  .chart-line { fill: none; stroke: url(#gradLine); stroke-width: 1.6; stroke-linecap: round; }
+  .chart-area { fill: url(#gradArea); opacity: .5; }
+  .bars-svg { width: 100%; height: 130px; display: block; }
+  .bars-svg rect { fill: url(#gradBar); rx: 1.4; transform-origin: center bottom; transform-box: fill-box; }
+
+  /* feature pills */
+  .pill {
+    position: absolute; z-index: 7; display: flex; align-items: center; gap: .5rem;
+    background: rgba(13,18,38,.9); border: 1px solid var(--line); border-radius: 999px;
+    padding: .55rem 1rem; font-size: .82rem; font-weight: 600;
+    box-shadow: 0 12px 40px rgba(0,0,0,.45); backdrop-filter: blur(6px);
+    white-space: nowrap;
+  }
+  .pill .p-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); flex: none; }
+  .pill--1 { top: 24%; left: max(2vw, calc(50% - 620px)); }
+  .pill--2 { top: 42%; right: max(2vw, calc(50% - 620px)); }
+  .pill--3 { bottom: 14%; left: max(6vw, calc(50% - 560px)); }
+
+  /* ---------- outro / the flip ---------- */
+  .outro {
+    min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    gap: 1.8rem; padding: 5rem 2rem; overflow: hidden; isolation: isolate;
+  }
+  .outro-bg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: .35; z-index: -2; transform: scaleY(-1);
+  }
+  .outro-vignette {
+    position: absolute; inset: 0; z-index: -1;
+    background: radial-gradient(ellipse at 50% 45%, transparent 30%, rgba(7,10,24,.88) 100%);
+  }
+  .outro .offer { box-shadow: 0 0 80px rgba(109,107,245,.18), 0 24px 70px rgba(0,0,0,.5); }
+  .outro h2 {
+    font-size: clamp(1.9rem, 5.4vw, 4rem); font-weight: 800;
+    letter-spacing: -0.02em; max-width: 22ch;
+  }
+  .outro > p { max-width: 54ch; color: var(--muted); font-size: clamp(1rem, 2vw, 1.15rem); }
+  .offer {
+    display: flex; flex-direction: column; gap: .9rem;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 18px;
+    padding: 1.6rem 2rem; max-width: 560px; width: min(94vw, 560px); text-align: left;
+  }
+  .offer-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .offer-name { font-weight: 800; font-size: 1.15rem; letter-spacing: .02em; }
+  .offer-price { font-weight: 800; font-size: 1.5rem; color: var(--teal); }
+  .offer ul { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+  .offer li { color: var(--muted); font-size: .95rem; padding-left: 1.3rem; position: relative; }
+  .offer li::before { content: "→"; position: absolute; left: 0; color: var(--indigo); }
+  .cta-row { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+  .cta {
+    display: inline-block; padding: 1rem 2.4rem; border-radius: 999px;
+    background: linear-gradient(90deg, var(--indigo), var(--violet));
+    color: #fff; font-weight: 700; text-decoration: none; font-size: 1.02rem;
+    transition: transform .25s ease, box-shadow .25s ease;
+    box-shadow: 0 8px 40px rgba(109,107,245,.4);
+  }
+  .cta:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 14px 50px rgba(109,107,245,.55); }
+  .cta-ghost {
+    display: inline-block; padding: 1rem 1.6rem; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--muted); text-decoration: none; font-size: .95rem;
+  }
+  .cta-ghost { transition: border-color .2s ease, color .2s ease; }
+  .cta-ghost:hover { color: var(--ink); border-color: var(--indigo); }
+  .credit { color: var(--muted); opacity: .85; font-size: .8rem; max-width: 60ch; line-height: 1.6; }
+
+  @media (max-width: 760px) {
+    .db-body { grid-template-columns: 1fr; }
+    .db-side { display: none; }
+    .db-main { grid-template-columns: 1fr 1fr; }
+    .card--chart { grid-column: 1 / 3; }
+    .card--bars { grid-column: 1 / 3; min-height: 150px; }
+    .db-main .kpi:nth-of-type(3) { grid-column: 1 / 3; }
+    .db-wrap { top: 57%; }
+    .db-main { gap: .6rem; padding: .7rem; }
+    .card { padding: .7rem .8rem; min-height: 70px; }
+    .card--chart { min-height: 128px; }
+    .card--bars { min-height: 118px; }
+    .chart-svg, .bars-svg { height: 84px; }
+    .scene .caption { top: 10.5%; }
+    .pill--1 { top: auto; bottom: 11%; left: 4vw; }
+    .pill--2 { top: auto; bottom: 4%; right: 4vw; }
+    .pill--3 { display: none; }
+    .db-wrap { top: 56%; }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a class="brand" href="#hero" style="text-decoration:none">nord<em>via</em></a>
+    <div class="nav-right">
+      <a class="skip-link" id="skipLink" href="#outro" data-i18n="skip">passer la démo ↓</a>
+      <span class="demo-badge" data-i18n="badge">démo</span>
+      <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language">EN</button>
+    </div>
+  </nav>
+
+  <!-- 1 · hero -->
+  <section class="hero" id="hero">
+    <img class="hero-bg" src="assets/hero-glow.webp" alt="" width="1376" height="768" fetchpriority="high" />
+    <div class="hero-vignette"></div>
+    <div class="ghost ghost--1"><div class="kpi-label">MRR</div><div class="kpi-value" data-i18n="gv1">48 200 $</div></div>
+    <div class="ghost ghost--2"><div class="kpi-label" data-i18n="kpi3">Attrition</div><div class="kpi-value" data-i18n="gv2">1,9 %</div></div>
+    <div class="ghost ghost--3"><div class="kpi-label" data-i18n="kpi2">Clients actifs</div><div class="kpi-value" data-i18n="gv3">12 847</div></div>
+    <div class="ghost ghost--bars">
+      <svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+        <defs><linearGradient id="gradBarGhost" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="#6d6bf5"/><stop offset="1" stop-color="#a06bf5"/>
+        </linearGradient></defs>
+        <rect x="4" y="20" width="10" height="20"/><rect x="20" y="12" width="10" height="28"/>
+        <rect x="36" y="24" width="10" height="16"/><rect x="52" y="8" width="10" height="32"/>
+        <rect x="68" y="16" width="10" height="24"/><rect x="84" y="4" width="10" height="36"/>
+      </svg>
+    </div>
+    <div class="kicker" data-i18n="kicker">NORDVIA · ANALYTIQUE SAAS</div>
+    <h1 id="heroTitle" data-i18n="h1">Vos revenus, enfin nets.</h1>
+    <p data-i18n="sub">Nordvia transforme vos données de facturation en décisions. Faites défiler : le produit se construit sous vos yeux.</p>
+    <div class="scroll-hint" data-i18n="hint">Faites défiler ↓</div>
+  </section>
+
+  <!-- 2 · pinned build scene -->
+  <section class="scene" id="scene">
+    <img class="backdrop" src="assets/backdrop.webp" alt="" width="1376" height="768" />
+
+    <div class="caption caption--1"><h2 data-i18n="cap1">Tout produit commence par une esquisse.</h2></div>
+    <div class="caption caption--2"><h2 data-i18n="cap2">Faites défiler. L'interface s'assemble.</h2></div>
+    <div class="caption caption--3"><h2 data-i18n="cap3">Les données arrivent en direct.</h2></div>
+    <div class="caption caption--4"><h2 data-i18n="cap4">Prêt pour le lancement.</h2></div>
+
+    <div class="db-glow" id="dbGlow"></div>
+    <div class="db-wrap" id="dbWrap">
+      <div class="db">
+        <div class="db-outline" id="dbOutline"></div>
+        <div class="db-top">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="db-title">nordvia.app · <span data-i18n="dbTitle">tableau de bord</span></span>
+        </div>
+        <div class="db-body">
+          <aside class="db-side" id="dbSide" aria-hidden="true">
+            <div class="side-item active" data-i18n="side1">Aperçu</div>
+            <div class="side-item" data-i18n="side2">Revenus</div>
+            <div class="side-item" data-i18n="side3">Clients</div>
+            <div class="side-item" data-i18n="side4">Rapports</div>
+            <div class="side-item" data-i18n="side5">Réglages</div>
+          </aside>
+          <div class="db-main">
+            <div class="card kpi">
+              <div class="skel"><i></i><i></i><i></i></div>
+              <div class="fill">
+                <div class="kpi-label">MRR</div>
+                <div class="kpi-value" id="kpiMrr" data-final="48200" data-kind="money">48 200 $</div>
+                <div class="kpi-delta" data-i18n="d1">+18,4 %</div>
+              </div>
+            </div>
+            <div class="card kpi">
+              <div class="skel"><i></i><i></i><i></i></div>
+              <div class="fill">
+                <div class="kpi-label" data-i18n="kpi2">Clients actifs</div>
+                <div class="kpi-value" id="kpiUsers" data-final="12847" data-kind="int">12 847</div>
+                <div class="kpi-delta" data-i18n="d2">+1 204</div>
+              </div>
+            </div>
+            <div class="card kpi">
+              <div class="skel"><i></i><i></i><i></i></div>
+              <div class="fill">
+                <div class="kpi-label" data-i18n="kpi3">Attrition</div>
+                <div class="kpi-value" id="kpiChurn" data-final="1.9" data-kind="pct">1,9 %</div>
+                <div class="kpi-delta bad" data-i18n="d3">−0,6 pt</div>
+              </div>
+            </div>
+            <div class="card card--chart">
+              <div class="skel"><i></i><i></i><i></i></div>
+              <div class="fill">
+                <div class="chart-title" data-i18n="chart1">Revenu récurrent (12 mois)</div>
+                <svg class="chart-svg" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="gradLine" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0" stop-color="#6d6bf5"/><stop offset="1" stop-color="#4fd8c8"/>
+                    </linearGradient>
+                    <linearGradient id="gradArea" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stop-color="#6d6bf5" stop-opacity=".55"/>
+                      <stop offset="1" stop-color="#6d6bf5" stop-opacity="0"/>
+                    </linearGradient>
+                    <linearGradient id="gradBar" x1="0" y1="1" x2="0" y2="0">
+                      <stop offset="0" stop-color="#6d6bf5"/><stop offset="1" stop-color="#a06bf5"/>
+                    </linearGradient>
+                  </defs>
+                  <path class="chart-area" id="chartArea"
+                    d="M0,36 L8,33 L16,34 L24,30 L32,31 L40,27 L48,28 L56,23 L64,24 L72,18 L80,16 L88,11 L100,6 L100,40 L0,40 Z"/>
+                  <path class="chart-line" id="chartLine" pathLength="1"
+                    d="M0,36 L8,33 L16,34 L24,30 L32,31 L40,27 L48,28 L56,23 L64,24 L72,18 L80,16 L88,11 L100,6"/>
+                </svg>
+              </div>
+            </div>
+            <div class="card card--bars">
+              <div class="skel"><i></i><i></i><i></i></div>
+              <div class="fill">
+                <div class="chart-title" data-i18n="chart2">Inscriptions cette semaine</div>
+                <svg class="bars-svg" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                  <rect x="4"  y="22" width="9" height="18"/>
+                  <rect x="18" y="16" width="9" height="24"/>
+                  <rect x="32" y="25" width="9" height="15"/>
+                  <rect x="46" y="12" width="9" height="28"/>
+                  <rect x="60" y="18" width="9" height="22"/>
+                  <rect x="74" y="8"  width="9" height="32"/>
+                  <rect x="88" y="4"  width="9" height="36"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pill pill--1"><span class="p-dot"></span><span data-i18n="pill1">Synchronisation en temps réel</span></div>
+    <div class="pill pill--2"><span class="p-dot"></span><span data-i18n="pill2">Rapports en 1 clic</span></div>
+    <div class="pill pill--3"><span class="p-dot"></span><span data-i18n="pill3">Données hébergées au Canada</span></div>
+  </section>
+
+  <!-- 3 · the flip -->
+  <section class="outro" id="outro">
+    <img class="outro-bg" src="assets/backdrop.webp" alt="" width="1376" height="768" loading="lazy" />
+    <div class="outro-vignette"></div>
+    <h2 class="reveal" data-i18n="flipH2">Tout ce que vous venez de voir défiler a été construit en 7 jours ouvrables.</h2>
+    <p class="reveal" data-i18n="flipP">Nordvia n'existe pas. Cette page est une Scroll Story : un site animé par le défilement, construit en marque blanche pour les agences. Prix fixe, votre marque sur la facture.</p>
+    <div class="offer reveal">
+      <div class="offer-head">
+        <span class="offer-name">Scroll Story</span>
+        <span class="offer-price" data-i18n="price">5 000 $ fixe</span>
+      </div>
+      <ul>
+        <li data-i18n="b1">vous le revendez à 10 000 $ ou plus (la marge habituelle en marque blanche)</li>
+        <li data-i18n="b2">en ligne 7 jours ouvrables après l'approbation du brief</li>
+        <li data-i18n="b3">Lighthouse mobile 90+ garanti sur téléphone</li>
+      </ul>
+    </div>
+    <div class="cta-row reveal">
+      <a class="cta" id="ctaCalendly" href="https://calendly.com/contact-nexawebdev/partner-discovery-call?utm_source=story-demo&utm_medium=referral&utm_campaign=scroll-story" target="_blank" rel="noopener" data-i18n="cta1">réserver un appel de partenariat</a>
+      <a class="cta-ghost" id="ctaSite" href="https://nexaweb.dev" target="_blank" rel="noopener" data-i18n="cta2">voir tous les forfaits → nexaweb.dev</a>
+    </div>
+    <p class="credit reveal" data-i18n="credit">Nordvia est une marque fictive. Démo construite par NexaWebDev, visuels générés par IA. Aucun témoin (cookie), aucun traceur : cette page ne collecte que des compteurs anonymes.</p>
+  </section>
+
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/vendor/lenis.min.js"></script>
+<script>
+  /* =================== i18n =================== */
+  var I18N = {
+    FR: {
+      badge: "démo", kicker: "NORDVIA · ANALYTIQUE SAAS",
+      h1: "Vos revenus, enfin nets.",
+      sub: "Nordvia transforme vos données de facturation en décisions. Faites défiler : le produit se construit sous vos yeux.",
+      hint: "Faites défiler ↓",
+      cap1: "Tout produit commence par une esquisse.",
+      cap2: "Faites défiler. L'interface s'assemble.",
+      cap3: "Les données arrivent en direct.",
+      cap4: "Prêt pour le lancement.",
+      dbTitle: "tableau de bord", skip: "passer la démo ↓",
+      side1: "Aperçu", side2: "Revenus", side3: "Clients", side4: "Rapports", side5: "Réglages",
+      kpi2: "Clients actifs", kpi3: "Attrition",
+      d1: "+18,4 %", d2: "+1 204", d3: "−0,6 pt",
+      gv1: "48 200 $", gv2: "1,9 %", gv3: "12 847",
+      chart1: "Revenu récurrent (12 mois)", chart2: "Inscriptions cette semaine",
+      pill1: "Synchronisation en temps réel", pill2: "Rapports en 1 clic", pill3: "Données hébergées au Canada",
+      flipH2: "Tout ce que vous venez de voir défiler a été construit en 7 jours ouvrables.",
+      flipP: "Nordvia n'existe pas. Cette page est une Scroll Story : un site animé par le défilement, construit en marque blanche pour les agences. Prix fixe, votre marque sur la facture.",
+      price: "5 000 $ fixe",
+      b1: "vous le revendez à 10 000 $ ou plus (la marge habituelle en marque blanche)",
+      b2: "en ligne 7 jours ouvrables après l'approbation du brief",
+      b3: "Lighthouse mobile 90+ garanti sur téléphone",
+      cta1: "réserver un appel de partenariat",
+      cta2: "voir tous les forfaits → nexaweb.dev",
+      credit: "Nordvia est une marque fictive. Démo construite par NexaWebDev, visuels générés par IA. Aucun témoin (cookie), aucun traceur : cette page ne collecte que des compteurs anonymes."
+    },
+    EN: {
+      badge: "demo", kicker: "NORDVIA · SAAS ANALYTICS",
+      h1: "Your revenue, finally in focus.",
+      sub: "Nordvia turns raw billing data into decisions. Scroll: the product builds itself under your finger.",
+      hint: "Scroll ↓",
+      cap1: "Every product starts as a sketch.",
+      cap2: "Scroll. The interface assembles itself.",
+      cap3: "Live data moves in.",
+      cap4: "Ready to launch.",
+      dbTitle: "dashboard", skip: "skip the demo ↓",
+      side1: "Overview", side2: "Revenue", side3: "Customers", side4: "Reports", side5: "Settings",
+      kpi2: "Active customers", kpi3: "Churn",
+      d1: "+18.4%", d2: "+1,204", d3: "−0.6 pt",
+      gv1: "$48,200", gv2: "1.9%", gv3: "12,847",
+      chart1: "Recurring revenue (12 months)", chart2: "Signups this week",
+      pill1: "Realtime sync", pill2: "1-click reports", pill3: "Data hosted in Canada",
+      flipH2: "Everything you just scrolled was built in 7 business days.",
+      flipP: "Nordvia isn't real. This page is a Scroll Story: a scroll-driven site built white-label for agencies. Flat fee, your brand on the invoice.",
+      price: "$5,000 flat",
+      b1: "you resell it at $10,000+ (standard white-label markup)",
+      b2: "live 7 business days after brief approval",
+      b3: "Lighthouse mobile 90+ guaranteed on phones",
+      cta1: "book a partner call",
+      cta2: "see all tiers → nexaweb.dev",
+      credit: "Nordvia is a fictional brand. Demo build by NexaWebDev, AI-generated visuals. No cookies, no trackers: this page only stores anonymous counters."
+    }
+  };
+  var lang = (navigator.language || "").toLowerCase().indexOf("fr") === 0 ? "FR" : "EN";
+
+  function applyLang() {
+    var dict = I18N[lang];
+    document.documentElement.lang = lang.toLowerCase();
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      var k = el.getAttribute("data-i18n");
+      if (dict[k]) el.textContent = dict[k];
+    });
+    var lt = document.getElementById("langToggle");
+    lt.textContent = lang === "FR" ? "EN" : "FR";
+    lt.setAttribute("aria-label", lang === "FR" ? "Switch to English" : "Passer au fran\u00e7ais");
+    splitTitle();
+    renderKpis(kpiProgress);
+  }
+
+  /* =================== cookieless beacon (Layer A rules: no id, no cookie) =================== */
+  var EVENTS_URL = "https://events.nexaweb.dev/e";
+  var fired = {};
+  function track(payload, dedupeKey) {
+    try {
+      if (dedupeKey) { if (fired[dedupeKey]) return; fired[dedupeKey] = 1; }
+      var body = JSON.stringify(payload);
+      if (navigator.sendBeacon) {
+        if (navigator.sendBeacon(EVENTS_URL, new Blob([body], { type: "text/plain;charset=UTF-8" }))) return;
+      }
+      fetch(EVENTS_URL, { method: "POST", body: body, keepalive: true, mode: "cors",
+        headers: { "Content-Type": "text/plain;charset=UTF-8" } }).catch(function () {});
+    } catch (e) { /* analytics must never break the page */ }
+  }
+
+  /* =================== hero title split =================== */
+  function splitTitle() {
+    var h1 = document.getElementById("heroTitle");
+    var words = h1.textContent.trim().split(" ");
+    h1.innerHTML = "";
+    words.forEach(function (w) {
+      var line = document.createElement("span");
+      line.className = "line";
+      var inner = document.createElement("span");
+      inner.textContent = w + " ";
+      line.appendChild(inner);
+      h1.appendChild(line);
+    });
+  }
+
+  /* =================== KPI counters (final values live in the DOM for no-JS) =================== */
+  var kpiProgress = 1; // 0..1, driven by the timeline; 1 = final values
+  function fmtInt(n) {
+    var s = Math.round(n).toString(), out = "", c = 0;
+    for (var i = s.length - 1; i >= 0; i--) { out = s[i] + out; if (++c % 3 === 0 && i > 0) out = " " + out; }
+    return lang === "FR" ? out : out.replace(/ /g, ",");
+  }
+  function renderKpis(p) {
+    kpiProgress = p;
+    var mrr = 48200 * p, users = 12847 * p, churn = 9.1 - (9.1 - 1.9) * p;
+    document.getElementById("kpiMrr").textContent =
+      lang === "FR" ? fmtInt(mrr) + " $" : "$" + fmtInt(mrr);
+    document.getElementById("kpiUsers").textContent = fmtInt(users);
+    document.getElementById("kpiChurn").textContent =
+      (lang === "FR" ? churn.toFixed(1).replace(".", ",") : churn.toFixed(1)) + " %";
+  }
+
+  /* =================== boot =================== */
+  applyLang();
+  track({ n: "section_view", section: "story_hero" }, "hero");
+
+  document.getElementById("langToggle").addEventListener("click", function () {
+    lang = lang === "FR" ? "EN" : "FR";
+    applyLang();
+    track({ n: "lang_toggle", to: lang });
+    if (!document.body.classList.contains("reduced")) {
+      gsap.from(".hero h1 .line > span", { yPercent: 110, duration: .7, ease: "power4.out", stagger: .05 });
+    }
+  });
+  document.getElementById("ctaCalendly").addEventListener("click", function () {
+    track({ n: "cta_click", location: "story_calendly" });
+  });
+  document.getElementById("ctaSite").addEventListener("click", function () {
+    track({ n: "cta_click", location: "story_site" });
+  });
+  document.getElementById("skipLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    track({ n: "cta_click", location: "story_skip" });
+    var y = document.getElementById("outro").getBoundingClientRect().top + window.scrollY;
+    if (window.lenisRef) { window.lenisRef.scrollTo(y); } else { window.scrollTo({ top: y, behavior: "smooth" }); }
+  });
+
+  /* Reduced motion policy: scroll-scrubbed animation is USER-driven (it only moves when
+     the visitor moves the scrollbar), so the timeline runs for everyone. Reduced motion
+     disables only self-playing movement: smooth-scroll inertia, entrance tweens, and the
+     drift/bob CSS loops. ?motion=1 forces everything on for QA. */
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    && window.location.search.indexOf("motion=1") === -1;
+  if (reduced) {
+    document.body.classList.add("reduced");
+    track({ n: "section_view", section: "story_reduced" }, "reduced");
+  }
+
+  {
+    gsap.registerPlugin(ScrollTrigger);
+    history.scrollRestoration = "manual"; // Chrome's late scroll restoration teleports mid-timeline
+
+    var lenis = null;
+    if (!reduced) {
+      lenis = new Lenis({ lerp: 0.09 });
+      window.lenisRef = lenis;
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+      gsap.ticker.lagSmoothing(0);
+      // Lenis measures the page before ScrollTrigger inserts the pin spacer
+      ScrollTrigger.addEventListener("refresh", function () { lenis.resize(); });
+    }
+    window.addEventListener("load", function () { ScrollTrigger.refresh(); });
+
+    /* hero entrance (self-playing: skipped under reduced motion) */
+    if (!reduced) {
+      gsap.from(".hero h1 .line > span", { yPercent: 110, duration: 1.1, ease: "power4.out", stagger: .07, delay: .15 });
+      gsap.from(".hero .kicker, .hero p", { opacity: 0, y: 24, duration: 1, ease: "power3.out", stagger: .15, delay: .4 });
+      gsap.from(".ghost", { autoAlpha: 0, y: 30, duration: 1.2, ease: "power3.out", stagger: .12, delay: .6 });
+    }
+    /* fragments drift up and away as you leave the hero: off to be assembled */
+    gsap.to(".ghost", {
+      yPercent: -160, autoAlpha: 0, ease: "none", stagger: .04,
+      scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
+    });
+    gsap.to(".hero-bg", {
+      yPercent: 18, ease: "none",
+      scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
+    });
+
+    /* reveal the wireframe skeletons only when JS runs (no-JS visitors keep the finished UI) */
+    gsap.set(".skel", { display: "flex", autoAlpha: 1 });
+    gsap.set(".fill", { autoAlpha: 0 });
+    gsap.set("#dbOutline", { opacity: 1 });
+    gsap.set(".db-side, .db-top", { autoAlpha: 0 });
+    gsap.set(".pill", { autoAlpha: 0, y: 24, scale: .9 });
+    renderKpis(0);
+
+    var kpiObj = { p: 0 };
+    var tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#scene", start: "top top", end: function () { return "+=" + Math.round(window.innerHeight * 2.9); }, scrub: reduced ? true : 1.2, pin: true,
+        onEnter: function () {
+          track({ n: "section_view", section: "story_scene" }, "scene");
+          document.getElementById("skipLink").classList.add("on");
+        }
+      },
+      defaults: { ease: "none" }
+    });
+
+    tl
+      /* act 1 — the sketch */
+      .from(".db-wrap", { scale: .96, autoAlpha: 0, duration: .22 }, 0)
+      .fromTo("#dbGlow", { autoAlpha: 0 }, { autoAlpha: .5, duration: .5 }, 0)
+      .fromTo(".caption--1", { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: .3 }, .02)
+      /* act 2 — assembly */
+      .to(".caption--1", { autoAlpha: 0, y: -26, duration: .3 }, 1.0)
+      .fromTo(".caption--2", { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: .35 }, 1.35)
+      .call(function () { track({ n: "scroll_depth", depth: 25 }, "d25"); }, null, 1.35)
+      .to(".db-top", { autoAlpha: 1, duration: .3 }, 1.2)
+      .to(".db-side", { autoAlpha: 1, duration: .35 }, 1.35)
+      .to(".skel", { autoAlpha: 0, duration: .5, stagger: .12 }, 1.6)
+      .to(".fill", { autoAlpha: 1, duration: .5, stagger: .12 }, 1.7)
+      .to("#dbOutline", { opacity: 0, duration: .5 }, 2.1)
+      /* act 3 — data */
+      .to(".caption--2", { autoAlpha: 0, y: -26, duration: .3 }, 2.5)
+      .fromTo(".caption--3", { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: .35 }, 2.8)
+      .call(function () { track({ n: "scroll_depth", depth: 50 }, "d50"); }, null, 2.8)
+      .fromTo("#chartLine", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.1 }, 2.7)
+      .fromTo("#chartArea", { autoAlpha: 0 }, { autoAlpha: 1, duration: .8 }, 3.2)
+      .from(".bars-svg rect", { scaleY: 0, duration: .7, stagger: .08 }, 2.9)
+      .to(kpiObj, { p: 1, duration: 1.2, onUpdate: function () { renderKpis(kpiObj.p); } }, 2.7)
+      /* act 4 — launch */
+      .to(".caption--3", { autoAlpha: 0, y: -26, duration: .3 }, 4.1)
+      .fromTo(".caption--4", { autoAlpha: 0, scale: .94 }, { autoAlpha: 1, scale: 1, duration: .4 }, 4.4)
+      .call(function () { track({ n: "scroll_depth", depth: 75 }, "d75"); }, null, 4.4)
+      .to(".pill", { autoAlpha: 1, y: 0, scale: 1, duration: .4, stagger: .15, ease: "power2.out" }, 4.3)
+      .to(".db-wrap", { scale: 1.03, duration: .8 }, 4.3)
+      .to("#dbGlow", { autoAlpha: 1, scale: 1.1, duration: .8 }, 4.3)
+      .to(".backdrop", { scale: 1.08, duration: 1.2 }, 4.0)
+      .call(function () { track({ n: "scroll_depth", depth: 100 }, "complete"); }, null, 5.0);
+
+    /* outro reveals (initial hidden state set here, NOT in CSS, so the pitch
+       still renders if this script never runs) */
+    if (reduced) {
+      /* entrances are self-playing motion: skip them, keep the pitch visible */
+      ScrollTrigger.create({
+        trigger: "#outro", start: "top 65%",
+        onEnter: function () { track({ n: "section_view", section: "story_outro" }, "outro"); }
+      });
+    } else {
+      gsap.set(".outro .reveal", { autoAlpha: 0, y: 40 });
+      gsap.utils.toArray(".outro .reveal").forEach(function (el, i) {
+        gsap.to(el, {
+          autoAlpha: 1, y: 0, duration: .9, ease: "power3.out", delay: i * .12,
+          scrollTrigger: {
+            trigger: "#outro", start: "top 65%",
+            onEnter: function () { track({ n: "section_view", section: "story_outro" }, "outro"); }
+          }
+        });
+      });
+    }
+  }
+</script>
+</body>
+</html>
