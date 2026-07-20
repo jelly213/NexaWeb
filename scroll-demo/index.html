@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NexaWebDev — Scroll Story Demo</title>
+<style>
+  :root {
+    --bg: #05060f;
+    --ink: #eef1ff;
+    --accent: #ff6b57;
+    --accent-2: #6ee7ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--ink); }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  section { position: relative; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    gap: 1.5rem;
+  }
+  .hero .kicker {
+    font-size: clamp(.8rem, 1.5vw, 1rem);
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 8vw, 6.5rem);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    max-width: 12ch;
+  }
+  .hero h1 .line { display: block; overflow: hidden; }
+  .hero h1 .line > span { display: inline-block; will-change: transform; }
+  .hero p {
+    max-width: 42ch;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: #aab0d0;
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    font-size: .85rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: #667;
+    animation: bob 2s ease-in-out infinite;
+  }
+  @keyframes bob { 50% { transform: translateY(8px); } }
+
+  /* ---------- Pinned scrub scene ---------- */
+  .scene {
+    height: 100vh;          /* what gets pinned */
+    overflow: hidden;
+  }
+  .scene .layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+  }
+  .scene .layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .scene .layer--sky img { object-position: center top; }
+  .scene .layer--clouds { top: 30%; bottom: auto; height: 45%; opacity: .85; }
+  .scene .layer--clouds img {
+    height: auto;   /* size to the strip's real aspect ratio so the mask tracks the pixels */
+    /* the AI cutout ends abruptly at its bottom row — dissolve it into the sky */
+    -webkit-mask-image: linear-gradient(to bottom, black 45%, transparent 92%);
+    mask-image: linear-gradient(to bottom, black 45%, transparent 92%);
+  }
+  .scene .layer--city { top: auto; bottom: -2%; height: 62%; }
+  .scene .layer--city img { object-fit: cover; object-position: center bottom; }
+  .scene .layer--rocket {
+    inset: auto;
+    left: 50%;
+    bottom: -30vh;
+    width: clamp(140px, 22vw, 300px);
+    height: auto;
+    transform: translateX(-50%);
+  }
+  .scene .layer--rocket img { width: 100%; height: auto; object-fit: contain; }
+
+  .scene .caption {
+    position: absolute;
+    left: 50%;
+    top: 14%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: min(90vw, 700px);
+    z-index: 5;
+  }
+  .scene .caption h2 {
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-shadow: 0 4px 30px rgba(0,0,0,.6);
+  }
+  .scene .caption p { margin-top: .75rem; color: #c3c9e8; font-size: clamp(.95rem, 1.8vw, 1.15rem); }
+  .caption--2, .caption--3 { opacity: 0; }
+
+  /* ---------- Outro ---------- */
+  .outro {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 1.75rem;
+    padding: 4rem 2rem;
+    background: linear-gradient(180deg, #05060f 0%, #0a0d1f 100%);
+  }
+  .outro h2 {
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    max-width: 16ch;
+  }
+  .outro .reveal { opacity: 0; transform: translateY(40px); }
+  .outro p { max-width: 46ch; color: #aab0d0; font-size: clamp(1rem, 2vw, 1.2rem); }
+  .cta {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 1.05rem;
+    transition: transform .25s ease, box-shadow .25s ease;
+    box-shadow: 0 8px 40px rgba(255,107,87,.35);
+  }
+  .cta:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 14px 50px rgba(255,107,87,.5); }
+  .credit { color: #556; font-size: .8rem; letter-spacing: .1em; }
+</style>
+</head>
+<body>
+
+  <!-- 1 · Hero with staggered line reveal -->
+  <section class="hero">
+    <div class="kicker">NexaWebDev · Scroll Story Demo</div>
+    <h1 id="heroTitle">Your scrollbar is the play button.</h1>
+    <p>This whole page is images + code — no video file anywhere. Scroll slowly, then scrub back up: the scene rewinds, exactly like a video timeline.</p>
+    <div class="scroll-hint">Scroll ↓</div>
+  </section>
+
+  <!-- 2 · Pinned, scroll-scrubbed scene -->
+  <section class="scene" id="scene">
+    <div class="layer layer--sky"><img src="assets/space-bg.webp" alt="" /></div>
+    <div class="layer layer--clouds"><img src="assets/clouds.webp" alt="" /></div>
+    <div class="layer layer--rocket"><img src="assets/rocket.webp" alt="" /></div>
+    <div class="layer layer--city"><img src="assets/city.webp" alt="" /></div>
+
+    <div class="caption caption--1">
+      <h2>Every layer moves at its own speed.</h2>
+      <p>City, clouds, sky — separate cut-out images.</p>
+    </div>
+    <div class="caption caption--2">
+      <h2>The rocket is riding your scroll.</h2>
+      <p>Scroll up and it flies backwards. Try it.</p>
+    </div>
+    <div class="caption caption--3">
+      <h2>That's the whole trick.</h2>
+      <p>GSAP ScrollTrigger, <code>scrub: true</code>, ~80 lines of code.</p>
+    </div>
+  </section>
+
+  <!-- 3 · Outro -->
+  <section class="outro">
+    <h2 class="reveal">Premium feel. No video. No WordPress plugins.</h2>
+    <p class="reveal">Layered art + GSAP ScrollTrigger + Lenis smooth scroll. Works in React, plain HTML, or dropped into a WordPress theme.</p>
+    <a class="cta reveal" href="https://nexaweb.dev">Built by NexaWebDev</a>
+    <div class="credit reveal">Art generated with Higgsfield · Code by Claude</div>
+  </section>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // scroll-story pages should always start at the top — Chrome's delayed
+  // scroll restoration otherwise fights the pinned timeline after a reload
+  history.scrollRestoration = "manual";
+
+  /* ---- Lenis smooth scroll, driven by GSAP's ticker ---- */
+  const lenis = new Lenis({ lerp: 0.09 });
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add((t) => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  /* ---- Hero: split headline into lines, staggered reveal ---- */
+  const h1 = document.getElementById("heroTitle");
+  const words = h1.textContent.trim().split(" ");
+  h1.innerHTML = "";
+  // wrap each word so lines can wrap naturally, then animate per word
+  words.forEach((w) => {
+    const line = document.createElement("span");
+    line.className = "line";
+    const inner = document.createElement("span");
+    inner.textContent = w + " ";
+    line.style.display = "inline-block";
+    line.appendChild(inner);
+    h1.appendChild(line);
+  });
+  gsap.from(".hero h1 .line > span", {
+    yPercent: 110,
+    duration: 1.1,
+    ease: "power4.out",
+    stagger: 0.08,
+    delay: 0.15,
+  });
+  gsap.from(".hero .kicker, .hero p", {
+    opacity: 0, y: 24, duration: 1, ease: "power3.out", stagger: 0.15, delay: 0.4,
+  });
+
+  /* ---- The "video": one pinned timeline scrubbed by scroll ---- */
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#scene",
+      start: "top top",
+      end: "+=3200",        // 3200px of scroll = the "video length"
+      scrub: 1.2,           // 1.2s catch-up lag = buttery feel
+      pin: true,
+    },
+    defaults: { ease: "none" },
+  });
+
+  tl
+    // Act 1 — city night: sky drifts, clouds slide, caption 1 shows
+    .from(".layer--city",   { yPercent: 30 }, 0)
+    .from(".layer--clouds", { xPercent: -12, opacity: 0 }, 0)
+    .fromTo(".caption--1", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .5 }, 0.1)
+
+    // Act 2 — rocket launches through the frame
+    .to(".caption--1", { opacity: 0, y: -30, duration: .4 }, 1.2)
+    .to(".layer--rocket", { bottom: "45vh", duration: 2.2 }, 1.0)
+    .to(".layer--city",   { yPercent: 18, scale: 1.06, duration: 2.2 }, 1.0)
+    .to(".layer--clouds", { yPercent: 55, opacity: .4, duration: 2.2 }, 1.0)
+    .fromTo(".caption--2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .5 }, 1.7)
+
+    // Act 3 — into space: city sinks away, stars remain
+    .to(".caption--2", { opacity: 0, y: -30, duration: .4 }, 3.2)
+    .to(".layer--rocket", { bottom: "110vh", scale: .85, duration: 1.8 }, 3.0)
+    .to(".layer--city",   { yPercent: 70, duration: 1.8 }, 3.0)
+    .to(".layer--clouds", { yPercent: 130, opacity: 0, duration: 1.5 }, 3.0)
+    .to(".layer--sky",    { scale: 1.12, duration: 1.8 }, 3.0)
+    .fromTo(".caption--3", { opacity: 0, scale: .92 }, { opacity: 1, scale: 1, duration: .6 }, 3.8);
+
+  /* Lenis measures the page before ScrollTrigger inserts the pin spacer —
+     without this resync it clamps scrolling and the outro is unreachable */
+  ScrollTrigger.addEventListener("refresh", () => lenis.resize());
+  window.addEventListener("load", () => ScrollTrigger.refresh());
+
+  /* ---- Outro: classic whileInView-style reveals ---- */
+  gsap.utils.toArray(".outro .reveal").forEach((el, i) => {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: .9, ease: "power3.out", delay: i * 0.12,
+      scrollTrigger: { trigger: ".outro", start: "top 65%" },
+    });
+  });
+</script>
+</body>
+</html>

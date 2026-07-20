@@ -1,0 +1,13 @@
+# story.nexaweb.dev — static Scroll Story demo (Nordvia), served as Worker assets.
+# Deploy: npx wrangler deploy   (from this directory)
+name = "nexaweb-story"
+compatibility_date = "2026-07-01"
+
+routes = [
+  { pattern = "story.nexaweb.dev", custom_domain = true }
+]
+
+[assets]
+directory = "./public"
+html_handling = "auto-trailing-slash"
+not_found_handling = "single-page-application"

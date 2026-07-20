@@ -34,6 +34,7 @@ const KEY_TTL_SECONDS = 60 * 60 * 24 * 120;
 const ALLOWED_ORIGINS = new Set([
   'https://nexaweb.dev',
   'https://www.nexaweb.dev',
+  'https://story.nexaweb.dev',
   'http://localhost:5173',
   'http://localhost:4173',
 ]);
