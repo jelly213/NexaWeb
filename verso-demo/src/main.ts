@@ -101,7 +101,27 @@ for (const [sel, tIn, tOut] of captionWindows) {
 }
 
 window.addEventListener('resize', () => scene.resize());
-window.addEventListener('load', () => ScrollTrigger.refresh());
+
+/* Anchor navigation must go through Lenis — native jumps misplace against the pin spacer. */
+function scrollToHash(hash: string, immediate: boolean): void {
+  const el = document.querySelector<HTMLElement>(hash);
+  if (!el) return;
+  if (lenis) lenis.scrollTo(el, { offset: -64, immediate });
+  else el.scrollIntoView();
+}
+document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
+  a.addEventListener('click', (e) => {
+    const href = a.getAttribute('href')!;
+    if (href.length < 2) return;
+    e.preventDefault();
+    history.pushState(null, '', href);
+    scrollToHash(href, false);
+  });
+});
+window.addEventListener('load', () => {
+  ScrollTrigger.refresh();
+  if (location.hash) scrollToHash(location.hash, true);
+});
 
 /* ==================== below-the-fold reveals + section tracking ==================== */
 const revealIO = new IntersectionObserver(

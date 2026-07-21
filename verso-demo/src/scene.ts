@@ -254,7 +254,9 @@ export function createScene(container: HTMLElement): VersoScene {
       const bSlab = new THREE.Mesh(new THREE.BoxGeometry(W * 0.42, 0.1, 1.1), matConcrete);
       bSlab.castShadow = true;
       balc.add(bSlab);
-      const rail = new THREE.Mesh(new THREE.BoxGeometry(W * 0.42, 0.42, 0.04), makeGlass());
+      const railMat = makeGlass();
+      railMat.opacity = 0.3; // lighter rail so balconies stop reading as floating trays
+      const rail = new THREE.Mesh(new THREE.BoxGeometry(W * 0.42, 0.42, 0.04), railMat);
       rail.position.set(0, 0.26, 0.53);
       balc.add(rail);
       balc.position.set((i % 2 === 0 ? -1 : 1) * W * 0.22, 0.12, D / 2 + 0.55);
@@ -415,7 +417,7 @@ export function createScene(container: HTMLElement): VersoScene {
       }
     });
     tl.to(roof.position, { y: roofY + 1.5 + (FLOORS - UNIT_FLOOR) * 0.22, duration: 0.7 }, 4.3 + (FLOORS - UNIT_FLOOR) * 0.05);
-    tl.to(camera.position, { x: -12.5, y: PODIUM_H + UNIT_FLOOR + 4.5, z: 13.5, duration: 1.4 }, 4.3);
+    tl.to(camera.position, { x: -12.5, y: PODIUM_H + UNIT_FLOOR + 4.5, z: 15, duration: 1.4 }, 4.3);
     tl.to(camTarget, { x: 1.2, y: PODIUM_H + UNIT_FLOOR + 0.6, duration: 1.4 }, 4.3);
     tl.to(unit.glass, { opacity: 0.12, duration: 0.5 }, 4.7);
     tl.to(unit.core, { opacity: 0.35, duration: 0.5 }, 4.7);
@@ -436,7 +438,7 @@ export function createScene(container: HTMLElement): VersoScene {
     tl.to(roof.position, { y: roofY, duration: 0.6 }, 6.05);
 
     // Act 4 — dusk (6.6 → 8.6)
-    tl.to(camera.position, { x: 12.5, y: 8, z: 16, duration: 2.0 }, 6.6);
+    tl.to(camera.position, { x: 13, y: 8.5, z: 19, duration: 2.0 }, 6.6);
     tl.to(camTarget, { x: 0, y: 6.2, z: 0, duration: 2.0 }, 6.6);
     tl.to(dusk, { t: 1, duration: 1.8, onUpdate: applyDusk }, 6.7);
     // the unit floor joins the lit facade at dusk
