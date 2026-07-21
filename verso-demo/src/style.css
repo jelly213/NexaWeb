@@ -1,5 +1,21 @@
 /* VERSO — demo site. Warm-dark architectural theme. */
 
+/* Self-hosted fonts, font-display:optional — no late swap, so text LCP lands at first paint. */
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: optional;
+  src: url('/fonts/instrument.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Hanken Grotesk';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: optional;
+  src: url('/fonts/hanken.woff2') format('woff2');
+}
+
 :root {
   --bg: #101014;
   --bg-2: #16161b;
@@ -139,6 +155,13 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: 0.005e
   overflow: hidden;
   isolation: isolate;
 }
+.story__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .story__gl, .story__gl canvas {
   position: absolute;
   inset: 0;
@@ -168,6 +191,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: 0.005e
   pointer-events: none;
   padding: 0 1.5rem 24vh; /* lift the wordmark into the sky, clear of the skyline */
   color: var(--story-ink);
+  will-change: transform; /* own compositor layer: canvas paints must not re-raster the LCP text */
 }
 .story__brand .overline { color: var(--story-accent); }
 /* soft halo behind the wordmark so it stays readable over the skyline */

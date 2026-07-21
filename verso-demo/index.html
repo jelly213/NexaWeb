@@ -9,9 +9,9 @@
   <meta property="og:description" content="La ville, autrement. 12 étages de résidences boutique à Griffintown." />
   <meta name="theme-color" content="#101014" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23101014'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23c8a06a' font-family='Georgia'>V</text></svg>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/instrument.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/hanken.woff2" crossorigin />
+  <link rel="preload" as="image" href="/poster.webp" fetchpriority="high" />
 </head>
 <body>
   <!-- Demo badge (agency lead capture, fixed) -->
@@ -35,6 +35,8 @@
   <main id="top">
     <!-- ==================== 3D scroll story ==================== -->
     <section class="story" id="story" aria-label="VERSO">
+      <!-- instant-paint poster of frame one; the canvas simply renders over it once live -->
+      <img class="story__poster" src="/poster.webp" width="1180" height="1006" alt="" fetchpriority="high" />
       <div class="story__gl" id="gl"></div>
 
       <div class="story__brand" id="act-0">

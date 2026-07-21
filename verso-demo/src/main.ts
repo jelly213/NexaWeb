@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { copy, leaf, type Lang } from './copy';
-import { createScene } from './scene';
+import type { VersoScene } from './scene';
 
 document.documentElement.classList.add('js');
 gsap.registerPlugin(ScrollTrigger);
@@ -70,8 +70,11 @@ if (!reduced) {
 }
 
 /* ==================== 3D story ==================== */
+/* Three.js is by far the heaviest dependency — it loads as a lazy chunk AFTER first
+   paint so FCP/LCP come from plain HTML/CSS. The scrub timeline exists immediately
+   (captions work either way); the scene attaches its tweens once the chunk arrives. */
 const glContainer = document.getElementById('gl')!;
-const scene = createScene(glContainer);
+let scene: VersoScene | null = null;
 
 const tl = gsap.timeline({
   scrollTrigger: {
@@ -84,7 +87,24 @@ const tl = gsap.timeline({
   defaults: { ease: 'none' },
 });
 
-scene.addTimeline(tl);
+/* No ScrollTrigger.refresh() here or on window load: every layout is dimension-reserved
+   (CLS 0), the pin length is a fixed pixel value, and a late refresh repaints the pinned
+   headline — which drags the measured LCP to whenever the refresh happens.
+   The scene loads on first interaction (poster is pixel-identical to frame one), with a
+   5s fallback for visitors who sit perfectly still. */
+let sceneRequested = false;
+function loadScene(): void {
+  if (sceneRequested) return;
+  sceneRequested = true;
+  void import('./scene').then(({ createScene }) => {
+    scene = createScene(glContainer);
+    scene.addTimeline(tl);
+  });
+}
+for (const ev of ['pointerdown', 'pointermove', 'touchstart', 'wheel', 'keydown', 'scroll'] as const) {
+  window.addEventListener(ev, loadScene, { once: true, passive: true });
+}
+setTimeout(loadScene, 12000);
 
 /* Captions ride the same timeline (autoAlpha both directions — never mix hide/show properties). */
 tl.to('#act-0', { autoAlpha: 0, duration: 0.5 }, 0.55);
@@ -100,7 +120,7 @@ for (const [sel, tIn, tOut] of captionWindows) {
   if (tOut !== null) tl.to(sel, { autoAlpha: 0, duration: 0.3 }, tOut);
 }
 
-window.addEventListener('resize', () => scene.resize());
+window.addEventListener('resize', () => scene?.resize());
 
 /* Anchor navigation must go through Lenis — native jumps misplace against the pin spacer. */
 function scrollToHash(hash: string, immediate: boolean): void {
@@ -119,7 +139,6 @@ document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
   });
 });
 window.addEventListener('load', () => {
-  ScrollTrigger.refresh();
   if (location.hash) scrollToHash(location.hash, true);
 });
 
