@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maison Lune — Contemporary Cashmere (NexaWebDev Demo)</title>
+<meta name="description" content="A demo storefront for a women's contemporary cashmere brand — built by NexaWebDev to show SKU-heavy merchandising, hover-swap product imagery, filtering, and a Shopify-idiom shopping experience." />
+<style>
+  :root {
+    --paper:      #f7f3ec;
+    --paper-2:    #efe7db;
+    --paper-3:    #e9dfd0;
+    --ink:        #221e18;
+    --ink-soft:   #6d6456;
+    --ink-faint:  #9a9081;
+    --camel:      #c39a63;
+    --camel-deep: #a67c44;
+    --line:       #e3dacb;
+    --line-soft:  #ede5d8;
+    --rose:       #c79b96;
+    --sage:       #9aa587;
+    --white:      #fffdf9;
+    --shadow:     0 22px 60px -32px rgba(60,48,30,.55);
+    --serif: "Cormorant Garamond", "Cormorant", Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    --ease: cubic-bezier(.22,.61,.36,1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  ::selection { background: var(--camel); color: var(--white); }
+
+  .wrap { width: min(1240px, 92vw); margin-inline: auto; }
+  .eyebrow {
+    font-size: .72rem; letter-spacing: .32em; text-transform: uppercase;
+    color: var(--camel-deep); font-weight: 600;
+  }
+  .serif { font-family: var(--serif); }
+
+  /* ---------------- Announcement ---------------- */
+  .announce {
+    background: var(--ink); color: var(--paper);
+    text-align: center; font-size: .74rem; letter-spacing: .22em;
+    text-transform: uppercase; padding: .62rem 1rem;
+    position: relative; overflow: hidden;
+  }
+  .announce .rot { display: inline-block; }
+
+  /* ---------------- Header ---------------- */
+  header {
+    position: sticky; top: 0; z-index: 60;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(14px) saturate(1.1);
+    border-bottom: 1px solid var(--line);
+    transition: box-shadow .4s var(--ease);
+  }
+  header.scrolled { box-shadow: 0 10px 30px -24px rgba(60,48,30,.5); }
+  .nav {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    padding: 1.05rem 0; gap: 1rem;
+  }
+  .nav-left, .nav-right { display: flex; align-items: center; gap: 1.6rem; }
+  .nav-right { justify-content: flex-end; }
+  .brand {
+    font-family: var(--serif); font-size: 1.75rem; font-weight: 600;
+    letter-spacing: .04em; text-align: center; line-height: 1; white-space: nowrap;
+  }
+  .brand small { display: block; font-family: var(--sans); font-size: .54rem;
+    letter-spacing: .5em; text-transform: uppercase; color: var(--ink-soft); margin-top: .3rem; }
+  .nav a.link, .icon-btn {
+    font-size: .82rem; letter-spacing: .08em; color: var(--ink);
+    position: relative; padding: .2rem 0;
+  }
+  .nav a.link::after {
+    content: ""; position: absolute; left: 0; bottom: -2px; height: 1px; width: 0;
+    background: var(--ink); transition: width .35s var(--ease);
+  }
+  .nav a.link:hover::after { width: 100%; }
+  .icon-btn { display: inline-flex; align-items: center; gap: .4rem; }
+  .cart-count {
+    display: inline-grid; place-items: center; min-width: 18px; height: 18px;
+    padding: 0 5px; border-radius: 999px; background: var(--ink); color: var(--paper);
+    font-size: .62rem; font-weight: 700; line-height: 1;
+  }
+  .burger { display: none; }
+
+  /* ---------------- Hero ---------------- */
+  .hero {
+    position: relative; padding: clamp(3.5rem, 8vw, 6.5rem) 0 clamp(3rem,6vw,5rem);
+    overflow: hidden;
+  }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(2rem,5vw,4.5rem); align-items: center; }
+  .hero h1 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(2.9rem, 7vw, 5.6rem); line-height: .98; letter-spacing: -.01em;
+    margin: 1.1rem 0 1.4rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--camel-deep); }
+  .hero p.lede {
+    font-size: 1.06rem; line-height: 1.65; color: var(--ink-soft); max-width: 42ch; margin-bottom: 2rem;
+  }
+  .cta-row { display: flex; gap: .9rem; flex-wrap: wrap; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: .6rem; padding: .95rem 1.8rem;
+    font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 600;
+    border-radius: 2px; transition: all .4s var(--ease);
+  }
+  .btn-solid { background: var(--ink); color: var(--paper); }
+  .btn-solid:hover { background: var(--camel-deep); transform: translateY(-2px); }
+  .btn-ghost { border: 1px solid var(--ink); color: var(--ink); }
+  .btn-ghost:hover { background: var(--ink); color: var(--paper); }
+  .hero-stats { display: flex; gap: 2.4rem; margin-top: 3rem; }
+  .hero-stats .n { font-family: var(--serif); font-size: 2rem; line-height: 1; }
+  .hero-stats .l { font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); margin-top: .45rem; }
+
+  .hero-art { position: relative; aspect-ratio: 4/5; border-radius: 3px; overflow: hidden; box-shadow: var(--shadow); }
+  .hero-art .float {
+    position: absolute; bottom: 1.1rem; left: 1.1rem; right: 1.1rem;
+    background: color-mix(in srgb, var(--white) 82%, transparent);
+    backdrop-filter: blur(6px); border-radius: 3px; padding: .9rem 1.1rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1px solid rgba(255,255,255,.6);
+  }
+  .hero-art .float .t { font-family: var(--serif); font-size: 1.15rem; }
+  .hero-art .float .p { font-size: .82rem; color: var(--ink-soft); }
+  .hero-art .tag {
+    position: absolute; top: 1.1rem; left: 1.1rem; background: var(--white);
+    padding: .4rem .85rem; font-size: .64rem; letter-spacing: .18em; text-transform: uppercase;
+    font-weight: 600; border-radius: 2px;
+  }
+
+  /* ---------------- Marquee ---------------- */
+  .marquee {
+    border-block: 1px solid var(--line); background: var(--paper-2);
+    overflow: hidden; padding: .95rem 0;
+  }
+  .marquee-track { display: flex; gap: 3.5rem; width: max-content; animation: slide 32s linear infinite; }
+  .marquee-track span { font-family: var(--serif); font-size: 1.15rem; font-style: italic; color: var(--ink-soft); white-space: nowrap; display: inline-flex; gap: 3.5rem; align-items: center; }
+  .marquee-track span::after { content: "✦"; color: var(--camel); font-style: normal; font-size: .8rem; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+
+  /* ---------------- Collections strip ---------------- */
+  .section { padding: clamp(3.5rem, 7vw, 6rem) 0; }
+  .section-head { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 2.4rem; flex-wrap: wrap; }
+  .section-head h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(2rem,4vw,3.1rem); line-height: 1.05; letter-spacing: -.01em; }
+  .section-head .link-more { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; border-bottom: 1px solid var(--ink); padding-bottom: 3px; }
+
+  .collections { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.1rem; }
+  .col-card { position: relative; aspect-ratio: 3/4; border-radius: 3px; overflow: hidden; cursor: pointer; }
+  .col-card .cimg { position: absolute; inset: 0; transition: transform .8s var(--ease); }
+  .col-card:hover .cimg { transform: scale(1.06); }
+  .col-card .clabel {
+    position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 1.2rem; background: linear-gradient(to top, rgba(30,24,16,.55), transparent 55%); color: var(--paper);
+  }
+  .col-card .clabel h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 500; }
+  .col-card .clabel span { font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; opacity: .85; }
+
+  /* ---------------- Shop / filter ---------------- */
+  .shop-bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 1.2rem;
+    flex-wrap: wrap; margin-bottom: 2rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--line);
+  }
+  .filters { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+  .chip {
+    font-size: .76rem; letter-spacing: .05em; padding: .5rem 1rem; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--white); color: var(--ink-soft);
+    transition: all .3s var(--ease);
+  }
+  .chip:hover { border-color: var(--ink); color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .filter-right { display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; }
+  .swatches { display: flex; gap: .45rem; align-items: center; }
+  .swatches .sw {
+    width: 20px; height: 20px; border-radius: 50%; border: 1px solid rgba(0,0,0,.12);
+    position: relative; transition: transform .25s var(--ease);
+  }
+  .swatches .sw:hover { transform: scale(1.15); }
+  .swatches .sw.active::after {
+    content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid var(--ink);
+  }
+  select.sort {
+    font-family: inherit; font-size: .78rem; padding: .55rem 2rem .55rem .9rem; border-radius: 2px;
+    border: 1px solid var(--line); background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23221e18' fill='none' stroke-width='1.3'/%3E%3C/svg%3E") no-repeat right .8rem center;
+    -webkit-appearance: none; appearance: none; color: var(--ink); cursor: pointer;
+  }
+  .result-count { font-size: .76rem; color: var(--ink-faint); letter-spacing: .04em; }
+
+  /* ---------------- Product grid ---------------- */
+  .grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem 1.1rem; }
+  .card { position: relative; }
+  .card.hide { display: none; }
+  .card-media {
+    position: relative; aspect-ratio: 3/4; border-radius: 3px; overflow: hidden;
+    background: var(--paper-2); cursor: pointer;
+  }
+  .card-media .layer { position: absolute; inset: 0; transition: opacity .55s var(--ease); }
+  .card-media .layer.back { opacity: 0; }
+  .card-media:hover .layer.front { opacity: 0; }
+  .card-media:hover .layer.back { opacity: 1; }
+  .card-badge {
+    position: absolute; top: .7rem; left: .7rem; z-index: 3; background: var(--white);
+    padding: .32rem .7rem; font-size: .58rem; letter-spacing: .16em; text-transform: uppercase;
+    font-weight: 700; border-radius: 2px;
+  }
+  .card-badge.sale { background: var(--ink); color: var(--paper); }
+  .wish {
+    position: absolute; top: .55rem; right: .55rem; z-index: 3; width: 34px; height: 34px;
+    display: grid; place-items: center; border-radius: 50%;
+    background: color-mix(in srgb, var(--white) 75%, transparent); backdrop-filter: blur(4px);
+    opacity: 0; transform: translateY(-4px); transition: all .35s var(--ease);
+  }
+  .card-media:hover .wish { opacity: 1; transform: none; }
+  .wish.on svg { fill: var(--rose); stroke: var(--rose); }
+  .quick-add {
+    position: absolute; left: .7rem; right: .7rem; bottom: .7rem; z-index: 3;
+    background: var(--white); color: var(--ink); padding: .8rem; border-radius: 2px;
+    font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 600;
+    opacity: 0; transform: translateY(10px); transition: all .4s var(--ease);
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+  }
+  .card-media:hover .quick-add { opacity: 1; transform: none; }
+  .quick-add:hover { background: var(--ink); color: var(--paper); }
+  .card-info { padding-top: .9rem; }
+  .card-info .row { display: flex; justify-content: space-between; gap: .6rem; align-items: baseline; }
+  .card-info h3 { font-family: var(--serif); font-size: 1.18rem; font-weight: 500; line-height: 1.15; }
+  .card-info .cat { font-size: .64rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: .25rem; }
+  .card-info .price { font-size: .98rem; white-space: nowrap; }
+  .card-info .price .was { color: var(--ink-faint); text-decoration: line-through; margin-right: .35rem; font-size: .82rem; }
+  .card-info .price .now { color: var(--camel-deep); }
+  .mini-sw { display: flex; gap: .3rem; margin-top: .55rem; }
+  .mini-sw i { width: 13px; height: 13px; border-radius: 50%; border: 1px solid rgba(0,0,0,.12); display: inline-block; }
+
+  .empty { text-align: center; padding: 4rem 0; color: var(--ink-soft); grid-column: 1/-1; display: none; }
+  .empty.show { display: block; }
+  .empty h3 { font-family: var(--serif); font-size: 1.8rem; margin-bottom: .4rem; }
+
+  /* ---------------- Editorial ---------------- */
+  .editorial { background: var(--ink); color: var(--paper); }
+  .ed-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(2rem,5vw,4.5rem); }
+  .ed-art { aspect-ratio: 5/6; border-radius: 3px; overflow: hidden; position: relative; }
+  .editorial .eyebrow { color: var(--camel); }
+  .editorial h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(2.1rem,4vw,3.4rem); line-height: 1.06; margin: 1rem 0 1.3rem; }
+  .editorial p { color: #c9c1b3; line-height: 1.75; margin-bottom: 1.2rem; max-width: 46ch; }
+  .ed-feats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.4rem; margin-top: 2rem; }
+  .ed-feats .f .fh { font-family: var(--serif); font-size: 1.6rem; color: var(--camel); }
+  .ed-feats .f .fl { font-size: .72rem; letter-spacing: .1em; color: #b7ae9f; margin-top: .3rem; line-height: 1.4; }
+
+  /* ---------------- Value props ---------------- */
+  .props { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; }
+  .prop { text-align: center; padding: 1.5rem 1rem; }
+  .prop .ic { width: 46px; height: 46px; margin: 0 auto 1rem; display: grid; place-items: center; color: var(--camel-deep); }
+  .prop h4 { font-family: var(--serif); font-size: 1.3rem; font-weight: 500; margin-bottom: .4rem; }
+  .prop p { font-size: .84rem; color: var(--ink-soft); line-height: 1.55; }
+
+  /* ---------------- Newsletter ---------------- */
+  .news { background: var(--paper-3); border-radius: 4px; padding: clamp(2.5rem,5vw,4rem); text-align: center; position: relative; overflow: hidden; }
+  .news h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(2rem,4vw,3rem); margin-bottom: .8rem; }
+  .news p { color: var(--ink-soft); max-width: 44ch; margin: 0 auto 1.8rem; line-height: 1.6; }
+  .news form { display: flex; gap: .6rem; max-width: 460px; margin: 0 auto; }
+  .news input {
+    flex: 1; padding: .95rem 1.2rem; border: 1px solid var(--line); border-radius: 2px;
+    font-family: inherit; font-size: .92rem; background: var(--white); color: var(--ink);
+  }
+  .news input:focus { outline: none; border-color: var(--ink); }
+  .news small { display: block; margin-top: 1rem; font-size: .7rem; color: var(--ink-faint); letter-spacing: .04em; }
+
+  /* ---------------- Footer ---------------- */
+  footer { background: var(--ink); color: var(--paper); padding: clamp(3rem,5vw,4.5rem) 0 2rem; }
+  .foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 2rem; }
+  footer .brand { text-align: left; color: var(--paper); }
+  footer .brand small { color: #a99f8f; }
+  footer p.blurb { color: #b7ae9f; line-height: 1.7; margin-top: 1.2rem; max-width: 34ch; font-size: .9rem; }
+  .foot-col h5 { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--camel); margin-bottom: 1.1rem; }
+  .foot-col a { display: block; color: #c9c1b3; font-size: .88rem; margin-bottom: .7rem; transition: color .3s; }
+  .foot-col a:hover { color: var(--paper); }
+  .foot-bottom { border-top: 1px solid rgba(255,255,255,.12); margin-top: 2.5rem; padding-top: 1.5rem;
+    display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-size: .78rem; color: #a99f8f; }
+  .foot-bottom .built { color: var(--camel); }
+
+  /* ---------------- Cart drawer ---------------- */
+  .scrim {
+    position: fixed; inset: 0; background: rgba(28,22,14,.42); backdrop-filter: blur(2px);
+    opacity: 0; pointer-events: none; transition: opacity .4s var(--ease); z-index: 90;
+  }
+  .scrim.open { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; right: 0; height: 100%; width: min(420px, 92vw);
+    background: var(--paper); z-index: 100; transform: translateX(100%);
+    transition: transform .5s var(--ease); display: flex; flex-direction: column;
+    box-shadow: -30px 0 60px -30px rgba(0,0,0,.4);
+  }
+  .drawer.open { transform: none; }
+  .drawer-head { display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 1.5rem; border-bottom: 1px solid var(--line); }
+  .drawer-head h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 500; }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
+  .drawer-empty { text-align: center; color: var(--ink-soft); padding: 3rem 1rem; }
+  .drawer-empty .serif { font-size: 1.5rem; display: block; margin-bottom: .5rem; color: var(--ink); }
+  .line-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line-soft); }
+  .line-item .li-img { width: 74px; height: 92px; border-radius: 2px; overflow: hidden; flex-shrink: 0; position: relative; }
+  .line-item .li-main { flex: 1; }
+  .line-item .li-main h4 { font-family: var(--serif); font-size: 1.05rem; font-weight: 500; }
+  .line-item .li-main .li-meta { font-size: .72rem; color: var(--ink-faint); letter-spacing: .05em; margin: .2rem 0 .6rem; }
+  .qty { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 2px; }
+  .qty button { width: 26px; height: 26px; font-size: .95rem; color: var(--ink-soft); }
+  .qty span { width: 30px; text-align: center; font-size: .82rem; }
+  .li-price { text-align: right; white-space: nowrap; font-size: .9rem; }
+  .li-remove { font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-faint); margin-top: .5rem; border-bottom: 1px solid var(--line); }
+  .li-remove:hover { color: var(--ink); }
+  .drawer-foot { padding: 1.3rem 1.5rem 1.6rem; border-top: 1px solid var(--line); background: var(--paper-2); }
+  .drawer-foot .sub { display: flex; justify-content: space-between; font-size: .95rem; margin-bottom: .3rem; }
+  .drawer-foot .sub.total { font-family: var(--serif); font-size: 1.35rem; margin-bottom: 1rem; }
+  .drawer-foot .ship-note { font-size: .72rem; color: var(--ink-soft); text-align: center; margin-bottom: 1rem; }
+  .drawer-foot .btn { width: 100%; justify-content: center; }
+  .free-bar { height: 4px; background: var(--line); border-radius: 999px; overflow: hidden; margin: .4rem 0 1rem; }
+  .free-bar i { display: block; height: 100%; background: var(--camel); width: 0; transition: width .5s var(--ease); }
+
+  /* toast */
+  .toast {
+    position: fixed; bottom: 1.5rem; left: 50%; transform: translate(-50%, 140%);
+    background: var(--ink); color: var(--paper); padding: .85rem 1.4rem; border-radius: 3px;
+    font-size: .82rem; letter-spacing: .04em; z-index: 120; transition: transform .5s var(--ease);
+    display: flex; align-items: center; gap: .6rem; box-shadow: var(--shadow);
+  }
+  .toast.show { transform: translate(-50%, 0); }
+  .toast svg { color: var(--camel); }
+
+  /* mobile menu */
+  .mob-menu {
+    position: fixed; inset: 0; background: var(--paper); z-index: 95; padding: 6rem 8vw;
+    transform: translateX(-100%); transition: transform .45s var(--ease); display: flex; flex-direction: column; gap: 1.2rem;
+  }
+  .mob-menu.open { transform: none; }
+  .mob-menu a { font-family: var(--serif); font-size: 2rem; }
+  .mob-close { position: absolute; top: 1.5rem; right: 8vw; font-size: 1.6rem; }
+
+  /* reveal */
+  [data-reveal] { opacity: 0; transform: translateY(26px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+  [data-reveal].in { opacity: 1; transform: none; }
+
+  /* ---------------- Responsive ---------------- */
+  @media (max-width: 1000px) {
+    .grid, .collections, .props { grid-template-columns: repeat(2,1fr); }
+    .hero-grid, .ed-grid { grid-template-columns: 1fr; }
+    .hero-art { max-width: 460px; }
+    .foot-grid { grid-template-columns: 1fr 1fr; }
+    .ed-feats { grid-template-columns: repeat(3,1fr); }
+  }
+  @media (max-width: 640px) {
+    .nav { grid-template-columns: auto 1fr auto; }
+    .nav-left .link, .nav-right .link, .nav-right .icon-btn.acct { display: none; }
+    .burger { display: inline-flex; }
+    .grid { grid-template-columns: 1fr 1fr; gap: 1.2rem .8rem; }
+    .props { grid-template-columns: 1fr 1fr; }
+    .foot-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 1.6rem; }
+    .news form { flex-direction: column; }
+    .shop-bar { flex-direction: column; align-items: flex-start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== SVG DEFS: reusable knit texture + garment glyphs ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="knit" width="14" height="16" patternUnits="userSpaceOnUse" patternTransform="scale(1)">
+      <path d="M0 0 L7 8 L14 0 M0 16 L7 8 L14 16" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="1.1"/>
+    </pattern>
+    <pattern id="knitDark" width="14" height="16" patternUnits="userSpaceOnUse">
+      <path d="M0 0 L7 8 L14 0 M0 16 L7 8 L14 16" fill="none" stroke="rgba(0,0,0,.10)" stroke-width="1.1"/>
+    </pattern>
+  </defs>
+</svg>
+
+<!-- ===== Announcement ===== -->
+<div class="announce"><span class="rot" id="announce">Complimentary shipping on orders over $250 · 30-day easy returns</span></div>
+
+<!-- ===== Header ===== -->
+<header id="header">
+  <div class="wrap nav">
+    <div class="nav-left">
+      <button class="burger icon-btn" aria-label="Menu" onclick="toggleMob(true)">
+        <svg width="20" height="14" viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M0 1h20M0 7h20M0 13h20"/></svg>
+      </button>
+      <a href="#shop" class="link">Shop</a>
+      <a href="#collections" class="link">Collections</a>
+      <a href="#story" class="link">Our Cashmere</a>
+      <a href="#journal" class="link">Journal</a>
+    </div>
+    <a href="#top" class="brand">Maison&nbsp;Lune<small>Cashmere</small></a>
+    <div class="nav-right">
+      <button class="icon-btn link" aria-label="Search">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><path d="M12.5 12.5 17 17"/></svg>
+      </button>
+      <a href="#" class="icon-btn link acct" aria-label="Account">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="5.5" r="3.2"/><path d="M2.5 16c0-3.6 2.9-5.6 6.5-5.6s6.5 2 6.5 5.6"/></svg>
+      </a>
+      <button class="icon-btn" aria-label="Cart" onclick="openCart()">
+        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4.5h2.2l1.5 9.5a1.5 1.5 0 0 0 1.5 1.3h6.4a1.5 1.5 0 0 0 1.5-1.2l1.2-6.6H5"/><circle cx="8" cy="17" r=".6"/><circle cx="15" cy="17" r=".6"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<a id="top"></a>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div data-reveal>
+      <span class="eyebrow">Autumn / Winter '26 — New Arrivals</span>
+      <h1>The art of<br><em>quiet</em> luxury,<br>knit to last.</h1>
+      <p class="lede">Grade-A Mongolian cashmere, spun in limited runs and finished by hand. Pieces designed to be layered, loved, and passed on.</p>
+      <div class="cta-row">
+        <a href="#shop" class="btn btn-solid">Shop the collection</a>
+        <a href="#story" class="btn btn-ghost">Our fibre story</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="n">GRADE&nbsp;A</div><div class="l">15.5-micron fibre</div></div>
+        <div><div class="n">240+</div><div class="l">Styles in stock</div></div>
+        <div><div class="n">14k+</div><div class="l">5-star reviews</div></div>
+      </div>
+    </div>
+    <div class="hero-art" data-reveal id="heroArt">
+      <span class="tag">Bestseller</span>
+      <div class="float">
+        <div><div class="t">The Cloud Crewneck</div><div class="p">Oatmeal · 100% cashmere</div></div>
+        <div class="t">$285</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Marquee ===== -->
+<div class="marquee">
+  <div class="marquee-track" id="marquee"></div>
+</div>
+
+<!-- ===== Collections ===== -->
+<section class="section" id="collections">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <div>
+        <span class="eyebrow">Shop by category</span>
+        <h2>Collections</h2>
+      </div>
+      <a href="#shop" class="link-more">View all styles</a>
+    </div>
+    <div class="collections" id="collectionGrid"></div>
+  </div>
+</section>
+
+<!-- ===== Shop / product grid ===== -->
+<section class="section" id="shop" style="padding-top:1rem">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <div>
+        <span class="eyebrow">The edit</span>
+        <h2>Women's cashmere</h2>
+      </div>
+    </div>
+
+    <div class="shop-bar" data-reveal>
+      <div class="filters" id="collectionFilters"></div>
+      <div class="filter-right">
+        <div class="swatches" id="colorFilters" title="Filter by colour"></div>
+        <select class="sort" id="sortSelect" aria-label="Sort products">
+          <option value="featured">Featured</option>
+          <option value="low">Price: Low to High</option>
+          <option value="high">Price: High to Low</option>
+          <option value="new">Newest</option>
+        </select>
+      </div>
+    </div>
+    <div class="result-count" id="resultCount" style="margin-bottom:1.4rem"></div>
+
+    <div class="grid" id="productGrid"></div>
+    <div class="empty" id="emptyState">
+      <h3>Nothing here — yet</h3>
+      <p>Try clearing a filter to see more of the collection.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Editorial / fibre story ===== -->
+<section class="section editorial" id="story">
+  <div class="wrap ed-grid">
+    <div class="ed-art" data-reveal id="edArt"></div>
+    <div data-reveal>
+      <span class="eyebrow">Traceable from goat to garment</span>
+      <h2>Cashmere worth keeping for a lifetime.</h2>
+      <p>Our fibre is combed by hand each spring from goats raised on the Alashan plateau, then sorted for length and fineness — only the longest, finest 15.5-micron strands make the cut. Longer fibres mean fewer pills and a garment that softens rather than wears.</p>
+      <p>We knit in small batches with a family-run mill we've partnered with for a decade, so every seam is linked, not overlocked. It costs more. It also lasts a decade longer.</p>
+      <div class="ed-feats">
+        <div class="f"><div class="fh">2-ply</div><div class="fl">Densely knit for warmth without weight</div></div>
+        <div class="f"><div class="fh">100%</div><div class="fl">Traceable, mulesing-free fibre</div></div>
+        <div class="f"><div class="fh">B-Corp</div><div class="fl">Certified supply chain</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Value props ===== -->
+<section class="section">
+  <div class="wrap">
+    <div class="props">
+      <div class="prop" data-reveal>
+        <div class="ic"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M15 2l3.5 7 7.7 1-5.6 5.4 1.4 7.6L15 26l-6.9 4 1.3-7.6L3.8 17l7.7-1z"/></svg></div>
+        <h4>Grade-A fibre</h4>
+        <p>Only the finest 15.5-micron cashmere. Softer, warmer, pill-resistant.</p>
+      </div>
+      <div class="prop" data-reveal>
+        <div class="ic"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 15l4 4L26 8"/><circle cx="15" cy="15" r="13"/></svg></div>
+        <h4>Free carbon-neutral shipping</h4>
+        <p>On every order over $250, delivered in recycled packaging.</p>
+      </div>
+      <div class="prop" data-reveal>
+        <div class="ic"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M15 27s-11-6.7-11-14a6 6 0 0 1 11-3 6 6 0 0 1 11 3c0 7.3-11 14-11 14z"/></svg></div>
+        <h4>Lifetime repairs</h4>
+        <p>Free mending and re-knitting for the life of the garment.</p>
+      </div>
+      <div class="prop" data-reveal>
+        <div class="ic"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M8 4h14l-1 22H9L8 4z"/><path d="M11 4a4 4 0 0 1 8 0"/></svg></div>
+        <h4>30-day easy returns</h4>
+        <p>Not in love? Send it back, free, no questions asked.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Newsletter (Klaviyo-style) ===== -->
+<section class="section" id="journal">
+  <div class="wrap">
+    <div class="news" data-reveal>
+      <span class="eyebrow">Join the list</span>
+      <h2>15% off your first order</h2>
+      <p>Early access to new drops, restock alerts on your saved sizes, and the occasional note on how to care for cashmere.</p>
+      <form onsubmit="subscribe(event)">
+        <input type="email" placeholder="you@email.com" required aria-label="Email address" />
+        <button type="submit" class="btn btn-solid">Subscribe</button>
+      </form>
+      <small>No spam. Unsubscribe anytime. Powered by a Klaviyo flow.</small>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand">Maison Lune<small>Cashmere</small></div>
+        <p class="blurb">Contemporary cashmere for women who buy less and keep it longer. Designed in Los Angeles, knit responsibly in Inner Mongolia.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Shop</h5>
+        <a href="#shop">Sweaters</a><a href="#shop">Cardigans</a><a href="#shop">Dresses</a><a href="#shop">Accessories</a><a href="#shop">Gift cards</a>
+      </div>
+      <div class="foot-col">
+        <h5>Help</h5>
+        <a href="#">Size guide</a><a href="#">Cashmere care</a><a href="#">Shipping & returns</a><a href="#">Track order</a><a href="#">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>House</h5>
+        <a href="#story">Our cashmere</a><a href="#">Sustainability</a><a href="#">Stores</a><a href="#">Journal</a><a href="#">Careers</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Maison Lune. All rights reserved. · A fictional brand.</span>
+      <span class="built">Demo storefront designed &amp; built by NexaWebDev</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== Cart drawer ===== -->
+<div class="scrim" id="scrim" onclick="closeCart()"></div>
+<aside class="drawer" id="drawer" aria-label="Shopping bag">
+  <div class="drawer-head">
+    <h3>Your bag <span id="drawerCount" style="font-family:var(--sans);font-size:.8rem;color:var(--ink-faint)"></span></h3>
+    <button class="icon-btn" aria-label="Close" onclick="closeCart()">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l14 14M16 2L2 16"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot" style="display:none">
+    <div class="ship-note" id="shipNote"></div>
+    <div class="free-bar"><i id="freeBar"></i></div>
+    <div class="sub"><span>Subtotal</span><span id="subtotal">$0</span></div>
+    <div class="sub total"><span>Total</span><span id="total">$0</span></div>
+    <button class="btn btn-solid" onclick="checkout()">Checkout →</button>
+  </div>
+</aside>
+
+<!-- ===== Toast ===== -->
+<div class="toast" id="toast"><svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l4 4 8-9"/></svg><span id="toastMsg">Added to bag</span></div>
+
+<!-- ===== Mobile menu ===== -->
+<div class="mob-menu" id="mobMenu">
+  <button class="mob-close icon-btn" onclick="toggleMob(false)">✕</button>
+  <a href="#shop" onclick="toggleMob(false)">Shop</a>
+  <a href="#collections" onclick="toggleMob(false)">Collections</a>
+  <a href="#story" onclick="toggleMob(false)">Our Cashmere</a>
+  <a href="#journal" onclick="toggleMob(false)">Journal</a>
+</div>
+
+<script>
+/* ============================================================
+   Maison Lune demo — NexaWebDev
+   Everything below is vanilla JS. In production this maps 1:1
+   onto Shopify: `products` -> the Storefront/Admin API, the
+   grid -> a collection template, quick-add -> /cart/add.js,
+   the drawer -> cart.js + section rendering.
+   ============================================================ */
+
+/* ---- Colourways (each product picks two for front/back "photos") ---- */
+const COLORS = {
+  oatmeal:  ['#e7dcc9', '#d8c8ad'],
+  camel:    ['#c39a63', '#a97e46'],
+  fog:      ['#c3c4c0', '#a6a8a2'],
+  rose:     ['#d9b3ac', '#c6968e'],
+  charcoal: ['#5a544c', '#403b34'],
+  sage:     ['#a3ab8e', '#868f6f'],
+  ink:      ['#33302b', '#26231f'],
+  cream:    ['#f0e9db', '#e3d9c4']
+};
+const SWATCH = {
+  oatmeal:'#ddceb4', camel:'#c39a63', fog:'#bcbdb8', rose:'#d3aaa2',
+  charcoal:'#57514a', sage:'#a3ab8e', ink:'#33302b', cream:'#ece3d2'
+};
+
+/* ---- Garment silhouettes (line-art, drawn over the knit swatch) ---- */
+const GLYPH = {
+  crew: '<path d="M35 22 L28 30 L20 46 L30 54 L35 47 L35 84 L65 84 L65 47 L70 54 L80 46 L72 30 L65 22 Q50 34 35 22 Z"/>',
+  turtle:'<path d="M38 16 L38 26 L30 34 L22 50 L31 58 L38 50 L38 84 L62 84 L62 50 L69 58 L78 50 L70 34 L62 26 L62 16 Q50 22 38 16 Z M40 16 Q50 24 60 16"/>',
+  cardi: '<path d="M35 22 L26 32 L18 48 L28 55 L34 48 L34 84 L66 84 L66 48 L72 55 L82 48 L74 32 L65 22 L50 30 Z M50 30 L50 84"/>',
+  dress: '<path d="M38 20 L30 30 L24 44 L32 50 L37 44 L30 86 L70 86 L63 44 L68 50 L76 44 L70 30 L62 20 Q50 30 38 20 Z"/>',
+  scarf: '<path d="M30 20 L44 20 L40 84 L26 84 Z M56 20 L70 20 L74 84 L60 84 Z M30 20 Q50 30 70 20" />',
+  hat:   '<path d="M28 56 Q28 26 50 26 Q72 26 72 56 Z M24 56 L76 56 L76 66 L24 66 Z M50 26 L50 16"/>'
+};
+
+/* ---- Catalogue (24 SKUs across 4 collections) ---- */
+const products = [
+  {id:'ml-01', name:'The Cloud Crewneck',    cat:'Sweaters',    type:'crew',   price:285, colors:['oatmeal','camel','fog','rose'], badge:'Bestseller', order:1},
+  {id:'ml-02', name:'Alto Turtleneck',       cat:'Sweaters',    type:'turtle', price:320, colors:['charcoal','camel','cream'],       badge:'New',        order:2},
+  {id:'ml-03', name:'Rue Ribbed Cardigan',   cat:'Cardigans',   type:'cardi',  price:345, colors:['oatmeal','sage','ink'],           badge:'',           order:3},
+  {id:'ml-04', name:'Lune Sweater Dress',    cat:'Dresses',     type:'dress',  price:395, colors:['charcoal','camel','rose'],        badge:'New',        order:4},
+  {id:'ml-05', name:'Featherweight Scarf',   cat:'Accessories', type:'scarf',  price:145, colors:['camel','fog','rose','cream'],     badge:'',           order:5},
+  {id:'ml-06', name:'Halo Beanie',           cat:'Accessories', type:'hat',    price:95,  colors:['oatmeal','charcoal','sage'],      badge:'',           order:6},
+  {id:'ml-07', name:'Mère Boxy Crew',        cat:'Sweaters',    type:'crew',   price:265, colors:['cream','fog','ink'],              badge:'',           order:7},
+  {id:'ml-08', name:'Colette Wrap Cardigan', cat:'Cardigans',   type:'cardi',  price:375, colors:['camel','oatmeal','charcoal'],     badge:'Bestseller', order:8},
+  {id:'ml-09', name:'Odette Polo Knit',      cat:'Sweaters',    type:'turtle', price:298, colors:['sage','rose','fog'],              badge:'',           order:9},
+  {id:'ml-10', name:'Belle Ribbed Dress',    cat:'Dresses',     type:'dress',  price:410, colors:['ink','camel','oatmeal'],          badge:'',           order:10},
+  {id:'ml-11', name:'Petit Fingerless Glove',cat:'Accessories', type:'hat',    price:85,  colors:['charcoal','oatmeal','rose'],      badge:'',           order:11, wasType:true},
+  {id:'ml-12', name:'Margaux Mock Neck',     cat:'Sweaters',    type:'turtle', price:310, colors:['fog','camel','ink'],              badge:'New',        order:12},
+  {id:'ml-13', name:'Soleil Open Cardigan',  cat:'Cardigans',   type:'cardi',  price:355, colors:['cream','sage','camel'],           badge:'',           order:13},
+  {id:'ml-14', name:'Verine Slip Dress',     cat:'Dresses',     type:'dress',  price:365, colors:['rose','charcoal','oatmeal'],      badge:'',           order:14},
+  {id:'ml-15', name:'Nuage Oversized Crew',  cat:'Sweaters',    type:'crew',   price:295, colors:['oatmeal','fog','sage'],           badge:'',           order:15},
+  {id:'ml-16', name:'Câline Cable Scarf',    cat:'Accessories', type:'scarf',  price:165, colors:['camel','ink','cream'],            badge:'',           order:16},
+  {id:'ml-17', name:'Aria V-Neck',           cat:'Sweaters',    type:'crew',   price:275, colors:['rose','oatmeal','charcoal'],      badge:'',           order:17},
+  {id:'ml-18', name:'Josephine Longline',    cat:'Cardigans',   type:'cardi',  price:398, colors:['charcoal','camel','cream'],       badge:'New',        order:18},
+  {id:'ml-19', name:'Lila Balloon Sleeve',   cat:'Sweaters',    type:'crew',   price:305, colors:['sage','rose','fog'],              badge:'',           order:19},
+  {id:'ml-20', name:'Genève Roll Neck',      cat:'Sweaters',    type:'turtle', price:330, colors:['ink','camel','oatmeal'],          badge:'Bestseller', order:20},
+  {id:'ml-21', name:'Amélie Knit Set',       cat:'Dresses',     type:'dress',  price:445, colors:['cream','fog','camel'],            badge:'',           order:21},
+  {id:'ml-22', name:'Fleur Bobble Beanie',   cat:'Accessories', type:'hat',    price:98,  colors:['rose','oatmeal','sage'],          badge:'',           order:22},
+  {id:'ml-23', name:'Manon Boyfriend Cardi', cat:'Cardigans',   type:'cardi',  price:368, colors:['oatmeal','charcoal','camel'],     badge:'',           order:23},
+  {id:'ml-24', name:'Céleste Cropped Crew',  cat:'Sweaters',    type:'crew',   price:255, colors:['fog','rose','ink'],               badge:'',           order:24}
+];
+const SIZES = ['XS','S','M','L','XL'];
+
+/* Give a few products a "sale" for visual variety (deterministic, no RNG) */
+products.forEach((p,i)=>{ if(i%7===3){ p.was = p.price; p.price = Math.round(p.price*0.8/5)*5; p.badge='Sale'; }});
+
+/* ---- Build an SVG "photo" for a product in a given colourway ---- */
+function productSVG(p, colorKey, variant){
+  const [a,b] = COLORS[colorKey];
+  const [top,bot] = variant==='back' ? [b,a] : [a,b];
+  const dark = ['charcoal','ink'].includes(colorKey);
+  const line = dark ? 'rgba(255,255,255,.5)' : 'rgba(40,32,20,.45)';
+  const knit = dark ? 'url(#knit)' : 'url(#knitDark)';
+  const scale = variant==='back' ? 1.35 : 1;   // "detail" shot zooms in
+  return `<svg viewBox="0 0 100 133" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" style="display:block">
+    <defs><linearGradient id="g-${p.id}-${colorKey}-${variant}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${bot}"/></linearGradient></defs>
+    <rect width="100" height="133" fill="url(#g-${p.id}-${colorKey}-${variant})"/>
+    <rect width="100" height="133" fill="${knit}"/>
+    <g transform="translate(0,20) scale(${scale})" transform-origin="50 66"
+       fill="none" stroke="${line}" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+      ${GLYPH[p.type]}
+    </g>
+  </svg>`;
+}
+
+/* ---- Render collections strip ---- */
+const CAT_META = [
+  {cat:'Sweaters',    key:'oatmeal', type:'crew'},
+  {cat:'Cardigans',   key:'camel',   type:'cardi'},
+  {cat:'Dresses',     key:'charcoal',type:'dress'},
+  {cat:'Accessories', key:'rose',    type:'scarf'}
+];
+document.getElementById('collectionGrid').innerHTML = CAT_META.map(c=>{
+  const count = products.filter(p=>p.cat===c.cat).length;
+  const fake = {id:'col-'+c.cat, type:c.type};
+  return `<a class="col-card" onclick="filterByCat('${c.cat}')">
+    <div class="cimg">${productSVG(fake,c.key,'front')}</div>
+    <div class="clabel"><span>${count} styles</span><h3>${c.cat}</h3></div>
+  </a>`;
+}).join('');
+
+/* ---- Hero + editorial art ---- */
+document.getElementById('heroArt').insertAdjacentHTML('afterbegin', productSVG({id:'hero',type:'crew'},'oatmeal','front'));
+document.getElementById('edArt').innerHTML = productSVG({id:'ed',type:'turtle'},'camel','front');
+
+/* ---- Marquee ---- */
+const marqItems = ['100% Grade-A Cashmere','Hand-linked seams','Carbon-neutral delivery','Lifetime repairs','Made in small batches','Traceable fibre'];
+document.getElementById('marquee').innerHTML =
+  `<span>${marqItems.join('</span><span>')}</span>`.repeat(2);
+
+/* ---- Filters state ---- */
+let activeCat = 'All';
+let activeColor = null;
+let activeSort = 'featured';
+const CATS = ['All', ...new Set(products.map(p=>p.cat))];
+
+document.getElementById('collectionFilters').innerHTML =
+  CATS.map(c=>`<button class="chip ${c==='All'?'active':''}" data-cat="${c}" onclick="setCat('${c}')">${c}</button>`).join('');
+
+const usedColors = [...new Set(products.flatMap(p=>p.colors))];
+document.getElementById('colorFilters').innerHTML =
+  usedColors.map(c=>`<button class="sw" title="${c}" style="background:${SWATCH[c]}" data-color="${c}" onclick="setColor('${c}')"></button>`).join('');
+
+function setCat(c){ activeCat=c; syncChips(); render(); }
+function filterByCat(c){ setCat(c); document.getElementById('shop').scrollIntoView({behavior:'smooth'}); }
+function setColor(c){ activeColor = activeColor===c ? null : c; syncChips(); render(); }
+function syncChips(){
+  document.querySelectorAll('[data-cat]').forEach(b=>b.classList.toggle('active', b.dataset.cat===activeCat));
+  document.querySelectorAll('[data-color]').forEach(b=>b.classList.toggle('active', b.dataset.color===activeColor));
+}
+document.getElementById('sortSelect').addEventListener('change', e=>{ activeSort=e.target.value; render(); });
+
+/* ---- Render product grid ---- */
+function render(){
+  let list = products.filter(p=>
+    (activeCat==='All' || p.cat===activeCat) &&
+    (!activeColor || p.colors.includes(activeColor))
+  );
+  if(activeSort==='low')  list.sort((a,b)=>a.price-b.price);
+  if(activeSort==='high') list.sort((a,b)=>b.price-a.price);
+  if(activeSort==='new')  list.sort((a,b)=>(b.badge==='New')-(a.badge==='New') || a.order-b.order);
+  if(activeSort==='featured') list.sort((a,b)=>a.order-b.order);
+
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = list.map(cardHTML).join('');
+  document.getElementById('emptyState').classList.toggle('show', list.length===0);
+  document.getElementById('resultCount').textContent =
+    `${list.length} ${list.length===1?'style':'styles'}${activeCat!=='All'?' in '+activeCat:''}${activeColor?' · '+activeColor:''}`;
+  observeReveal();
+}
+
+function cardHTML(p){
+  const c0 = activeColor && p.colors.includes(activeColor) ? activeColor : p.colors[0];
+  const priceHTML = p.was
+    ? `<span class="was">$${p.was}</span><span class="now">$${p.price}</span>`
+    : `$${p.price}`;
+  const badge = p.badge ? `<span class="card-badge ${p.badge==='Sale'?'sale':''}">${p.badge}</span>` : '';
+  const swatches = p.colors.map(c=>`<i style="background:${SWATCH[c]}" title="${c}"></i>`).join('');
+  return `<article class="card" data-reveal>
+    <div class="card-media" onclick="quickAdd('${p.id}','${c0}')">
+      ${badge}
+      <button class="wish" aria-label="Save" onclick="event.stopPropagation();this.classList.toggle('on')">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="#221e18" stroke-width="1.4"><path d="M9 16S1 11 1 5.7A3.7 3.7 0 0 1 9 3a3.7 3.7 0 0 1 8 2.7C17 11 9 16 9 16z"/></svg>
+      </button>
+      <div class="layer front">${productSVG(p,c0,'front')}</div>
+      <div class="layer back">${productSVG(p,c0,'back')}</div>
+      <button class="quick-add" onclick="event.stopPropagation();quickAdd('${p.id}','${c0}')">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 1v12M1 7h12"/></svg> Quick add
+      </button>
+    </div>
+    <div class="card-info">
+      <div class="cat">${p.cat}</div>
+      <div class="row"><h3>${p.name}</h3><div class="price">${priceHTML}</div></div>
+      <div class="mini-sw">${swatches}</div>
+    </div>
+  </article>`;
+}
+
+/* ============================================================
+   CART
+   ============================================================ */
+const cart = [];   // {id, name, price, color, size, qty}
+const FREE_SHIP = 250;
+
+function quickAdd(id, color){
+  const p = products.find(x=>x.id===id);
+  const size = SIZES[2]; // demo default "M"; a PDP would let the shopper choose
+  const existing = cart.find(i=>i.id===id && i.color===color && i.size===size);
+  if(existing) existing.qty++;
+  else cart.push({id, name:p.name, price:p.price, color, size, qty:1, type:p.type});
+  renderCart();
+  toast(`${p.name} added to bag`);
+  bump();
+}
+
+function renderCart(){
+  const count = cart.reduce((n,i)=>n+i.qty,0);
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('drawerCount').textContent = count?`(${count})`:'';
+  const body = document.getElementById('drawerBody');
+  const foot = document.getElementById('drawerFoot');
+
+  if(!cart.length){
+    body.innerHTML = `<div class="drawer-empty"><span class="serif">Your bag is empty</span>
+      Discover the collection and find something to keep for years.
+      <div style="margin-top:1.4rem"><button class="btn btn-ghost" onclick="closeCart()">Continue shopping</button></div></div>`;
+    foot.style.display='none';
+    return;
+  }
+  foot.style.display='block';
+  body.innerHTML = cart.map((i,idx)=>`
+    <div class="line-item">
+      <div class="li-img">${productSVG({id:'li'+idx,type:i.type}, i.color, 'front')}</div>
+      <div class="li-main">
+        <h4>${i.name}</h4>
+        <div class="li-meta">${i.color} · Size ${i.size}</div>
+        <div class="qty">
+          <button onclick="changeQty(${idx},-1)" aria-label="Decrease">−</button>
+          <span>${i.qty}</span>
+          <button onclick="changeQty(${idx},1)" aria-label="Increase">+</button>
+        </div>
+      </div>
+      <div>
+        <div class="li-price">$${i.price*i.qty}</div>
+        <button class="li-remove" onclick="removeItem(${idx})">Remove</button>
+      </div>
+    </div>`).join('');
+
+  const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  document.getElementById('subtotal').textContent = '$'+subtotal;
+  document.getElementById('total').textContent = '$'+subtotal;
+  const remaining = FREE_SHIP - subtotal;
+  document.getElementById('freeBar').style.width = Math.min(100, subtotal/FREE_SHIP*100)+'%';
+  document.getElementById('shipNote').innerHTML = remaining>0
+    ? `You're <strong>$${remaining}</strong> away from free shipping`
+    : `✓ You've unlocked free carbon-neutral shipping`;
+}
+function changeQty(idx, d){ cart[idx].qty += d; if(cart[idx].qty<1) cart.splice(idx,1); renderCart(); }
+function removeItem(idx){ cart.splice(idx,1); renderCart(); }
+function checkout(){ toast('This is a demo — Shopify checkout would open here'); }
+
+/* ---- Drawer + UI plumbing ---- */
+function openCart(){ document.getElementById('drawer').classList.add('open'); document.getElementById('scrim').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeCart(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('scrim').classList.remove('open'); document.body.style.overflow=''; }
+function bump(){ const c=document.getElementById('cartCount'); c.animate([{transform:'scale(1)'},{transform:'scale(1.5)'},{transform:'scale(1)'}],{duration:350,easing:'ease'}); }
+
+let toastTimer;
+function toast(msg){
+  const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show'); clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
+}
+function subscribe(e){ e.preventDefault(); e.target.reset(); toast('Welcome to the list — check your inbox for 15% off'); }
+function toggleMob(open){ document.getElementById('mobMenu').classList.toggle('open',open); document.body.style.overflow=open?'hidden':''; }
+
+/* ---- Scroll reveal ---- */
+let io;
+function observeReveal(){
+  if(!io) io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }});
+  },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('[data-reveal]:not(.in)').forEach(el=>io.observe(el));
+}
+
+/* ---- Header shadow on scroll ---- */
+addEventListener('scroll', ()=>{
+  document.getElementById('header').classList.toggle('scrolled', scrollY>10);
+}, {passive:true});
+
+/* ---- Boot ---- */
+render();
+renderCart();
+observeReveal();
+</script>
+</body>
+</html>
