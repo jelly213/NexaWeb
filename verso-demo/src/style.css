@@ -9,6 +9,12 @@
   --line: #2a2a31;
   --bronze: #c8a06a;
   --bronze-deep: #9c7a4d;
+  /* warm daylight theme for the below-fold sections */
+  --paper: #f3efe7;
+  --paper-2: #eae4d8;
+  --ink-dark: #221d17;
+  --muted-dark: #6e6759;
+  --line-dark: rgba(34, 29, 23, 0.14);
   --serif: "Instrument Serif", Georgia, serif;
   --sans: "Hanken Grotesk", system-ui, sans-serif;
 }
@@ -164,6 +170,19 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: 0.005e
   color: var(--story-ink);
 }
 .story__brand .overline { color: var(--story-accent); }
+/* soft halo behind the wordmark so it stays readable over the skyline */
+.story__brand::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -62%);
+  width: min(96vw, 1100px);
+  height: 46vh;
+  background: radial-gradient(closest-side, rgba(238, 240, 245, 0.85), rgba(238, 240, 245, 0) 72%);
+  z-index: -1;
+}
+.story__brand > * { position: relative; }
 .story__title {
   font-size: clamp(4rem, 14vw, 11rem);
   letter-spacing: 0.22em;
@@ -227,12 +246,15 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: 0.005e
 }
 @keyframes bob { 50% { transform: translate(-50%, 8px); } }
 
-/* ---------- Sections ---------- */
+/* ---------- Sections (warm daylight by default; contact + nexa stay night) ---------- */
 .section {
   padding: clamp(4.5rem, 10vw, 8rem) clamp(1.25rem, 6vw, 6rem);
-  border-top: 1px solid var(--line);
-  background: var(--bg);
+  border-top: 1px solid var(--line-dark);
+  background: var(--paper);
+  color: var(--ink-dark);
 }
+.section .overline { color: var(--bronze-deep); }
+.vie { background: var(--paper-2); }
 .section__title {
   font-size: clamp(1.9rem, 4.2vw, 3.2rem);
   line-height: 1.15;
@@ -243,56 +265,63 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: 0.005e
 /* Residences */
 .units { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
 .unit {
-  background: var(--panel);
-  border: 1px solid var(--line);
+  background: #fffdf8;
+  border: 1px solid var(--line-dark);
   border-radius: 14px;
-  padding: 1.75rem;
-  transition: border-color 0.3s ease, transform 0.3s ease;
+  padding: 1.25rem 1.25rem 1.75rem;
+  box-shadow: 0 10px 30px rgba(34, 29, 23, 0.06);
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
-.unit:hover { border-color: var(--bronze-deep); transform: translateY(-4px); }
-.unit__plan {
-  height: 120px;
+.unit:hover {
+  border-color: var(--bronze-deep);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 44px rgba(34, 29, 23, 0.12);
+}
+.unit__img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
   border-radius: 10px;
-  border: 1px solid var(--line);
-  background:
-    linear-gradient(135deg, rgba(200, 160, 106, 0.08), rgba(200, 160, 106, 0.02)),
-    var(--bg-2);
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.4rem;
-}
-.unit__glyph {
-  font-family: var(--serif);
-  font-size: 2rem;
-  color: var(--bronze);
-  opacity: 0.65;
+  margin-bottom: 1.3rem;
+  background: var(--paper-2);
 }
 .unit h3 { font-size: 1.5rem; }
-.unit__size { color: var(--muted); font-size: 0.85rem; letter-spacing: 0.08em; margin: 0.2rem 0 0.8rem; }
-.unit__desc { color: var(--muted); font-size: 0.95rem; min-height: 3em; }
-.unit__price { margin-top: 1.1rem; font-weight: 600; color: var(--bronze); }
+.unit__size { color: var(--muted-dark); font-size: 0.85rem; letter-spacing: 0.08em; margin: 0.2rem 0 0.8rem; }
+.unit__desc { color: var(--muted-dark); font-size: 0.95rem; min-height: 3em; }
+.unit__price { margin-top: 1.1rem; font-weight: 600; color: var(--bronze-deep); }
 
 /* Amenities */
 .amenities { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
 .amenity {
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--line-dark);
   padding-top: 1.2rem;
 }
 .amenity h3 { font-size: 1.25rem; margin-bottom: 0.4rem; }
-.amenity p { color: var(--muted); font-size: 0.93rem; }
+.amenity p { color: var(--muted-dark); font-size: 0.93rem; }
 
 /* Neighbourhood */
-.quartier__para { max-width: 58ch; color: var(--muted); font-size: 1.05rem; margin-bottom: clamp(2rem, 5vw, 3rem); }
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.quartier__grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+.quartier__photo {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(34, 29, 23, 0.14);
+}
+.quartier__para { max-width: 58ch; color: var(--muted-dark); font-size: 1.05rem; margin-bottom: clamp(2rem, 5vw, 3rem); }
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem 1rem; }
 .stat { border-left: 2px solid var(--bronze-deep); padding-left: 1rem; }
-.stat__value { display: block; font-family: var(--serif); font-size: clamp(1.6rem, 3vw, 2.4rem); color: var(--ink); }
-.stat__label { color: var(--muted); font-size: 0.85rem; }
+.stat__value { display: block; font-family: var(--serif); font-size: clamp(1.6rem, 3vw, 2.4rem); color: var(--ink-dark); }
+.stat__label { color: var(--muted-dark); font-size: 0.85rem; }
 
 /* Gallery */
 .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
-.gallery__item { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+.gallery__item { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--line-dark); }
 .gallery__item img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; background: var(--bg-2); }
 .gallery__item figcaption {
   position: absolute;
@@ -303,8 +332,9 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: 0.005e
   background: linear-gradient(to top, rgba(10, 10, 14, 0.75), transparent);
 }
 
-/* Contact */
-.contact { background: var(--bg-2); }
+/* Contact (stays night-mode — the scroll ends at night, the form inherits that mood) */
+.contact { background: var(--bg-2); color: var(--ink); border-top-color: var(--line); }
+.contact .overline { color: var(--bronze); }
 .contact__inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -331,10 +361,13 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: 0.005e
 /* NexaWebDev banner */
 .nexa {
   text-align: center;
+  color: var(--ink);
+  border-top-color: var(--line);
   background:
     radial-gradient(60% 120% at 50% 0%, rgba(200, 160, 106, 0.10), transparent 60%),
     var(--bg);
 }
+.nexa .overline { color: var(--bronze); }
 .nexa .section__title { margin-left: auto; margin-right: auto; }
 .nexa__line { color: var(--muted); max-width: 52ch; margin: 0 auto clamp(1.5rem, 4vw, 2.5rem); }
 
@@ -366,7 +399,7 @@ html.js .reveal.is-visible { opacity: 1; transform: none; }
 @media (max-width: 900px) {
   .nav__links { display: none; }
   .units, .amenities { grid-template-columns: 1fr 1fr; }
-  .contact__inner { grid-template-columns: 1fr; }
+  .contact__inner, .quartier__grid { grid-template-columns: 1fr; }
   .stats { grid-template-columns: 1fr 1fr; row-gap: 1.5rem; }
 }
 @media (max-width: 560px) {

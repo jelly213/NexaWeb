@@ -43,6 +43,12 @@ function render(): void {
     const img = document.getElementById(`g-${i}`) as HTMLImageElement | null;
     if (img) img.alt = c[lang];
   });
+  copy.residences.units.forEach((u, i) => {
+    const img = document.getElementById(`u-${i}`) as HTMLImageElement | null;
+    if (img) img.alt = u.name[lang];
+  });
+  const qPhoto = document.getElementById('q-photo') as HTMLImageElement | null;
+  if (qPhoto) qPhoto.alt = copy.neighbourhood.title[lang];
 }
 render();
 

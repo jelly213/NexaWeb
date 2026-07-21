@@ -6,6 +6,11 @@
 
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
 /** Structural slice of a gsap timeline — keeps three/gsap typing decoupled. */
 export interface Tl {
@@ -62,6 +67,11 @@ export function createScene(container: HTMLElement): VersoScene {
 
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  // swap in a real sky for lighting/reflections once it loads (CC0, Poly Haven)
+  new RGBELoader().load('/env/sky_1k.hdr', (tex) => {
+    scene.environment = pmrem.fromEquirectangular(tex).texture;
+    tex.dispose();
+  });
 
   const camera = new THREE.PerspectiveCamera(38, container.clientWidth / container.clientHeight, 0.1, 300);
   camera.position.set(14, 4.5, 19);
@@ -85,6 +95,12 @@ export function createScene(container: HTMLElement): VersoScene {
   // ---------- materials ----------
   const matConcrete = new THREE.MeshStandardMaterial({ color: '#cfc9bd', roughness: 0.9, metalness: 0 });
   const matLimestone = new THREE.MeshStandardMaterial({ color: LIMESTONE, roughness: 0.85, metalness: 0 });
+  // Griffintown DNA: red-brick warehouse podium under the glass tower
+  const brickTex = new THREE.TextureLoader().load('/textures/brick.webp');
+  brickTex.colorSpace = THREE.SRGBColorSpace;
+  brickTex.wrapS = brickTex.wrapT = THREE.RepeatWrapping;
+  brickTex.repeat.set(3.2, 0.9);
+  const matBrick = new THREE.MeshStandardMaterial({ map: brickTex, roughness: 0.95, metalness: 0 });
   // "bronze" in daylight must read as dark anodized metal, not brown wood
   const matBronze = new THREE.MeshStandardMaterial({ color: '#3f3a34', roughness: 0.45, metalness: 0.85, envMapIntensity: 1.0 });
   const matGround = new THREE.MeshStandardMaterial({ color: '#3c3f46', roughness: 1 });
@@ -154,8 +170,8 @@ export function createScene(container: HTMLElement): VersoScene {
 
   // podium
   const podium = new THREE.Group();
-  // recessed stone core so the lobby's glass band reads from the street
-  const podiumBody = new THREE.Mesh(new THREE.BoxGeometry(W + 2.2, PODIUM_H, D + 1.6), matLimestone);
+  // recessed brick core so the lobby's glass band reads from the street
+  const podiumBody = new THREE.Mesh(new THREE.BoxGeometry(W + 2.2, PODIUM_H, D + 1.6), matBrick);
   podiumBody.position.y = PODIUM_H / 2;
   podiumBody.castShadow = podiumBody.receiveShadow = true;
   podium.add(podiumBody);
@@ -211,6 +227,26 @@ export function createScene(container: HTMLElement): VersoScene {
       col.position.set((sx * W) / 2, 0.14 + (FLOOR_H - 0.14) / 2, (sz * D) / 2);
       g.add(col);
     }
+
+    // curtain-wall mullions — the fine vertical rhythm that makes glass read as real facade
+    const mullGeo = new THREE.BoxGeometry(0.045, FLOOR_H - 0.14, 0.045);
+    const mullions = new THREE.InstancedMesh(mullGeo, matBronze, 24);
+    const m4 = new THREE.Matrix4();
+    let mi = 0;
+    const my = 0.14 + (FLOOR_H - 0.14) / 2;
+    for (let x = -3; x <= 3; x++) {
+      m4.setPosition(x, my, D / 2);
+      mullions.setMatrixAt(mi++, m4);
+      m4.setPosition(x, my, -D / 2);
+      mullions.setMatrixAt(mi++, m4);
+    }
+    for (let z = -2; z <= 2; z++) {
+      m4.setPosition(W / 2, my, z);
+      mullions.setMatrixAt(mi++, m4);
+      m4.setPosition(-W / 2, my, z);
+      mullions.setMatrixAt(mi++, m4);
+    }
+    g.add(mullions);
 
     // balconies on the canal side, alternating halves
     if (i >= 1 && i < FLOORS - 1) {
@@ -305,6 +341,8 @@ export function createScene(container: HTMLElement): VersoScene {
   const daySun = 2.2;
   const sunDay = new THREE.Color('#fff2df');
   const sunDusk = new THREE.Color('#ff8e4d');
+  const slabDay = new THREE.Color('#cfc9bd');
+  const slabDusk = new THREE.Color('#6e6a62'); // slabs dim at night so bloom stays on the windows
   const cityThresholds = cityLightMats.map(() => 0.25 + rng() * 0.5);
   const floorThresholds = floors.map(() => 0.15 + rng() * 0.55);
 
@@ -326,6 +364,24 @@ export function createScene(container: HTMLElement): VersoScene {
       m.opacity = THREE.MathUtils.smoothstep(t, cityThresholds[i], cityThresholds[i] + 0.2) * 0.65;
     });
     stringLightMats.forEach((m) => (m.opacity = THREE.MathUtils.smoothstep(t, 0.3, 0.55)));
+    matConcrete.color.copy(slabDay).lerp(slabDusk, t);
+    if (bloom) bloom.strength = 0.1 + t * 0.32; // windows halo as night falls
+  }
+
+  // ---------- post-processing (desktop only; mobile keeps the lean direct path) ----------
+  let composer: EffectComposer | null = null;
+  let bloom: UnrealBloomPass | null = null;
+  if (!coarse) {
+    composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    bloom = new UnrealBloomPass(
+      new THREE.Vector2(container.clientWidth, container.clientHeight),
+      0.12, // strength ramps up with dusk
+      0.55,
+      0.62
+    );
+    composer.addPass(bloom);
+    composer.addPass(new OutputPass());
   }
 
   // ---------- render loop (only renders; all motion is timeline-driven) ----------
@@ -333,7 +389,8 @@ export function createScene(container: HTMLElement): VersoScene {
   renderer.setAnimationLoop(() => {
     if (disposed) return;
     camera.lookAt(camTarget);
-    renderer.render(scene, camera);
+    if (composer) composer.render();
+    else renderer.render(scene, camera);
   });
 
   // ---------- timeline ----------
@@ -396,6 +453,7 @@ export function createScene(container: HTMLElement): VersoScene {
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h);
+    composer?.setSize(w, h);
   }
 
   function dispose(): void {
