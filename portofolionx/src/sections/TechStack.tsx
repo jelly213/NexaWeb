@@ -120,11 +120,13 @@ export default function TechStack() {
           wide
         />
 
+        {/* Also 3-col: six demos land as two full rows instead of a ragged 4+2. */}
         <div className="mt-14">
           <PortfolioGroup
             title={t('stack.demo.title')}
             sub={t('stack.demo.sub')}
             items={portfolioItems.filter(i => i.kind === 'demo')}
+            wide
           />
         </div>
       </div>

@@ -471,7 +471,14 @@ const portfolioItems: Record<Language, PortfolioItem[]> = {
         result: 'A photoreal hero with no video file, built in two days.',
       },
     },
-    { title: 'Nordvia — Scroll Story', category: 'SaaS Launch — GSAP Scroll Story', platform: 'Scroll Story', image: scrollStoryImg, link: 'https://story.nexaweb.dev', kind: 'demo' },
+    {
+      title: 'Nordvia — Scroll Story', category: 'SaaS Launch — GSAP Scroll Story', platform: 'Scroll Story', image: scrollStoryImg, link: 'https://story.nexaweb.dev', kind: 'demo',
+      study: {
+        problem: 'Sell the Scroll Story tier by demonstrating it: a landing page that plays like a product video.',
+        built: 'A fictional SaaS dashboard that assembles from wireframe to product as the visitor scrolls, ending on the pitch.',
+        result: 'A page that plays like a video with no video file, under 150 KB of art per scene.',
+      },
+    },
     { title: 'Emergency Plumbing Co.', category: 'Home Services — React/Next.js', platform: 'React / Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/', kind: 'demo' },
     { title: 'Marchand & Associés', category: 'Law Firm — WordPress', platform: 'WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/', kind: 'demo' },
     { title: 'Prestige Rénovation', category: 'Kitchen & Bath — Webflow', platform: 'Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/', kind: 'demo' },
@@ -517,7 +524,14 @@ const portfolioItems: Record<Language, PortfolioItem[]> = {
         result: 'Un héro photoréaliste sans fichier vidéo, construit en deux jours.',
       },
     },
-    { title: 'Nordvia — Scroll Story', category: 'Lancement SaaS — GSAP Scroll Story', platform: 'Scroll Story', image: scrollStoryImg, link: 'https://story.nexaweb.dev', kind: 'demo' },
+    {
+      title: 'Nordvia — Scroll Story', category: 'Lancement SaaS — GSAP Scroll Story', platform: 'Scroll Story', image: scrollStoryImg, link: 'https://story.nexaweb.dev', kind: 'demo',
+      study: {
+        problem: 'Vendre le forfait Scroll Story en le démontrant : une page qui se joue comme une vidéo de produit.',
+        built: "Un tableau de bord SaaS fictif qui s'assemble du wireframe au produit au fil du défilement, jusqu'au pitch final.",
+        result: "Une page qui joue comme une vidéo sans fichier vidéo, avec moins de 150 Ko d'images par scène.",
+      },
+    },
     { title: "Services de plomberie d'urgence", category: 'Services à domicile — React/Next.js', platform: 'React / Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/', kind: 'demo' },
     { title: 'Marchand & Associés', category: 'Cabinet juridique — WordPress', platform: 'WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/', kind: 'demo' },
     { title: 'Prestige Rénovation', category: 'Cuisine & Salle de bain — Webflow', platform: 'Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/', kind: 'demo' },
