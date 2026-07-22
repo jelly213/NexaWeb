@@ -11,7 +11,7 @@ export const copy = {
     },
   },
   hint: { fr: 'Faites défiler', en: 'Scroll' },
-  loading: { fr: 'Chargement du chapitre', en: 'Loading chapter' },
+  loading: { fr: 'Chargement', en: 'Loading' },
   nav: {
     links: [
       { fr: 'L’histoire', en: 'The story' },
@@ -32,7 +32,7 @@ export const copy = {
   },
   chapters: [
     {
-      overline: { fr: 'Chapitre 01 — Le terrain', en: 'Chapter 01 — The Ground' },
+      overline: { fr: 'Mois 01 — Le terrain', en: 'Month 01 — The Ground' },
       headline: { fr: 'Avant la première pierre, il y a l’eau', en: 'Before the first stone, there is the water' },
       sub: {
         fr: 'Un terrain nu entre la piste et le canal, et une idée qui prend racine.',
@@ -40,7 +40,7 @@ export const copy = {
       },
     },
     {
-      overline: { fr: 'Chapitre 02 — La structure', en: 'Chapter 02 — The Structure' },
+      overline: { fr: 'Mois 03 — La structure', en: 'Month 03 — The Structure' },
       headline: { fr: 'Le béton monte, un étage à la fois', en: 'The concrete climbs, one storey at a time' },
       sub: {
         fr: 'Les fondations coulées, le squelette s’élève au-dessus du quai.',
@@ -48,7 +48,7 @@ export const copy = {
       },
     },
     {
-      overline: { fr: 'Chapitre 03 — La résidence', en: 'Chapter 03 — The Dwelling' },
+      overline: { fr: 'Mois 08 — La résidence', en: 'Month 08 — The Dwelling' },
       headline: { fr: 'Derrière les clôtures, un chez-soi prend forme', en: 'Behind the fences, a home takes shape' },
       sub: {
         fr: 'Les façades se ferment, la lumière entre, le bois trouve sa place.',
@@ -56,7 +56,7 @@ export const copy = {
       },
     },
     {
-      overline: { fr: 'Chapitre 04 — Le repère', en: 'Chapter 04 — The Landmark' },
+      overline: { fr: 'Mois 12 — Le repère', en: 'Month 12 — The Landmark' },
       headline: { fr: 'Au crépuscule, les fenêtres s’allument', en: 'At dusk, the windows light up' },
       sub: {
         fr: 'Le chantier s’efface. Il reste un repère au bord du canal.',
@@ -68,11 +68,6 @@ export const copy = {
     overline: { fr: 'Occupation été 2027', en: 'Occupancy summer 2027' },
     headline: { fr: '12 mois de chantier. Une minute de scroll.', en: '12 months on site. One minute of scroll.' },
   },
-  interludes: [
-    { fr: 'Mois 03 — Le béton prend, le canal continue de couler.', en: 'Month 03 — The concrete sets, the canal keeps flowing.' },
-    { fr: 'Mois 08 — La structure atteint son dernier étage.', en: 'Month 08 — The structure tops out.' },
-    { fr: 'Mois 12 — Les clés changent de mains.', en: 'Month 12 — The keys change hands.' },
-  ],
   residences: {
     overline: { fr: 'Les résidences', en: 'The residences' },
     intro: {

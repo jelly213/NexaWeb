@@ -42,12 +42,7 @@ let lang = localStorage.getItem('rivage-lang') || 'fr';
 if (lang !== 'fr' && lang !== 'en') lang = 'fr';
 
 const UNIT_IMG_IDS = ['u-0', 'u-1', 'u-2'];
-const POSTER_ALTS = [
-  { fr: 'Terrain vague au bord du canal de Lachine', en: 'Empty lot on the Lachine Canal' },
-  { fr: 'Structure de béton en construction', en: 'Concrete structure under construction' },
-  { fr: 'Façades et finitions de la résidence', en: 'Façades and finishes of the residence' },
-  { fr: 'Rivage terminé au crépuscule, fenêtres allumées', en: 'Rivage complete at dusk, windows lit' },
-];
+const POSTER_ALT = { fr: 'Terrain vague au bord du canal de Lachine', en: 'Empty lot on the Lachine Canal' };
 
 function render() {
   document.documentElement.lang = lang;
@@ -62,10 +57,7 @@ function render() {
     const img = document.getElementById(UNIT_IMG_IDS[i]);
     if (img) img.alt = u.name[lang];
   });
-  POSTER_ALTS.forEach((alt, i) => {
-    const img = document.getElementById(`poster-ch${i + 1}`);
-    if (img) img.alt = alt[lang];
-  });
+  document.getElementById('poster-ch1').alt = POSTER_ALT[lang];
 }
 render();
 
@@ -87,157 +79,189 @@ if (!reduced) {
 }
 
 /* ==================== story engine ==================== */
-/* Chapter config — `count` frames named f001.webp…f{count}.webp inside `dir`,
-   `pin` is the scroll distance (px) the chapter stays pinned. */
-const CHAPTERS = [
-  { id: 'ch1', dir: 'frames/ch1', count: 80, pin: 2400 },
-  { id: 'ch2', dir: 'frames/ch2', count: 80, pin: 2400 },
-  { id: 'ch3', dir: 'frames/ch3', count: 80, pin: 2400 },
-  { id: 'ch4', dir: 'frames/ch4', count: 80, pin: 2400 },
-];
+/* One continuous scrub: 4 clips × 80 frames = one virtual 320-frame sequence on a
+   single pinned canvas. Consecutive clips share their boundary still (each was
+   generated start_image→end_image off the same design), so the seams are cuts on
+   near-identical frames. Frames load lazily in 80-frame chunks as the scrub
+   approaches them. */
+const SEG_DIRS = ['frames/ch1', 'frames/ch2', 'frames/ch3', 'frames/ch4'];
+const SEG_FRAMES = 80;
+const TOTAL_FRAMES = SEG_DIRS.length * SEG_FRAMES; // 320
+const PIN_LENGTH = 8800; // px of scroll for the full 12 months (~27 px/frame)
 
 const DPR_CAP = 2;
 
-function createChapter(cfg) {
-  const el = document.getElementById(cfg.id);
-  const cv = el.querySelector('.chapter__canvas');
-  const ctx = cv.getContext('2d');
-  const loader = el.querySelector('.chapter__loader');
-  const bar = el.querySelector('.chapter__loader-bar');
+const storyEl = document.getElementById('story');
+const cv = storyEl.querySelector('.chapter__canvas');
+const ctx = cv.getContext('2d');
+const loader = storyEl.querySelector('.chapter__loader');
+const bar = storyEl.querySelector('.chapter__loader-bar');
 
-  const state = {
-    frame: 0,        // scrubbed frame position (float, tweened by GSAP)
-    frames: [],      // Image objects, filled once load() runs
-    loaded: 0,
-    started: false,  // load() called
-    firstDrawn: false,
-  };
-
-  function fit() {
-    const dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
-    cv.width = Math.max(1, Math.round(el.clientWidth * dpr));
-    cv.height = Math.max(1, Math.round(el.clientHeight * dpr));
-  }
-  fit();
-
-  /* Cover-fit draw, centered. Guarded twice over: bail while no frame is ready,
-     and fall back to the nearest earlier loaded frame so late/missing files never
-     blank the canvas or throw. */
-  function draw(idx) {
-    const want = Math.max(0, Math.min(cfg.count - 1, Math.round(idx)));
-    let img = null;
-    for (let j = want; j >= 0; j--) {
-      const f = state.frames[j];
-      if (f && f.complete && f.naturalWidth > 0) { img = f; break; }
-    }
-    if (!img) return; // nothing loaded yet — poster stays visible underneath
-    const cw = cv.width;
-    const ch = cv.height;
-    const s = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-    const w = img.naturalWidth * s;
-    const h = img.naturalHeight * s;
-    ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
-    if (!state.firstDrawn) {
-      state.firstDrawn = true;
-      gsap.to(loader, { autoAlpha: 0, duration: 0.4 });
-    }
-  }
-
-  /* Lazy frame loading — called near page start for ch1, and for chN+1 when chN's
-     pin begins or the section comes within 1.5 viewports. */
-  function load() {
-    if (state.started) return;
-    state.started = true;
-    for (let i = 0; i < cfg.count; i++) {
-      const img = new Image();
-      img.decoding = 'async';
-      img.onload = () => {
-        state.loaded++;
-        bar.style.transform = `scaleX(${state.loaded / cfg.count})`;
-        // repaint when the newly arrived frame is at (or just before) the scrub position
-        if (state.loaded === 1 || Math.round(state.frame) >= i) draw(state.frame);
-      };
-      img.onerror = () => {}; // missing frame: skip silently, draw() falls back
-      img.src = `${cfg.dir}/f${String(i + 1).padStart(3, '0')}.webp`;
-      state.frames.push(img);
-    }
-  }
-
-  return { cfg, el, state, fit, draw, load };
-}
-
-const chapters = CHAPTERS.map(createChapter);
-
-/* Caption choreography per chapter, in timeline units (frame tween spans 0→10).
-   autoAlpha for BOTH directions — never mix with opacity-only. */
-const CAPTION_WINDOWS = {
-  ch1: [
-    ['#brand', 'out', 0.9],
-    ['#scroll-hint', 'out', 0.7],
-    ['#cap-ch1', 'in', 3.2],
-    ['#cap-ch1', 'out', 8.4],
-  ],
-  ch2: [
-    ['#cap-ch2', 'in', 1.4],
-    ['#cap-ch2', 'out', 8.4],
-  ],
-  ch3: [
-    ['#cap-ch3', 'in', 1.4],
-    ['#cap-ch3', 'out', 8.4],
-  ],
-  ch4: [
-    ['#cap-ch4', 'in', 1.0],
-    ['#cap-ch4', 'out', 5.4],
-    ['#cap-final', 'in', 6.8],
-  ],
+const state = {
+  frame: 0,                 // scrubbed global frame position (float, tweened by GSAP)
+  frames: new Array(TOTAL_FRAMES).fill(null),
+  loaded: 0,
+  chunkStarted: [false, false, false, false],
+  firstDrawn: false,
 };
 
-chapters.forEach((ch, k) => {
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: ch.el,
-      start: 'top top',
-      end: `+=${ch.cfg.pin}`,
-      scrub: reduced ? true : 1.2,
-      pin: true,
-      onEnter: () => {
-        track('chapter_view', { chapter: ch.cfg.id }, `c:${ch.cfg.id}`);
-        ch.load();
-        if (chapters[k + 1]) chapters[k + 1].load(); // next chapter starts loading when this pin begins
-      },
-    },
-    defaults: { ease: 'none' },
-  });
+function fit() {
+  const dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
+  cv.width = Math.max(1, Math.round(storyEl.clientWidth * dpr));
+  cv.height = Math.max(1, Math.round(storyEl.clientHeight * dpr));
+}
+fit();
 
-  tl.to(ch.state, { frame: ch.cfg.count - 1, duration: 10, onUpdate: () => ch.draw(ch.state.frame) }, 0);
+/* Nearest ready frame at or before index — late or missing files never blank the
+   canvas or throw. Returns null while nothing is loaded (poster stays visible). */
+function frameAt(idx) {
+  const want = Math.max(0, Math.min(TOTAL_FRAMES - 1, Math.round(idx)));
+  for (let j = want; j >= 0; j--) {
+    const f = state.frames[j];
+    if (f && f.complete && f.naturalWidth > 0) return f;
+  }
+  return null;
+}
 
-  for (const [sel, dir, at] of CAPTION_WINDOWS[ch.cfg.id] || []) {
-    tl.to(sel, { autoAlpha: dir === 'in' ? 1 : 0, duration: dir === 'in' ? 0.5 : 0.4 }, at);
+/* Centered paint with an optional camera push-in (scale about center).
+   Fit: cover, but never crop more than OVERCROP beyond contain — full-bleed on
+   landscape screens, near-complete frame letterboxed on the dark background on
+   portrait phones (a raw cover-fit there showed only a center slice of the film). */
+const OVERCROP = 1.15;
+function paint(img, alpha, scale) {
+  const cw = cv.width;
+  const ch = cv.height;
+  const cover = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+  const contain = Math.min(cw / img.naturalWidth, ch / img.naturalHeight);
+  const s = Math.min(cover, contain * OVERCROP) * scale;
+  const w = img.naturalWidth * s;
+  const h = img.naturalHeight * s;
+  ctx.globalAlpha = alpha;
+  ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+  ctx.globalAlpha = 1;
+}
+
+/* Seam transitions: the 4 clips meet at frames 80/160/240. Each pair was generated
+   off the same boundary still, so the residual jump is only camera drift — hidden
+   here with a scrubbed push-in zoom + crossfade: the outgoing clip freezes on its
+   last frame while the incoming one fades over it, both zooming through the cut. */
+const SEAM_SPAN = 8;   // frames of transition on each side of a seam
+const SEAM_ZOOM = 0.14; // peak extra scale at the cut
+const smooth = (t) => t * t * (3 - 2 * t);
+
+function draw(pos) {
+  pos = Math.max(0, Math.min(TOTAL_FRAMES - 1, pos));
+  let seam = 0;
+  for (let k = 1; k < SEG_DIRS.length; k++) {
+    if (Math.abs(pos - k * SEG_FRAMES) < SEAM_SPAN) { seam = k * SEG_FRAMES; break; }
   }
 
-  /* Early-warmup trigger: start loading when the chapter is within 1.5 viewports
-     of the bottom edge ('top 250%' = section top at 2.5× viewport height). */
-  if (k > 0) {
-    ScrollTrigger.create({
-      trigger: ch.el,
-      start: 'top 250%',
-      once: true,
-      onEnter: () => ch.load(),
-    });
+  let outImg = null;
+  let inImg = null;
+  let mix = 0;
+  let zoom = 1;
+  if (!seam) {
+    outImg = frameAt(pos);
+  } else {
+    const d = pos - seam; // -SPAN … +SPAN through the cut
+    mix = smooth((d + SEAM_SPAN) / (2 * SEAM_SPAN));
+    zoom = 1 + SEAM_ZOOM * smooth(1 - Math.abs(d) / SEAM_SPAN);
+    outImg = frameAt(Math.min(pos, seam - 1));
+    inImg = frameAt(Math.max(pos, seam));
   }
+  if (!outImg) return; // nothing loaded yet — poster stays visible underneath
+
+  /* The film no longer always covers the canvas (letterboxed on portrait), so
+     paint the section background behind it — never let the cover-fit poster
+     bleed through the bars. */
+  ctx.fillStyle = '#1a1815';
+  ctx.fillRect(0, 0, cv.width, cv.height);
+  paint(outImg, 1, zoom);
+  if (inImg && inImg !== outImg) paint(inImg, mix, zoom);
+
+  if (!state.firstDrawn) {
+    state.firstDrawn = true;
+    gsap.to(loader, { autoAlpha: 0, duration: 0.4 });
+  }
+}
+
+/* Lazy chunk loading — chunk 0 near page start, chunk k+1 as the scrub plays chunk k. */
+function loadChunk(k) {
+  if (k < 0 || k >= SEG_DIRS.length || state.chunkStarted[k]) return;
+  state.chunkStarted[k] = true;
+  for (let i = 0; i < SEG_FRAMES; i++) {
+    const g = k * SEG_FRAMES + i;
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = () => {
+      state.loaded++;
+      bar.style.transform = `scaleX(${state.loaded / TOTAL_FRAMES})`;
+      // repaint when the newly arrived frame is at (or just before) the scrub position
+      if (state.loaded === 1 || Math.round(state.frame) >= g) draw(state.frame);
+    };
+    img.onerror = () => {}; // missing frame: skip silently, draw() falls back
+    img.src = `${SEG_DIRS[k]}/f${String(i + 1).padStart(3, '0')}.webp`;
+    state.frames[g] = img;
+  }
+}
+
+/* Caption choreography in timeline units — the frame tween spans 0→40 (10 per clip).
+   autoAlpha for BOTH directions — never mix with opacity-only. */
+const CAPTION_WINDOWS = [
+  ['#scroll-hint', 'out', 0.7],
+  ['#brand', 'out', 0.9],
+  ['#hero-scrim', 'out', 0.9],
+  ['#cap-ch1', 'in', 3.2],
+  ['#cap-ch1', 'out', 8.6],
+  ['#cap-ch2', 'in', 11.6],
+  ['#cap-ch2', 'out', 18.6],
+  ['#cap-ch3', 'in', 21.6],
+  ['#cap-ch3', 'out', 28.6],
+  ['#cap-ch4', 'in', 31.2],
+  ['#cap-ch4', 'out', 35.6],
+  ['#cap-final', 'in', 37.4],
+];
+
+const tl = gsap.timeline({
+  scrollTrigger: {
+    trigger: storyEl,
+    start: 'top top',
+    end: `+=${PIN_LENGTH}`,
+    scrub: reduced ? true : 1.2,
+    pin: true,
+    onEnter: () => track('chapter_view', { chapter: 'ch1' }, 'c:ch1'),
+  },
+  defaults: { ease: 'none' },
 });
 
-/* Chapter 1 loads near page start — after first paint so it never competes with LCP. */
-requestAnimationFrame(() => requestAnimationFrame(() => chapters[0].load()));
+tl.to(state, {
+  frame: TOTAL_FRAMES - 1,
+  duration: 40,
+  onUpdate: () => {
+    draw(state.frame);
+    const seg = Math.min(SEG_DIRS.length - 1, Math.floor(state.frame / SEG_FRAMES));
+    loadChunk(seg);
+    loadChunk(seg + 1); // warm the next clip while this one plays
+    if (seg > 0) track('chapter_view', { chapter: `ch${seg + 1}` }, `c:ch${seg + 1}`);
+  },
+}, 0);
+
+for (const [sel, dir, at] of CAPTION_WINDOWS) {
+  tl.to(sel, { autoAlpha: dir === 'in' ? 1 : 0, duration: dir === 'in' ? 0.5 : 0.4 }, at);
+}
+
+/* Hero-scrim tween starts from visible even after a mid-page reload */
+gsap.set('#hero-scrim', { autoAlpha: 1 });
+
+/* Chunk 0 loads near page start — after first paint so it never competes with LCP. */
+requestAnimationFrame(() => requestAnimationFrame(() => loadChunk(0)));
 
 /* No ScrollTrigger.refresh() on load: every layout is dimension-reserved (CLS 0),
-   pins are fixed pixel lengths, and a late refresh would repaint the pinned h1
+   the pin is a fixed pixel length, and a late refresh would repaint the pinned h1
    and drag the measured LCP. ScrollTrigger's own resize handling covers the rest. */
 window.addEventListener('resize', () => {
-  for (const ch of chapters) {
-    ch.fit();
-    ch.draw(ch.state.frame);
-  }
+  fit();
+  draw(state.frame);
 });
 
 /* ==================== anchor navigation (must go through Lenis — native jumps misplace against pin spacers) ==================== */
