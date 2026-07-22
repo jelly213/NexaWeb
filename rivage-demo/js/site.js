@@ -123,21 +123,33 @@ function frameAt(idx) {
   return null;
 }
 
-/* Centered paint with an optional camera push-in (scale about center).
-   Fit: cover, but never crop more than OVERCROP beyond contain — full-bleed on
-   landscape screens, near-complete frame letterboxed on the dark background on
-   portrait phones (a raw cover-fit there showed only a center slice of the film). */
+/* Paint with an optional camera push-in (scale about the film's center).
+   Landscape: cover-fit, centered, but never cropping more than OVERCROP beyond
+   contain. Portrait: the FULL 16:9 frame, anchored just below the nav — captions
+   and the brand block live in the dark area under the film (CSS mirrors the same
+   geometry: NAV_H + 56.25vw). A raw cover-fit on phones showed a center slice. */
 const OVERCROP = 1.15;
+const NAV_H = 64; // css px — matches the fixed nav bar
 function paint(img, alpha, scale) {
   const cw = cv.width;
   const ch = cv.height;
+  const portrait = ch > cw;
   const cover = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
   const contain = Math.min(cw / img.naturalWidth, ch / img.naturalHeight);
-  const s = Math.min(cover, contain * OVERCROP) * scale;
+  const base = portrait ? contain : Math.min(cover, contain * OVERCROP);
+  const s = base * scale;
   const w = img.naturalWidth * s;
   const h = img.naturalHeight * s;
+  let y;
+  if (portrait) {
+    const dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
+    const filmCenter = NAV_H * dpr + (img.naturalHeight * base) / 2;
+    y = filmCenter - h / 2; // seam zoom breathes around the film's own center
+  } else {
+    y = (ch - h) / 2;
+  }
   ctx.globalAlpha = alpha;
-  ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+  ctx.drawImage(img, (cw - w) / 2, y, w, h);
   ctx.globalAlpha = 1;
 }
 
