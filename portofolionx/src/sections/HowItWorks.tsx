@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { m, useInView } from 'framer-motion';
+import { m, useInView } from 'motion/react';
 import { DollarSign, FileText, Rocket } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';

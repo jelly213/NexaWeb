@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { m } from 'framer-motion';
+import { m } from 'motion/react';
 import { Code2, ShoppingCart, Globe, Layers, ImageIcon, Eye } from 'lucide-react';
 import { useLanguage, type PortfolioItem, type PortfolioPlatform } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
