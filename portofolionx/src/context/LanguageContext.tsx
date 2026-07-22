@@ -14,9 +14,10 @@ type Language = 'EN' | 'FR';
 
 const translations = {
   EN: {
-    // Navbar
-    'nav.howItWorks': 'How It Works',
-    'nav.stack': 'Our Stack',
+    // Navbar — slug-style labels rendered verbatim after the // prefix
+    'nav.howItWorks': 'how-it-works',
+    'nav.stack': 'stack',
+    'nav.pricing': 'pricing',
     'nav.cta': 'Book a Call →',
 
     // Hero
@@ -27,7 +28,14 @@ const translations = {
       'Send a brief, get a bilingual Shopify store or custom site under your brand in 48–72h. On time or your deposit back.',
     'hero.cta1': 'book_a_call()',
     'hero.cta2': 'how-it-works',
+    'hero.comment': '/* The dev team your clients never meet. */',
     'hero.proof': 'Used by digital agencies across Canada and the US',
+    'term.competitor': '# competitor: gohighlevel template',
+    'term.us': '# nexawebdev: custom next.js',
+    'term.theirBuild': 'their build',
+    'term.ourBuild': 'our build',
+    'term.deployed': 'deployed in',
+    'term.bilingual': '· bilingual /en /fr',
     'hero.stat1.value': '140+',
     'hero.stat1.label': 'shopify_stores',
     'hero.stat2.value': '48h',
@@ -121,6 +129,14 @@ const translations = {
     'cta.risk3': 'No commitment beyond the project',
     'cta.risk4': 'Your brand. Your client. Your margin.',
     'cta.guarantee': '48 hours or your deposit back. Guaranteed in writing.',
+    'cta.term.window': '~/nexawebdev — new_partnership',
+    'cta.term.cmd': 'nexawebdev quote --resale',
+    'cta.term.slider': 'what you charge your client',
+    'cta.term.fee': 'our flat fee',
+    'cta.term.margin': 'your margin',
+    'cta.term.delivery': 'delivery',
+    'cta.term.guarantee': 'on time or your deposit back',
+    'cta.term.inWriting': 'in writing',
 
     // Footer
     'footer.tagline': 'Your invisible dev team. Your full margin.',
@@ -133,9 +149,10 @@ const translations = {
     'footer.legal': 'Built for agencies. Invisible by design.',
   },
   FR: {
-    // Navbar
-    'nav.howItWorks': 'Comment ça marche',
-    'nav.stack': 'Notre stack',
+    // Navbar — libellés façon slug, rendus tels quels après le préfixe //
+    'nav.howItWorks': 'comment-ça-marche',
+    'nav.stack': 'stack',
+    'nav.pricing': 'tarifs',
     'nav.cta': 'Réserver un appel →',
 
     // Hero
@@ -146,7 +163,14 @@ const translations = {
       "Envoyez un brief, recevez une boutique Shopify ou un site bilingue sous votre marque en 48–72h. À temps, ou on vous remet votre dépôt.",
     'hero.cta1': 'réserver_un_appel()',
     'hero.cta2': 'comment-ça-marche',
+    'hero.comment': "/* L'équipe de dev que vos clients ne rencontrent jamais. */",
     'hero.proof': 'Utilisé par des agences numériques au Canada et aux États-Unis',
+    'term.competitor': '# concurrent : template gohighlevel',
+    'term.us': '# nexawebdev : next.js sur mesure',
+    'term.theirBuild': 'leur site',
+    'term.ourBuild': 'notre site',
+    'term.deployed': 'déployé en',
+    'term.bilingual': '· bilingue /fr /en',
     'hero.stat1.value': '140+',
     'hero.stat1.label': 'boutiques_shopify',
     'hero.stat2.value': '48h',
@@ -240,6 +264,14 @@ const translations = {
     'cta.risk3': 'Aucun engagement au-delà du projet',
     'cta.risk4': 'Votre marque. Votre client. Votre marge.',
     'cta.guarantee': '48 heures ou on vous remet votre dépôt. Garanti par écrit.',
+    'cta.term.window': '~/nexawebdev — nouveau_partenariat',
+    'cta.term.cmd': 'nexawebdev quote --resale',
+    'cta.term.slider': 'ce que vous facturez à votre client',
+    'cta.term.fee': 'nos frais fixes',
+    'cta.term.margin': 'votre marge',
+    'cta.term.delivery': 'livraison',
+    'cta.term.guarantee': 'à temps ou dépôt remboursé',
+    'cta.term.inWriting': 'par écrit',
 
     // Footer
     'footer.tagline': 'Votre équipe de dev invisible. Votre marge complète.',
