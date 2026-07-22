@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { m } from 'motion/react';
+import { m, useReducedMotion } from 'motion/react';
 import { Code2, ShoppingCart, Globe, Layers, ImageIcon, Eye } from 'lucide-react';
 import { useLanguage, type PortfolioItem, type PortfolioPlatform } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
@@ -137,6 +137,7 @@ export default function TechStack() {
 function PortfolioGroup({ title, sub, items, wide }: { title: string; sub: string; items: PortfolioItem[]; wide?: boolean }) {
   const { c } = useTheme();
   const { t } = useLanguage();
+  const reduceMotion = useReducedMotion();
   if (items.length === 0) return null;
 
   return (
@@ -164,13 +165,31 @@ function PortfolioGroup({ title, sub, items, wide }: { title: string; sub: strin
           >
             <div className="relative aspect-video flex flex-col items-center justify-center gap-2 overflow-hidden" style={{ backgroundColor: c.bgTrack }}>
               {item.image ? (
-                <img
-                  src={item.image}
-                  alt={`${item.title} — ${item.category}`}
-                  className="absolute inset-0 object-cover w-full h-full"
-                  loading="lazy"
-                  decoding="async"
-                />
+                /* Screenshot wipes in like a buffer painting; reduced motion gets a crossfade.
+                   Hover zoom lives on this wrapper (CSS) because motion owns the img transform. */
+                <m.div
+                  className="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.03]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+                  initial={reduceMotion ? { opacity: 0 } : { clipPath: 'inset(0 100% 0 0)' }}
+                  whileInView={reduceMotion ? { opacity: 1 } : { clipPath: 'inset(0 0% 0 0)' }}
+                  /* Top margin extends the zone infinitely upward: fast scrolls and anchor
+                     jumps that skip the viewport pass still count as "viewed" — otherwise
+                     the screenshot ships clipped to nothing (real bug, caught 2026-07-22). */
+                  viewport={{ once: true, margin: '100000px 0px -80px 0px' }}
+                  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
+                >
+                  <m.img
+                    src={item.image}
+                    alt={`${item.title} — ${item.category}`}
+                    className="object-cover w-full h-full"
+                    loading="lazy"
+                    decoding="async"
+                    initial={reduceMotion ? false : { scale: 1.12 }}
+                    whileInView={reduceMotion ? undefined : { scale: 1 }}
+                    viewport={{ once: true, margin: '100000px 0px -80px 0px' }}
+                    transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
+                  />
+                </m.div>
               ) : (
                 <>
                   <ImageIcon size={28} className="relative z-10" style={{ color: c.dim }} />

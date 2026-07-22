@@ -1,14 +1,25 @@
 import { useState, useEffect, useRef } from 'react';
-import { m, useInView } from 'motion/react';
-import { DollarSign, FileText, Rocket } from 'lucide-react';
+import { m, useInView, useScroll, useSpring, useTransform, type MotionValue } from 'motion/react';
+import { DollarSign, FileText, Rocket, type LucideIcon } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 
 const icons = [DollarSign, FileText, Rocket];
 
+// Each step's ignition window along the beam's 0→1 progress. The beam head crosses
+// card i's zone roughly a third of the way apart; numbers ignite as it arrives.
+const IGNITE: [number, number][] = [[0.02, 0.2], [0.36, 0.54], [0.7, 0.88]];
+
 export default function HowItWorks() {
   const { t, language } = useLanguage();
   const { c } = useTheme();
+
+  // One scroll-scrubbed beam traces the 3-step pipeline. User-driven motion, so it
+  // runs under prefers-reduced-motion too (house policy — see lessons 2026-07-21).
+  const stepsRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: stepsRef, offset: ['start 0.85', 'end 0.35'] });
+  const beam = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const beamHeadLeft = useTransform(beam, v => `${v * 100}%`);
 
   const [marginCount, setMarginCount] = useState(0);
   const marginRef = useRef<HTMLDivElement>(null);
@@ -64,55 +75,34 @@ export default function HowItWorks() {
           </h2>
         </m.div>
 
-        <div className="grid lg:grid-cols-3 gap-[18px] mb-10">
-          {steps.map((step, i) => {
-            const Icon = icons[i];
-            return (
-              <m.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12 }}
-                className="relative"
-              >
-                {i < 2 && (
-                  <div
-                    className="hidden lg:block absolute top-10 left-[calc(100%_-_1rem)] w-full h-px z-0"
-                    style={{ backgroundColor: c.borderSoft }}
-                  />
-                )}
-                <div
-                  className="rounded-[6px] p-7 h-full relative z-10 transition-colors duration-300"
-                  style={{ backgroundColor: c.bgCard, border: `1px solid ${c.borderSoft}` }}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <div
-                      className="w-11 h-11 rounded-[4px] flex items-center justify-center"
-                      style={{ backgroundColor: c.blue }}
-                    >
-                      <Icon size={18} style={{ color: c.textOnBlue }} />
-                    </div>
-                    <span
-                      className="font-mono text-4xl font-bold select-none"
-                      style={{ color: c.borderSoft }}
-                    >
-                      {step.num}
-                    </span>
-                  </div>
-                  <h3
-                    className="font-bold text-base mb-2"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.textHead }}
-                  >
-                    {step.title}
-                  </h3>
-                  <p className="font-mono text-[13px] leading-relaxed" style={{ color: c.muted }}>
-                    {step.desc}
-                  </p>
-                </div>
-              </m.div>
-            );
-          })}
+        <div ref={stepsRef} className="relative grid lg:grid-cols-3 gap-[18px] mb-10">
+          {/* Track + beam sit at z-0: the solid card surfaces (z-10) mask them, so the
+              line only shows in the gaps — same trick as the old static connectors. */}
+          <div
+            aria-hidden="true"
+            className="hidden lg:block absolute top-10 inset-x-0 h-px z-0"
+            style={{ backgroundColor: c.borderSoft }}
+          />
+          <m.div
+            aria-hidden="true"
+            className="hidden lg:block absolute top-10 inset-x-0 h-px z-0 origin-left"
+            style={{ backgroundColor: c.blue, boxShadow: `0 0 10px ${c.blue}`, scaleX: beam }}
+          />
+          <m.div
+            aria-hidden="true"
+            className="hidden lg:block absolute w-1.5 h-1.5 rounded-full z-0"
+            style={{
+              top: 'calc(2.5rem + 0.5px)',
+              left: beamHeadLeft,
+              x: '-50%',
+              y: '-50%',
+              backgroundColor: c.blue,
+              boxShadow: `0 0 14px 3px ${c.blue}66`,
+            }}
+          />
+          {steps.map((step, i) => (
+            <StepCard key={i} step={step} icon={icons[i]} index={i} beam={beam} />
+          ))}
         </div>
 
         {/* Profit callout — counts up on scroll-in, resets every 30s */}
@@ -132,5 +122,55 @@ export default function HowItWorks() {
         </div>
       </div>
     </section>
+  );
+}
+
+function StepCard({ step, icon: Icon, index, beam }: {
+  step: { num: string; title: string; desc: string };
+  icon: LucideIcon;
+  index: number;
+  beam: MotionValue<number>;
+}) {
+  const { c } = useTheme();
+  // The ghost number ignites to brand blue as the beam head crosses this card's zone.
+  const numColor = useTransform(beam, IGNITE[index], [c.borderSoft, c.blue]);
+
+  return (
+    <m.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.12 }}
+      className="relative"
+    >
+      <div
+        className="rounded-[6px] p-7 h-full relative z-10 transition-colors duration-300"
+        style={{ backgroundColor: c.bgCard, border: `1px solid ${c.borderSoft}` }}
+      >
+        <div className="flex items-center justify-between mb-6">
+          <div
+            className="w-11 h-11 rounded-[4px] flex items-center justify-center"
+            style={{ backgroundColor: c.blue }}
+          >
+            <Icon size={18} style={{ color: c.textOnBlue }} />
+          </div>
+          <m.span
+            className="font-mono text-4xl font-bold select-none"
+            style={{ color: numColor }}
+          >
+            {step.num}
+          </m.span>
+        </div>
+        <h3
+          className="font-bold text-base mb-2"
+          style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.textHead }}
+        >
+          {step.title}
+        </h3>
+        <p className="font-mono text-[13px] leading-relaxed" style={{ color: c.muted }}>
+          {step.desc}
+        </p>
+      </div>
+    </m.div>
   );
 }
