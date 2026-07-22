@@ -5,29 +5,41 @@ import lawfirmImg from '../assets/lawfirm-mockup.webp';
 import kitchenImg from '../assets/kitchen-mockup.webp';
 import estheticsImg from '../assets/professional-esthetics.webp';
 import scrollStoryImg from '../assets/scroll-story-demo.webp';
+import youlovekhuImg from '../assets/youlovekhu.webp';
+import trazeImg from '../assets/traze-boxing.webp';
+import versoImg from '../assets/verso-demo.webp';
+import rivageImg from '../assets/rivage-demo.webp';
 
 type Language = 'EN' | 'FR';
 
 const translations = {
   EN: {
-    // Navbar
-    'nav.howItWorks': 'How It Works',
-    'nav.stack': 'Our Stack',
+    // Navbar — slug-style labels rendered verbatim after the // prefix
+    'nav.howItWorks': 'how-it-works',
+    'nav.stack': 'stack',
+    'nav.pricing': 'pricing',
     'nav.cta': 'Book a Call →',
 
     // Hero
-    'hero.badge': 'white-label web dev · fr/en · 48h',
+    'hero.badge': 'white-label shopify & web dev · fr/en · 48h',
     'hero.headline1': 'Scale your agency',
     'hero.headline2': 'without touching code.',
     'hero.sub':
-      'Send a brief, get a custom-coded bilingual site in 48 hours. Invoice at your own rate.',
+      'Send a brief, get a bilingual Shopify store or custom site under your brand in 48–72h. On time or your deposit back.',
     'hero.cta1': 'book_a_call()',
     'hero.cta2': 'how-it-works',
+    'hero.comment': '/* The dev team your clients never meet. */',
     'hero.proof': 'Used by digital agencies across Canada and the US',
-    'hero.stat1.value': '48h',
-    'hero.stat1.label': 'turnaround',
-    'hero.stat2.value': '$1K',
-    'hero.stat2.label': 'flat_fee',
+    'term.competitor': '# competitor: gohighlevel template',
+    'term.us': '# nexawebdev: custom next.js',
+    'term.theirBuild': 'their build',
+    'term.ourBuild': 'our build',
+    'term.deployed': 'deployed in',
+    'term.bilingual': '· bilingual /en /fr',
+    'hero.stat1.value': '140+',
+    'hero.stat1.label': 'shopify_stores',
+    'hero.stat2.value': '48h',
+    'hero.stat2.label': 'turnaround',
     'hero.stat3.value': '90+',
     'hero.stat3.label': 'pagespeed',
     'hero.stat4.value': 'FR·EN',
@@ -65,11 +77,15 @@ const translations = {
     'stack.title': 'Built on the Platforms',
     'stack.titleAccent': 'That Actually Perform',
     'stack.sub':
-      "We skip the page builders. Every site is custom-coded for speed and SEO.",
+      '140+ Shopify stores shipped through our production pipeline. Custom code everywhere else, no page builders.',
     'stack.clientwork.title': 'Client Work',
-    'stack.clientwork.sub': 'Live sites. Sold by agencies, built by us. Their clients never knew.',
+    'stack.clientwork.sub': 'Live stores you can visit right now. Every one of them is Shopify.',
     'stack.demo.title': 'Demo Builds',
-    'stack.demo.sub': 'Built to show the work, not sold to a client. Same stack, same 48 hours.',
+    'stack.demo.sub': 'Built to show the range, not sold to a client. Same team, same deadlines.',
+    'stack.filter.all': 'All platforms',
+    'study.problem': 'problem',
+    'study.built': 'built',
+    'study.result': 'result',
 
     // Pricing
     'pricing.badge': 'Partner Pricing',
@@ -113,6 +129,14 @@ const translations = {
     'cta.risk3': 'No commitment beyond the project',
     'cta.risk4': 'Your brand. Your client. Your margin.',
     'cta.guarantee': '48 hours or your deposit back. Guaranteed in writing.',
+    'cta.term.window': '~/nexawebdev — new_partnership',
+    'cta.term.cmd': 'nexawebdev quote --resale',
+    'cta.term.slider': 'what you charge your client',
+    'cta.term.fee': 'our flat fee',
+    'cta.term.margin': 'your margin',
+    'cta.term.delivery': 'delivery',
+    'cta.term.guarantee': 'on time or your deposit back',
+    'cta.term.inWriting': 'in writing',
 
     // Footer
     'footer.tagline': 'Your invisible dev team. Your full margin.',
@@ -125,24 +149,32 @@ const translations = {
     'footer.legal': 'Built for agencies. Invisible by design.',
   },
   FR: {
-    // Navbar
-    'nav.howItWorks': 'Comment ça marche',
-    'nav.stack': 'Notre stack',
+    // Navbar — libellés façon slug, rendus tels quels après le préfixe //
+    'nav.howItWorks': 'comment-ça-marche',
+    'nav.stack': 'stack',
+    'nav.pricing': 'tarifs',
     'nav.cta': 'Réserver un appel →',
 
     // Hero
-    'hero.badge': 'dev web marque blanche · fr/en · 48h',
+    'hero.badge': 'shopify & dev web marque blanche · fr/en · 48h',
     'hero.headline1': 'Développez votre agence',
     'hero.headline2': 'sans toucher une ligne de code.',
     'hero.sub':
-      "Envoyez un brief, recevez un site bilingue codé sur mesure en 48h. Facturez à votre propre tarif.",
+      "Envoyez un brief, recevez une boutique Shopify ou un site bilingue sous votre marque en 48–72h. À temps, ou on vous remet votre dépôt.",
     'hero.cta1': 'réserver_un_appel()',
     'hero.cta2': 'comment-ça-marche',
+    'hero.comment': "/* L'équipe de dev que vos clients ne rencontrent jamais. */",
     'hero.proof': 'Utilisé par des agences numériques au Canada et aux États-Unis',
-    'hero.stat1.value': '48h',
-    'hero.stat1.label': 'livraison',
-    'hero.stat2.value': '1K$',
-    'hero.stat2.label': 'prix_fixe',
+    'term.competitor': '# concurrent : template gohighlevel',
+    'term.us': '# nexawebdev : next.js sur mesure',
+    'term.theirBuild': 'leur site',
+    'term.ourBuild': 'notre site',
+    'term.deployed': 'déployé en',
+    'term.bilingual': '· bilingue /fr /en',
+    'hero.stat1.value': '140+',
+    'hero.stat1.label': 'boutiques_shopify',
+    'hero.stat2.value': '48h',
+    'hero.stat2.label': 'livraison',
     'hero.stat3.value': '90+',
     'hero.stat3.label': 'pagespeed',
     'hero.stat4.value': 'FR·EN',
@@ -180,11 +212,15 @@ const translations = {
     'stack.title': 'Construit sur les plateformes',
     'stack.titleAccent': 'qui performent vraiment',
     'stack.sub':
-      "On ne touche pas aux constructeurs de pages. Chaque site est codé sur mesure pour la vitesse et le SEO.",
+      'Plus de 140 boutiques Shopify livrées via notre pipeline de production. Du code sur mesure pour le reste, aucun constructeur de pages.',
     'stack.clientwork.title': 'Travaux clients',
-    'stack.clientwork.sub': 'Sites en ligne. Vendus par des agences, construits par nous. Leurs clients ne l\'ont jamais su.',
+    'stack.clientwork.sub': 'Des boutiques en ligne que vous pouvez visiter maintenant. Toutes sur Shopify.',
     'stack.demo.title': 'Démos',
-    'stack.demo.sub': 'Construits pour montrer le travail, pas vendus à un client. Même stack, mêmes 48h.',
+    'stack.demo.sub': "Construits pour montrer l'étendue, pas vendus à un client. Même équipe, mêmes délais.",
+    'stack.filter.all': 'Toutes les plateformes',
+    'study.problem': 'problème',
+    'study.built': 'réalisation',
+    'study.result': 'résultat',
 
     // Pricing
     'pricing.badge': 'Tarifs partenaires',
@@ -228,6 +264,14 @@ const translations = {
     'cta.risk3': 'Aucun engagement au-delà du projet',
     'cta.risk4': 'Votre marque. Votre client. Votre marge.',
     'cta.guarantee': '48 heures ou on vous remet votre dépôt. Garanti par écrit.',
+    'cta.term.window': '~/nexawebdev — nouveau_partenariat',
+    'cta.term.cmd': 'nexawebdev quote --resale',
+    'cta.term.slider': 'ce que vous facturez à votre client',
+    'cta.term.fee': 'nos frais fixes',
+    'cta.term.margin': 'votre marge',
+    'cta.term.delivery': 'livraison',
+    'cta.term.guarantee': 'à temps ou dépôt remboursé',
+    'cta.term.inWriting': 'par écrit',
 
     // Footer
     'footer.tagline': 'Votre équipe de dev invisible. Votre marge complète.',
@@ -277,17 +321,19 @@ const problemRightItems: Record<Language, string[]> = {
   ],
 };
 
+// Shopify leads: it is the only platform every paying client has bought, and the pipeline
+// behind the 140+ number is the strongest proof the business owns.
 const platformItems: Record<Language, { name: string; desc: string; badge: string }[]> = {
   EN: [
+    {
+      name: 'Shopify',
+      desc: 'Our home turf: 140+ stores shipped through an Admin-API production pipeline. Bilingual catalogs, no translation plugin.',
+      badge: '140+ Stores Shipped',
+    },
     {
       name: 'React / Next.js',
       desc: 'Scores 90+ on PageSpeed. Good fit for local service sites, landing pages, and quote calculators.',
       badge: 'Fastest Option',
-    },
-    {
-      name: 'Shopify',
-      desc: 'Native bilingual product catalogs with no translation plugin. Good for agencies with retail or D2C clients.',
-      badge: 'E-Commerce',
     },
     {
       name: 'WordPress',
@@ -302,14 +348,14 @@ const platformItems: Record<Language, { name: string; desc: string; badge: strin
   ],
   FR: [
     {
+      name: 'Shopify',
+      desc: 'Notre terrain de jeu : plus de 140 boutiques livrées via un pipeline de production sur l\'API Admin. Catalogues bilingues, sans plugin de traduction.',
+      badge: '140+ boutiques livrées',
+    },
+    {
       name: 'React / Next.js',
       desc: "Score 90+ sur PageSpeed. Bon choix pour les sites de services locaux, les pages d'atterrissage et les calculateurs de devis.",
       badge: 'Option la plus rapide',
-    },
-    {
-      name: 'Shopify',
-      desc: 'Catalogues bilingues natifs sans plugin de traduction. Bon pour les agences avec des clients en retail ou D2C.',
-      badge: 'E-Commerce',
     },
     {
       name: 'WordPress',
@@ -344,7 +390,6 @@ const pricingTiers: Record<Language, PricingTier[]> = {
       delivery: '48-hour delivery',
       desc: 'React or static. Landing pages, local service sites, and quote calculators.',
       features: ['Custom-coded, no page builders', '90+ mobile PageSpeed', 'Native FR/EN'],
-      featured: true,
       carePlan: '+$99/mo Care Plan',
     },
     {
@@ -361,6 +406,7 @@ const pricingTiers: Record<Language, PricingTier[]> = {
       delivery: '5-day delivery',
       desc: 'Shopify or custom API. Bilingual catalogs, product pages, and checkout.',
       features: ['Bilingual catalog, no plugin', 'Product pages + checkout', 'Payment-ready at handoff'],
+      featured: true,
       carePlan: '+$99/mo Care Plan',
     },
   ],
@@ -371,7 +417,6 @@ const pricingTiers: Record<Language, PricingTier[]> = {
       delivery: 'Livraison en 48h',
       desc: "React ou statique. Pages d'atterrissage, sites de services locaux et calculateurs de devis.",
       features: ['Codé sur mesure, aucun constructeur', '90+ PageSpeed mobile', 'FR/EN natif'],
-      featured: true,
       carePlan: '+99$/mois Forfait entretien',
     },
     {
@@ -388,6 +433,7 @@ const pricingTiers: Record<Language, PricingTier[]> = {
       delivery: 'Livraison en 5 jours',
       desc: 'Shopify ou API sur mesure. Catalogues bilingues, fiches produits et paiement.',
       features: ['Catalogue bilingue, sans plugin', 'Fiches produits + caisse', 'Paiement prêt à la livraison'],
+      featured: true,
       carePlan: '+99$/mois Forfait entretien',
     },
   ],
@@ -395,31 +441,132 @@ const pricingTiers: Record<Language, PricingTier[]> = {
 
 export type PortfolioKind = 'client' | 'demo';
 
+// Platform values are language-independent identifiers: the filter compares them across
+// EN/FR, so they must not be translated.
+export type PortfolioPlatform = 'Shopify' | 'Scroll Story' | 'React / Next.js' | 'WordPress' | 'Webflow';
+
 export interface PortfolioItem {
   title: string;
   category: string;
+  platform: PortfolioPlatform;
   image: string;
   link: string;
   kind: PortfolioKind;
+  // The case study is the sales pitch: what was broken, what we shipped, what came of it.
+  // Cards without one render as plain thumbnails (the below-the-fold demos).
+  study?: { problem: string; built: string; result: string };
 }
 
-// `kind` is load-bearing, not cosmetic: three of these are demo builds, not sold client work.
-// Labelling them as deliveries is an over-claim a prospect catches the moment they see
-// `mockup.pages.dev` in the URL bar.
+// `kind` is load-bearing, not cosmetic: several of these are demo builds, not sold client
+// work. Labelling them as deliveries is an over-claim a prospect catches the moment they
+// see `mockup.pages.dev` in the URL bar. Order is deliberate: real Shopify clients first,
+// premium scroll-story demos second, generic mockups last.
 const portfolioItems: Record<Language, PortfolioItem[]> = {
   EN: [
-    { title: 'Professional Esthetics Clinic', category: 'Ecommerce — Shopify', image: estheticsImg, link: 'https://skinsations.ca', kind: 'client' },
-    { title: 'Nordvia — Scroll Story', category: 'SaaS Launch — GSAP Scroll Story', image: scrollStoryImg, link: 'https://story.nexaweb.dev', kind: 'demo' },
-    { title: 'Emergency Plumbing Co.', category: 'Home Services — React/Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/', kind: 'demo' },
-    { title: 'Marchand & Associés', category: 'Law Firm — WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/', kind: 'demo' },
-    { title: 'Prestige Rénovation', category: 'Kitchen & Bath — Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/', kind: 'demo' },
+    {
+      title: 'YouLoveKhu', category: 'Streetwear — Shopify', platform: 'Shopify', image: youlovekhuImg, link: 'https://youlovekhu.com', kind: 'client',
+      study: {
+        problem: 'A limited-drop streetwear brand stuck on a stock theme that looked like every other store.',
+        built: 'Full redesign around the drop model: dark metal identity, cinematic chrome-logo video hero.',
+        result: 'Approved and published live on the brand\'s domain the same week.',
+      },
+    },
+    {
+      title: 'Traze Boxing', category: 'Sports Brand — Shopify', platform: 'Shopify', image: trazeImg, link: 'https://bd-boxing.myshopify.com/', kind: 'client',
+      study: {
+        problem: 'A Montreal boxing brand selling gear, apparel, and classes with no storefront at all.',
+        built: 'Shopify store with a ring-side video hero, full product line, and class schedule pages.',
+        result: 'Live store the founders now sell equipment and book classes through.',
+      },
+    },
+    {
+      title: 'Professional Esthetics Clinic', category: 'Beauty Clinic — Shopify', platform: 'Shopify', image: estheticsImg, link: 'https://skinsations.ca', kind: 'client',
+      study: {
+        problem: 'A working esthetics clinic with no way to sell products or present services online.',
+        built: 'Shopify storefront with a bilingual catalog and service pages on a custom domain.',
+        result: 'Live and taking orders at skinsations.ca.',
+      },
+    },
+    {
+      title: 'VERSO — 3D Condo Tower', category: 'Real Estate — 3D Scroll Story', platform: 'Scroll Story', image: versoImg, link: 'https://3d-scroll-story.nexaweb.dev', kind: 'demo',
+      study: {
+        problem: 'Prove a premium-tier claim: a real-time 3D building that assembles as you scroll, without wrecking PageSpeed.',
+        built: 'A procedural Three.js tower that assembles, reveals a unit, and glows at dusk as you scroll, inside a full bilingual site.',
+        result: 'Lighthouse 100 desktop / 86 mobile with WebGL running.',
+      },
+    },
+    {
+      title: 'RIVAGE — Construction Film', category: 'Real Estate — AI Scroll Story', platform: 'Scroll Story', image: rivageImg, link: 'https://rivage-demo-8f3.pages.dev', kind: 'demo',
+      study: {
+        problem: 'Show a condo project as a film: twelve months of construction, driven by the visitor\'s scroll.',
+        built: 'AI-generated timelapse of one locked building design, 320 frames scrubbed as one continuous shot.',
+        result: 'A photoreal hero with no video file, built in two days.',
+      },
+    },
+    {
+      title: 'Nordvia — Scroll Story', category: 'SaaS Launch — GSAP Scroll Story', platform: 'Scroll Story', image: scrollStoryImg, link: 'https://story.nexaweb.dev', kind: 'demo',
+      study: {
+        problem: 'Sell the Scroll Story tier by demonstrating it: a landing page that plays like a product video.',
+        built: 'A fictional SaaS dashboard that assembles from wireframe to product as the visitor scrolls, ending on the pitch.',
+        result: 'A page that plays like a video with no video file, under 150 KB of art per scene.',
+      },
+    },
+    { title: 'Emergency Plumbing Co.', category: 'Home Services — React/Next.js', platform: 'React / Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/', kind: 'demo' },
+    { title: 'Marchand & Associés', category: 'Law Firm — WordPress', platform: 'WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/', kind: 'demo' },
+    { title: 'Prestige Rénovation', category: 'Kitchen & Bath — Webflow', platform: 'Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/', kind: 'demo' },
   ],
   FR: [
-    { title: "Clinique d'esthétique professionnelle", category: 'E-commerce — Shopify', image: estheticsImg, link: 'https://skinsations.ca', kind: 'client' },
-    { title: 'Nordvia — Scroll Story', category: 'Lancement SaaS — GSAP Scroll Story', image: scrollStoryImg, link: 'https://story.nexaweb.dev', kind: 'demo' },
-    { title: "Services de plomberie d'urgence", category: 'Services à domicile — React/Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/', kind: 'demo' },
-    { title: 'Marchand & Associés', category: 'Cabinet juridique — WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/', kind: 'demo' },
-    { title: 'Prestige Rénovation', category: 'Cuisine & Salle de bain — Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/', kind: 'demo' },
+    {
+      title: 'YouLoveKhu', category: 'Streetwear — Shopify', platform: 'Shopify', image: youlovekhuImg, link: 'https://youlovekhu.com', kind: 'client',
+      study: {
+        problem: 'Une marque streetwear à éditions limitées coincée sur un thème générique, identique aux autres boutiques.',
+        built: 'Refonte complète autour du modèle de drops : identité métal sombre, héro vidéo au logo chromé.',
+        result: 'Approuvée et publiée sur le domaine de la marque la même semaine.',
+      },
+    },
+    {
+      title: 'Traze Boxing', category: 'Marque sportive — Shopify', platform: 'Shopify', image: trazeImg, link: 'https://bd-boxing.myshopify.com/', kind: 'client',
+      study: {
+        problem: 'Une marque de boxe montréalaise vendant équipement, vêtements et cours, sans aucune boutique.',
+        built: 'Boutique Shopify avec héro vidéo sur le ring, gamme complète de produits et pages d\'horaires de cours.',
+        result: 'Boutique en ligne où les fondateurs vendent leur équipement et remplissent leurs cours.',
+      },
+    },
+    {
+      title: "Clinique d'esthétique professionnelle", category: 'Clinique beauté — Shopify', platform: 'Shopify', image: estheticsImg, link: 'https://skinsations.ca', kind: 'client',
+      study: {
+        problem: 'Une clinique d\'esthétique en activité, sans moyen de vendre ses produits ni de présenter ses services en ligne.',
+        built: 'Boutique Shopify avec catalogue bilingue et pages de services sur un domaine personnalisé.',
+        result: 'En ligne et en vente sur skinsations.ca.',
+      },
+    },
+    {
+      title: 'VERSO — Tour condo 3D', category: 'Immobilier — Scroll Story 3D', platform: 'Scroll Story', image: versoImg, link: 'https://3d-scroll-story.nexaweb.dev', kind: 'demo',
+      study: {
+        problem: 'Prouver une promesse haut de gamme : un immeuble 3D en temps réel qui s\'assemble au défilement, sans ruiner PageSpeed.',
+        built: "Une tour procédurale Three.js qui s'assemble, révèle une unité et s'illumine à la tombée du jour au fil du défilement, dans un site bilingue complet.",
+        result: 'Lighthouse 100 desktop / 86 mobile avec le WebGL actif.',
+      },
+    },
+    {
+      title: 'RIVAGE — Film de chantier', category: 'Immobilier — Scroll Story IA', platform: 'Scroll Story', image: rivageImg, link: 'https://rivage-demo-8f3.pages.dev', kind: 'demo',
+      study: {
+        problem: 'Montrer un projet de condos comme un film : douze mois de chantier pilotés par le défilement du visiteur.',
+        built: 'Timelapse généré par IA d\'un même design verrouillé, 320 images défilées en un seul plan continu.',
+        result: 'Un héro photoréaliste sans fichier vidéo, construit en deux jours.',
+      },
+    },
+    {
+      title: 'Nordvia — Scroll Story', category: 'Lancement SaaS — GSAP Scroll Story', platform: 'Scroll Story', image: scrollStoryImg, link: 'https://story.nexaweb.dev', kind: 'demo',
+      study: {
+        problem: 'Vendre le forfait Scroll Story en le démontrant : une page qui se joue comme une vidéo de produit.',
+        built: "Un tableau de bord SaaS fictif qui s'assemble du wireframe au produit au fil du défilement, jusqu'au pitch final.",
+        result: "Une page qui joue comme une vidéo sans fichier vidéo, avec moins de 150 Ko d'images par scène.",
+      },
+    },
+    { title: "Services de plomberie d'urgence", category: 'Services à domicile — React/Next.js', platform: 'React / Next.js', image: plumbingImg, link: 'https://plumbing-mockup.pages.dev/', kind: 'demo' },
+    { title: 'Marchand & Associés', category: 'Cabinet juridique — WordPress', platform: 'WordPress', image: lawfirmImg, link: 'https://lawfirm-mockup.pages.dev/', kind: 'demo' },
+    { title: 'Prestige Rénovation', category: 'Cuisine & Salle de bain — Webflow', platform: 'Webflow', image: kitchenImg, link: 'https://kitchen-mockup.pages.dev/', kind: 'demo' },
   ],
 };
 

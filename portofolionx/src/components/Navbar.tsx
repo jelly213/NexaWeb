@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { m, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'motion/react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
@@ -7,7 +7,7 @@ import { openCalendly } from '../lib/calendly';
 import logo from '../assets/logo.svg';
 
 export default function Navbar() {
-  const { language, toggleLanguage } = useLanguage();
+  const { language, toggleLanguage, t } = useLanguage();
   const { theme, toggleTheme, c } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -19,9 +19,9 @@ export default function Navbar() {
   }, []);
 
   const links = [
-    { label: 'how-it-works', href: '#how-it-works' },
-    { label: 'stack', href: '#tech-stack' },
-    { label: 'pricing', href: '#pricing' },
+    { label: t('nav.howItWorks'), href: '#how-it-works' },
+    { label: t('nav.stack'), href: '#tech-stack' },
+    { label: t('nav.pricing'), href: '#pricing' },
   ];
 
   const handleNavClick = (href: string) => {
@@ -123,7 +123,7 @@ export default function Navbar() {
             className="hidden lg:inline-flex items-center px-4 py-2 text-[13px] font-mono font-bold hover:opacity-90 transition-opacity"
             style={{ backgroundColor: c.blue, color: c.textOnBlue }}
           >
-            book_a_call()
+            {t('hero.cta1')}
           </button>
 
           {/* Mobile hamburger */}
@@ -168,7 +168,7 @@ export default function Navbar() {
                 className="block w-full text-center px-4 py-3 text-sm font-bold mt-3"
                 style={{ backgroundColor: c.blue, color: c.textOnBlue }}
               >
-                book_a_call()
+                {t('hero.cta1')}
               </button>
             </div>
           </m.div>

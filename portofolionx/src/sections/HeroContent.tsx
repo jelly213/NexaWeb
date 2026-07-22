@@ -1,4 +1,4 @@
-import { m } from 'framer-motion';
+import { m } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
@@ -60,7 +60,7 @@ export default function HeroContent() {
           className="font-mono text-[14px] leading-[1.7]"
           style={{ color: c.muted }}
         >
-          <span style={{ color: c.comment }}>{'/* The dev team your clients never meet. */'}</span>
+          <span style={{ color: c.comment }}>{t('hero.comment')}</span>
           <br />
           {t('hero.sub')}
         </m.p>

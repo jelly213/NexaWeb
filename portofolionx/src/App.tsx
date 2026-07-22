@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { LazyMotion, domAnimation } from 'framer-motion';
+import { LazyMotion, domAnimation } from 'motion/react';
 import { LanguageProvider } from './context/LanguageContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { ConsentProvider } from './context/ConsentContext';

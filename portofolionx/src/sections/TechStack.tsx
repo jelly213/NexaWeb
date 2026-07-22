@@ -1,22 +1,30 @@
-import { m } from 'framer-motion';
+import { useState } from 'react';
+import { m, useReducedMotion } from 'motion/react';
 import { Code2, ShoppingCart, Globe, Layers, ImageIcon, Eye } from 'lucide-react';
-import { useLanguage, type PortfolioItem } from '../context/LanguageContext';
+import { useLanguage, type PortfolioItem, type PortfolioPlatform } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 
-const platformIcons = [Code2, ShoppingCart, Globe, Layers];
+// Index-aligned with platformItems in LanguageContext: Shopify leads.
+const platformIcons = [ShoppingCart, Code2, Globe, Layers];
 const platformGradients = [
-  'from-blue-600 to-indigo-600',
   'from-emerald-600 to-teal-600',
+  'from-blue-600 to-indigo-600',
   'from-orange-600 to-amber-600',
   'from-violet-600 to-purple-600',
 ];
 
+// Filter chips let a prospect self-select by platform (masterclass pattern). 'All' default:
+// the client group is entirely Shopify anyway, so the Shopify-led story survives the default
+// view while the premium demos stay visible without a tap.
+const FILTER_PLATFORMS: PortfolioPlatform[] = ['Shopify', 'Scroll Story', 'React / Next.js', 'WordPress', 'Webflow'];
+
 export default function TechStack() {
   const { t, tPlatformItems, tPortfolioItems } = useLanguage();
   const { c } = useTheme();
+  const [filter, setFilter] = useState<PortfolioPlatform | 'all'>('all');
 
   const platforms = tPlatformItems();
-  const portfolioItems = tPortfolioItems();
+  const portfolioItems = tPortfolioItems().filter(i => filter === 'all' || i.platform === filter);
 
   return (
     <section id="tech-stack" className="py-24" style={{ backgroundColor: c.bg, borderTop: `1px solid ${c.border}` }}>
@@ -80,20 +88,45 @@ export default function TechStack() {
           })}
         </div>
 
-        {/* Client work and demo builds are labelled separately on purpose. Three of these were
+        {/* Platform filter — prospects self-select the stack they're shopping for. */}
+        <div className="flex flex-wrap gap-2 mb-10" role="group" aria-label={t('stack.filter.all')}>
+          {(['all', ...FILTER_PLATFORMS] as const).map(p => {
+            const active = filter === p;
+            return (
+              <button
+                key={p}
+                onClick={() => setFilter(p)}
+                aria-pressed={active}
+                className="font-mono text-xs px-3 py-1.5 rounded-[4px] transition-colors cursor-pointer"
+                style={{
+                  border: `1px solid ${active ? c.blue : c.borderSoft}`,
+                  color: active ? c.blue : c.muted,
+                  backgroundColor: active ? `${c.blue}14` : 'transparent',
+                }}
+              >
+                {p === 'all' ? t('stack.filter.all') : p}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Client work and demo builds are labelled separately on purpose. Several of these were
             never sold to a client, and a prospect who clicks through to a *.pages.dev URL under
             a "recent deliveries" heading has every reason to distrust the rest of the page. */}
         <PortfolioGroup
           title={t('stack.clientwork.title')}
           sub={t('stack.clientwork.sub')}
           items={portfolioItems.filter(i => i.kind === 'client')}
+          wide
         />
 
+        {/* Also 3-col: six demos land as two full rows instead of a ragged 4+2. */}
         <div className="mt-14">
           <PortfolioGroup
             title={t('stack.demo.title')}
             sub={t('stack.demo.sub')}
             items={portfolioItems.filter(i => i.kind === 'demo')}
+            wide
           />
         </div>
       </div>
@@ -101,8 +134,10 @@ export default function TechStack() {
   );
 }
 
-function PortfolioGroup({ title, sub, items }: { title: string; sub: string; items: PortfolioItem[] }) {
+function PortfolioGroup({ title, sub, items, wide }: { title: string; sub: string; items: PortfolioItem[]; wide?: boolean }) {
   const { c } = useTheme();
+  const { t } = useLanguage();
+  const reduceMotion = useReducedMotion();
   if (items.length === 0) return null;
 
   return (
@@ -117,7 +152,7 @@ function PortfolioGroup({ title, sub, items }: { title: string; sub: string; ite
         <p className="font-mono text-[13px]" style={{ color: c.dim }}>{sub}</p>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-[18px]">
+      <div className={`grid md:grid-cols-2 ${wide ? 'lg:grid-cols-3' : 'lg:grid-cols-4'} gap-[18px]`}>
         {items.map((item, i) => (
           <m.div
             key={item.link}
@@ -130,13 +165,31 @@ function PortfolioGroup({ title, sub, items }: { title: string; sub: string; ite
           >
             <div className="relative aspect-video flex flex-col items-center justify-center gap-2 overflow-hidden" style={{ backgroundColor: c.bgTrack }}>
               {item.image ? (
-                <img
-                  src={item.image}
-                  alt={`${item.title} — ${item.category}`}
-                  className="absolute inset-0 object-cover w-full h-full"
-                  loading="lazy"
-                  decoding="async"
-                />
+                /* Screenshot wipes in like a buffer painting; reduced motion gets a crossfade.
+                   Hover zoom lives on this wrapper (CSS) because motion owns the img transform. */
+                <m.div
+                  className="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.03]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+                  initial={reduceMotion ? { opacity: 0 } : { clipPath: 'inset(0 100% 0 0)' }}
+                  whileInView={reduceMotion ? { opacity: 1 } : { clipPath: 'inset(0 0% 0 0)' }}
+                  /* Top margin extends the zone infinitely upward: fast scrolls and anchor
+                     jumps that skip the viewport pass still count as "viewed" — otherwise
+                     the screenshot ships clipped to nothing (real bug, caught 2026-07-22). */
+                  viewport={{ once: true, margin: '100000px 0px -80px 0px' }}
+                  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
+                >
+                  <m.img
+                    src={item.image}
+                    alt={`${item.title} — ${item.category}`}
+                    className="object-cover w-full h-full"
+                    loading="lazy"
+                    decoding="async"
+                    initial={reduceMotion ? false : { scale: 1.12 }}
+                    whileInView={reduceMotion ? undefined : { scale: 1 }}
+                    viewport={{ once: true, margin: '100000px 0px -80px 0px' }}
+                    transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
+                  />
+                </m.div>
               ) : (
                 <>
                   <ImageIcon size={28} className="relative z-10" style={{ color: c.dim }} />
@@ -167,6 +220,22 @@ function PortfolioGroup({ title, sub, items }: { title: string; sub: string; ite
               >
                 {item.title}
               </h4>
+              {item.study && (
+                <dl className="mt-3 space-y-2 border-t pt-3" style={{ borderColor: c.borderSoft }}>
+                  {([
+                    ['study.problem', item.study.problem],
+                    ['study.built', item.study.built],
+                    ['study.result', item.study.result],
+                  ] as const).map(([labelKey, text]) => (
+                    <div key={labelKey}>
+                      <dt className="font-mono text-[10px] uppercase tracking-wider mb-0.5" style={{ color: c.dim }}>
+                        {t(labelKey)}
+                      </dt>
+                      <dd className="text-[12px] leading-relaxed" style={{ color: c.muted }}>{text}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
             </div>
           </m.div>
         ))}
