@@ -8,6 +8,12 @@ Main portfolio and agency site for NexaWebDev.
 ## Project Location
 `website/portofolionx/` — React/Vite SPA.
 
+**Sibling demo projects** (separate builds, separate deploys — not part of the SPA):
+`scroll-demo/` (internal scroll-story reference), `story-demo/` ("Nordvia" 2D demo →
+story.nexaweb.dev, CF Worker, `npx wrangler deploy`), `verso-demo/` ("VERSO" 3D flagship demo →
+3d-scroll-story.nexaweb.dev, CF Pages via `wrangler pages deploy dist --project-name=verso-demo`;
+lives on branch `feat/verso-3d-demo`, unmerged as of 2026-07-20), `events-worker/` (the event sink).
+
 **Hosting (verified 2026-07-09 from response headers — this file previously said Cloudflare Pages,
 which was wrong and cost a debugging cycle):**
 

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RIVAGE — Résidences sur le canal de Lachine | Montréal</title>
+  <meta name="description" content="RIVAGE — trente-six résidences boutique au bord du canal de Lachine, à Saint-Henri. Suivez douze mois de chantier en un scroll. Site démo par NexaWebDev." />
+  <meta property="og:title" content="RIVAGE — Bâti sous vos yeux" />
+  <meta property="og:description" content="Trente-six résidences au bord du canal de Lachine. Douze mois de chantier, une minute de scroll." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#141210" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23141210'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23c28450' font-family='Georgia'>R</text></svg>" />
+  <link rel="preload" as="font" type="font/woff2" href="fonts/instrument.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="fonts/hanken.woff2" crossorigin />
+  <link rel="preload" as="image" href="poster/ch1.webp" fetchpriority="high" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+  <!-- Fixed demo badge (agency lead capture) -->
+  <a class="demo-badge" id="demo-badge" href="#nexa" data-copy="demo.badge"></a>
+
+  <header class="nav" id="nav">
+    <a class="nav__logo" href="#top">RIVAGE</a>
+    <nav class="nav__links" id="nav-links" aria-label="Navigation principale">
+      <a href="#story" data-copy="nav.links.0"></a>
+      <a href="#residences" data-copy="nav.links.1"></a>
+      <a href="#vie" data-copy="nav.links.2"></a>
+      <a href="#quartier" data-copy="nav.links.3"></a>
+      <a href="#contact" data-copy="nav.links.4"></a>
+    </nav>
+    <div class="nav__right">
+      <button class="nav__lang" id="lang-toggle" aria-label="Switch language">EN</button>
+      <a class="btn btn--small" href="#contact" data-copy="nav.cta"></a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ==================== The story — one continuous 12-month scrub (4 clips, 320 frames) ==================== -->
+    <section class="chapter" id="story">
+      <img class="chapter__poster" id="poster-ch1" src="poster/ch1.webp" width="1280" height="720" alt="" fetchpriority="high" />
+      <canvas class="chapter__canvas" aria-hidden="true"></canvas>
+      <div class="chapter__scrim" aria-hidden="true"></div>
+      <div class="chapter__scrim chapter__scrim--hero" id="hero-scrim" aria-hidden="true"></div>
+      <div class="chapter__loader" aria-hidden="true">
+        <span class="chapter__loader-label" data-copy="loading"></span>
+        <span class="chapter__loader-track"><span class="chapter__loader-bar"></span></span>
+      </div>
+
+      <div class="story__brand" id="brand">
+        <p class="overline" data-copy="brand.overline"></p>
+        <h1 class="story__title">RIVAGE</h1>
+        <p class="story__tagline" data-copy="brand.tagline"></p>
+        <p class="story__sub" data-copy="brand.sub"></p>
+      </div>
+
+      <div class="story__caption" id="cap-ch1">
+        <p class="overline" data-copy="chapters.0.overline"></p>
+        <h2 data-copy="chapters.0.headline"></h2>
+        <p class="sub" data-copy="chapters.0.sub"></p>
+      </div>
+      <div class="story__caption" id="cap-ch2">
+        <p class="overline" data-copy="chapters.1.overline"></p>
+        <h2 data-copy="chapters.1.headline"></h2>
+        <p class="sub" data-copy="chapters.1.sub"></p>
+      </div>
+      <div class="story__caption" id="cap-ch3">
+        <p class="overline" data-copy="chapters.2.overline"></p>
+        <h2 data-copy="chapters.2.headline"></h2>
+        <p class="sub" data-copy="chapters.2.sub"></p>
+      </div>
+      <div class="story__caption" id="cap-ch4">
+        <p class="overline" data-copy="chapters.3.overline"></p>
+        <h2 data-copy="chapters.3.headline"></h2>
+        <p class="sub" data-copy="chapters.3.sub"></p>
+      </div>
+      <div class="story__caption story__caption--cta" id="cap-final">
+        <p class="overline" data-copy="finale.overline"></p>
+        <h2 data-copy="finale.headline"></h2>
+        <a class="btn" id="story-cta" href="#contact" data-copy="nav.cta"></a>
+      </div>
+
+      <p class="scroll-hint" id="scroll-hint" data-copy="hint"></p>
+    </section>
+
+    <!-- ==================== Residences ==================== -->
+    <section class="section residences" id="residences">
+      <p class="overline reveal" data-copy="residences.overline"></p>
+      <h2 class="section__title reveal" data-copy="residences.intro"></h2>
+      <div class="units">
+        <article class="unit reveal">
+          <img class="unit__img" id="u-0" src="units/le-quai.webp" width="1200" height="805" alt="" loading="lazy" decoding="async" />
+          <h3 data-copy="residences.units.0.name"></h3>
+          <p class="unit__size" data-copy="residences.units.0.size"></p>
+          <p class="unit__desc" data-copy="residences.units.0.desc"></p>
+          <p class="unit__price" data-copy="residences.units.0.price"></p>
+        </article>
+        <article class="unit reveal">
+          <img class="unit__img" id="u-1" src="units/l-ecluse.webp" width="1200" height="805" alt="" loading="lazy" decoding="async" />
+          <h3 data-copy="residences.units.1.name"></h3>
+          <p class="unit__size" data-copy="residences.units.1.size"></p>
+          <p class="unit__desc" data-copy="residences.units.1.desc"></p>
+          <p class="unit__price" data-copy="residences.units.1.price"></p>
+        </article>
+        <article class="unit reveal">
+          <img class="unit__img" id="u-2" src="units/la-verriere.webp" width="1200" height="805" alt="" loading="lazy" decoding="async" />
+          <h3 data-copy="residences.units.2.name"></h3>
+          <p class="unit__size" data-copy="residences.units.2.size"></p>
+          <p class="unit__desc" data-copy="residences.units.2.desc"></p>
+          <p class="unit__price" data-copy="residences.units.2.price"></p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== Amenities ==================== -->
+    <section class="section vie" id="vie">
+      <p class="overline reveal" data-copy="amenities.overline"></p>
+      <h2 class="section__title reveal" data-copy="amenities.title"></h2>
+      <div class="amenities">
+        <div class="amenity reveal"><h3 data-copy="amenities.items.0.title"></h3><p data-copy="amenities.items.0.line"></p></div>
+        <div class="amenity reveal"><h3 data-copy="amenities.items.1.title"></h3><p data-copy="amenities.items.1.line"></p></div>
+        <div class="amenity reveal"><h3 data-copy="amenities.items.2.title"></h3><p data-copy="amenities.items.2.line"></p></div>
+        <div class="amenity reveal"><h3 data-copy="amenities.items.3.title"></h3><p data-copy="amenities.items.3.line"></p></div>
+        <div class="amenity reveal"><h3 data-copy="amenities.items.4.title"></h3><p data-copy="amenities.items.4.line"></p></div>
+        <div class="amenity reveal"><h3 data-copy="amenities.items.5.title"></h3><p data-copy="amenities.items.5.line"></p></div>
+      </div>
+    </section>
+
+    <!-- ==================== Neighbourhood ==================== -->
+    <section class="section quartier" id="quartier">
+      <p class="overline reveal" data-copy="neighbourhood.overline"></p>
+      <h2 class="section__title reveal" data-copy="neighbourhood.title"></h2>
+      <p class="quartier__para reveal" data-copy="neighbourhood.para"></p>
+      <div class="stats">
+        <div class="stat reveal"><span class="stat__value" data-copy="neighbourhood.stats.0.value"></span><span class="stat__label" data-copy="neighbourhood.stats.0.label"></span></div>
+        <div class="stat reveal"><span class="stat__value" data-copy="neighbourhood.stats.1.value"></span><span class="stat__label" data-copy="neighbourhood.stats.1.label"></span></div>
+        <div class="stat reveal"><span class="stat__value" data-copy="neighbourhood.stats.2.value"></span><span class="stat__label" data-copy="neighbourhood.stats.2.label"></span></div>
+        <div class="stat reveal"><span class="stat__value" data-copy="neighbourhood.stats.3.value"></span><span class="stat__label" data-copy="neighbourhood.stats.3.label"></span></div>
+      </div>
+    </section>
+
+    <!-- ==================== Contact / lead capture ==================== -->
+    <section class="section contact" id="contact">
+      <div class="contact__inner">
+        <div>
+          <p class="overline reveal" data-copy="contact.overline"></p>
+          <h2 class="section__title reveal" data-copy="contact.headline"></h2>
+          <p class="contact__line reveal" data-copy="contact.line"></p>
+        </div>
+        <form class="form reveal" id="lead-form" novalidate>
+          <label><span data-copy="contact.labels.name"></span><input name="name" type="text" autocomplete="name" required /></label>
+          <label><span data-copy="contact.labels.email"></span><input name="email" type="email" autocomplete="email" required /></label>
+          <label><span data-copy="contact.labels.phone"></span><input name="phone" type="tel" autocomplete="tel" /></label>
+          <label><span data-copy="contact.labels.unit"></span>
+            <select name="unit">
+              <option data-copy="contact.labels.unitOptions.0"></option>
+              <option data-copy="contact.labels.unitOptions.1"></option>
+              <option data-copy="contact.labels.unitOptions.2"></option>
+              <option data-copy="contact.labels.unitOptions.3"></option>
+            </select>
+          </label>
+          <button class="btn" type="submit" data-copy="contact.labels.submit"></button>
+          <p class="form__success" id="form-success" data-copy="contact.labels.success" hidden></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== NexaWebDev demo banner ==================== -->
+    <section class="section nexa" id="nexa">
+      <p class="overline reveal">NexaWebDev</p>
+      <h2 class="section__title reveal" data-copy="demo.headline"></h2>
+      <p class="nexa__line reveal" data-copy="demo.line"></p>
+      <a class="btn btn--copper reveal" id="nexa-cta" href="https://nexaweb.dev/?utm_source=rivage-demo&utm_medium=demo-site&utm_campaign=scroll-story-construction#contact" data-copy="demo.cta"></a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <p class="footer__logo">RIVAGE</p>
+      <p data-copy="footer.blurb"></p>
+      <p class="footer__addr" data-copy="footer.address"></p>
+    </div>
+    <p class="footer__legal" data-copy="footer.legal"></p>
+  </footer>
+
+  <!-- Vendored libs (classic scripts, executed in order before the module below). No CDN. -->
+  <script src="js/vendor/gsap.min.js"></script>
+  <script src="js/vendor/ScrollTrigger.min.js"></script>
+  <script src="js/vendor/lenis.min.js"></script>
+  <script type="module" src="js/site.js"></script>
+</body>
+</html>
