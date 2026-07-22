@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { m, useReducedMotion } from 'motion/react';
+import { useState, useRef } from 'react';
+import { m, useMotionValue, useSpring, useMotionTemplate } from 'motion/react';
 import { Code2, ShoppingCart, Globe, Layers, ImageIcon, Eye } from 'lucide-react';
 import { useLanguage, type PortfolioItem, type PortfolioPlatform } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
@@ -136,8 +136,6 @@ export default function TechStack() {
 
 function PortfolioGroup({ title, sub, items, wide }: { title: string; sub: string; items: PortfolioItem[]; wide?: boolean }) {
   const { c } = useTheme();
-  const { t } = useLanguage();
-  const reduceMotion = useReducedMotion();
   if (items.length === 0) return null;
 
   return (
@@ -154,92 +152,138 @@ function PortfolioGroup({ title, sub, items, wide }: { title: string; sub: strin
 
       <div className={`grid md:grid-cols-2 ${wide ? 'lg:grid-cols-3' : 'lg:grid-cols-4'} gap-[18px]`}>
         {items.map((item, i) => (
-          <m.div
-            key={item.link}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.08 }}
-            className="group rounded-[6px] overflow-hidden transition-colors"
-            style={{ backgroundColor: c.bgCard, border: `1px solid ${c.borderSoft}` }}
-          >
-            <div className="relative aspect-video flex flex-col items-center justify-center gap-2 overflow-hidden" style={{ backgroundColor: c.bgTrack }}>
-              {item.image ? (
-                /* Screenshot wipes in like a buffer painting; reduced motion gets a crossfade.
-                   Hover zoom lives on this wrapper (CSS) because motion owns the img transform. */
-                <m.div
-                  className="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.03]"
-                  style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
-                  initial={reduceMotion ? { opacity: 0 } : { clipPath: 'inset(0 100% 0 0)' }}
-                  whileInView={reduceMotion ? { opacity: 1 } : { clipPath: 'inset(0 0% 0 0)' }}
-                  /* Top margin extends the zone infinitely upward: fast scrolls and anchor
-                     jumps that skip the viewport pass still count as "viewed" — otherwise
-                     the screenshot ships clipped to nothing (real bug, caught 2026-07-22). */
-                  viewport={{ once: true, margin: '100000px 0px -80px 0px' }}
-                  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
-                >
-                  <m.img
-                    src={item.image}
-                    alt={`${item.title} — ${item.category}`}
-                    className="object-cover w-full h-full"
-                    loading="lazy"
-                    decoding="async"
-                    initial={reduceMotion ? false : { scale: 1.12 }}
-                    whileInView={reduceMotion ? undefined : { scale: 1 }}
-                    viewport={{ once: true, margin: '100000px 0px -80px 0px' }}
-                    transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
-                  />
-                </m.div>
-              ) : (
-                <>
-                  <ImageIcon size={28} className="relative z-10" style={{ color: c.dim }} />
-                  <span className="font-mono text-xs relative z-10" style={{ color: c.dim }}>Coming Soon</span>
-                </>
-              )}
-              {item.link && (
-                <a
-                  href={item.link.startsWith('http') ? item.link : `https://${item.link}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`View ${item.title}`}
-                  className="absolute inset-0 z-20 flex items-center justify-center bg-black/0 group-hover:bg-black/50 transition-colors"
-                >
-                  <Eye size={22} aria-hidden="true" className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                </a>
-              )}
-              <div
-                className="absolute top-3 right-3 w-2 h-2 rounded-full animate-pulse z-30"
-                style={{ backgroundColor: c.green }}
-              />
-            </div>
-            <div className="p-4">
-              <p className="font-mono text-xs mb-1" style={{ color: c.blue }}>{item.category}</p>
-              <h4
-                className="font-semibold text-sm"
-                style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.textHead }}
-              >
-                {item.title}
-              </h4>
-              {item.study && (
-                <dl className="mt-3 space-y-2 border-t pt-3" style={{ borderColor: c.borderSoft }}>
-                  {([
-                    ['study.problem', item.study.problem],
-                    ['study.built', item.study.built],
-                    ['study.result', item.study.result],
-                  ] as const).map(([labelKey, text]) => (
-                    <div key={labelKey}>
-                      <dt className="font-mono text-[10px] uppercase tracking-wider mb-0.5" style={{ color: c.dim }}>
-                        {t(labelKey)}
-                      </dt>
-                      <dd className="text-[12px] leading-relaxed" style={{ color: c.muted }}>{text}</dd>
-                    </div>
-                  ))}
-                </dl>
-              )}
-            </div>
-          </m.div>
+          <PortfolioCard key={item.link} item={item} index={i} />
         ))}
       </div>
+    </m.div>
+  );
+}
+
+const TILT_MAX_X = 7;   // degrees toward/away from the viewer
+const TILT_MAX_Y = 10;  // degrees left/right
+const TILT_SPRING = { stiffness: 260, damping: 22, mass: 0.6 };
+
+/* Cursor-tracked 3D tilt: the card leans toward the pointer, the screenshot floats on a
+   nearer plane than the text, and a soft glare follows the cursor. Pointer-driven feedback
+   only — nothing self-plays, so it needs no reduced-motion branch. Touch devices never
+   fire pointerenter with a fine pointer, so they keep today's tap-through behavior. */
+function PortfolioCard({ item, index }: { item: PortfolioItem; index: number }) {
+  const { c } = useTheme();
+  const { t } = useLanguage();
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const rotateX = useSpring(useMotionValue(0), TILT_SPRING);
+  const rotateY = useSpring(useMotionValue(0), TILT_SPRING);
+  const glareX = useMotionValue(50);
+  const glareY = useMotionValue(50);
+  const glareOpacity = useSpring(useMotionValue(0), { stiffness: 200, damping: 30 });
+  const glare = useMotionTemplate`radial-gradient(360px circle at ${glareX}% ${glareY}%, ${c.blue}26, transparent 65%)`;
+
+  const handleMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== 'mouse' || !cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    rotateY.set(px * TILT_MAX_Y * 2);
+    rotateX.set(-py * TILT_MAX_X * 2);
+    glareX.set((px + 0.5) * 100);
+    glareY.set((py + 0.5) * 100);
+    glareOpacity.set(1);
+  };
+
+  const handleLeave = () => {
+    rotateX.set(0);
+    rotateY.set(0);
+    glareOpacity.set(0);
+  };
+
+  return (
+    <m.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.08 }}
+      style={{ perspective: 900 }}
+    >
+      <m.div
+        ref={cardRef}
+        onPointerMove={handleMove}
+        onPointerLeave={handleLeave}
+        className="group rounded-[6px] h-full"
+        style={{
+          backgroundColor: c.bgCard,
+          border: `1px solid ${c.borderSoft}`,
+          rotateX,
+          rotateY,
+          transformStyle: 'preserve-3d',
+        }}
+      >
+        <div
+          className="relative aspect-video flex flex-col items-center justify-center gap-2 overflow-hidden rounded-t-[5px]"
+          style={{ backgroundColor: c.bgTrack, transform: 'translateZ(26px)' }}
+        >
+          {item.image ? (
+            <img
+              src={item.image}
+              alt={`${item.title} — ${item.category}`}
+              className="absolute inset-0 object-cover w-full h-full"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <>
+              <ImageIcon size={28} className="relative z-10" style={{ color: c.dim }} />
+              <span className="font-mono text-xs relative z-10" style={{ color: c.dim }}>Coming Soon</span>
+            </>
+          )}
+          {item.link && (
+            <a
+              href={item.link.startsWith('http') ? item.link : `https://${item.link}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`View ${item.title}`}
+              className="absolute inset-0 z-20 flex items-center justify-center bg-black/0 group-hover:bg-black/50 transition-colors"
+            >
+              <Eye size={22} aria-hidden="true" className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+            </a>
+          )}
+          <div
+            className="absolute top-3 right-3 w-2 h-2 rounded-full animate-pulse z-30"
+            style={{ backgroundColor: c.green }}
+          />
+        </div>
+        <div className="p-4" style={{ transform: 'translateZ(12px)' }}>
+          <p className="font-mono text-xs mb-1" style={{ color: c.blue }}>{item.category}</p>
+          <h4
+            className="font-semibold text-sm"
+            style={{ fontFamily: "'Space Grotesk', sans-serif", color: c.textHead }}
+          >
+            {item.title}
+          </h4>
+          {item.study && (
+            <dl className="mt-3 space-y-2 border-t pt-3" style={{ borderColor: c.borderSoft }}>
+              {([
+                ['study.problem', item.study.problem],
+                ['study.built', item.study.built],
+                ['study.result', item.study.result],
+              ] as const).map(([labelKey, text]) => (
+                <div key={labelKey}>
+                  <dt className="font-mono text-[10px] uppercase tracking-wider mb-0.5" style={{ color: c.dim }}>
+                    {t(labelKey)}
+                  </dt>
+                  <dd className="text-[12px] leading-relaxed" style={{ color: c.muted }}>{text}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+        {/* Cursor glare — decorative, above the image plane, below the link overlay */}
+        <m.div
+          aria-hidden="true"
+          className="absolute inset-0 rounded-[6px] pointer-events-none z-10"
+          style={{ background: glare, opacity: glareOpacity, transform: 'translateZ(30px)' }}
+        />
+      </m.div>
     </m.div>
   );
 }
