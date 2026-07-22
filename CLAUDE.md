@@ -38,7 +38,7 @@ Single scrollable page: `Navbar → Hero → Problem → HowItWorks → TechStac
 - **UI primitives:** `src/components/` — Button, Badge (shadcn/ui), ContactForm
 - **i18n:** `language` toggle in Navbar; `t(key)`, `toggleLanguage()`, `tProblemLeft()`, `tProblemRight()` from `useLanguage()`
 - **Styling:** Tailwind v4 via `@tailwindcss/vite` — no `tailwind.config.ts`, tokens are CSS custom properties in `src/index.css` (OKLCH colors)
-- **Animations:** Framer Motion, `whileInView` + `viewport={{ once: true }}` in sections
+- **Animations:** Motion (renamed Framer Motion; `motion` package, import from `motion/react` — migrated 2026-07-22), `whileInView` + `viewport={{ once: true }}` in sections
 - **Path alias:** `@` → `src/`
 
 ## Analytics & Consent (added 2026-07-09)
