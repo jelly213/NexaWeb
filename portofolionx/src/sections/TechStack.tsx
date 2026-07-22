@@ -1,22 +1,30 @@
+import { useState } from 'react';
 import { m } from 'framer-motion';
 import { Code2, ShoppingCart, Globe, Layers, ImageIcon, Eye } from 'lucide-react';
-import { useLanguage, type PortfolioItem } from '../context/LanguageContext';
+import { useLanguage, type PortfolioItem, type PortfolioPlatform } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 
-const platformIcons = [Code2, ShoppingCart, Globe, Layers];
+// Index-aligned with platformItems in LanguageContext: Shopify leads.
+const platformIcons = [ShoppingCart, Code2, Globe, Layers];
 const platformGradients = [
-  'from-blue-600 to-indigo-600',
   'from-emerald-600 to-teal-600',
+  'from-blue-600 to-indigo-600',
   'from-orange-600 to-amber-600',
   'from-violet-600 to-purple-600',
 ];
 
+// Filter chips let a prospect self-select by platform (masterclass pattern). 'All' default:
+// the client group is entirely Shopify anyway, so the Shopify-led story survives the default
+// view while the premium demos stay visible without a tap.
+const FILTER_PLATFORMS: PortfolioPlatform[] = ['Shopify', 'Scroll Story', 'React / Next.js', 'WordPress', 'Webflow'];
+
 export default function TechStack() {
   const { t, tPlatformItems, tPortfolioItems } = useLanguage();
   const { c } = useTheme();
+  const [filter, setFilter] = useState<PortfolioPlatform | 'all'>('all');
 
   const platforms = tPlatformItems();
-  const portfolioItems = tPortfolioItems();
+  const portfolioItems = tPortfolioItems().filter(i => filter === 'all' || i.platform === filter);
 
   return (
     <section id="tech-stack" className="py-24" style={{ backgroundColor: c.bg, borderTop: `1px solid ${c.border}` }}>
@@ -80,13 +88,36 @@ export default function TechStack() {
           })}
         </div>
 
-        {/* Client work and demo builds are labelled separately on purpose. Three of these were
+        {/* Platform filter — prospects self-select the stack they're shopping for. */}
+        <div className="flex flex-wrap gap-2 mb-10" role="group" aria-label={t('stack.filter.all')}>
+          {(['all', ...FILTER_PLATFORMS] as const).map(p => {
+            const active = filter === p;
+            return (
+              <button
+                key={p}
+                onClick={() => setFilter(p)}
+                aria-pressed={active}
+                className="font-mono text-xs px-3 py-1.5 rounded-[4px] transition-colors cursor-pointer"
+                style={{
+                  border: `1px solid ${active ? c.blue : c.borderSoft}`,
+                  color: active ? c.blue : c.muted,
+                  backgroundColor: active ? `${c.blue}14` : 'transparent',
+                }}
+              >
+                {p === 'all' ? t('stack.filter.all') : p}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Client work and demo builds are labelled separately on purpose. Several of these were
             never sold to a client, and a prospect who clicks through to a *.pages.dev URL under
             a "recent deliveries" heading has every reason to distrust the rest of the page. */}
         <PortfolioGroup
           title={t('stack.clientwork.title')}
           sub={t('stack.clientwork.sub')}
           items={portfolioItems.filter(i => i.kind === 'client')}
+          wide
         />
 
         <div className="mt-14">
@@ -101,8 +132,9 @@ export default function TechStack() {
   );
 }
 
-function PortfolioGroup({ title, sub, items }: { title: string; sub: string; items: PortfolioItem[] }) {
+function PortfolioGroup({ title, sub, items, wide }: { title: string; sub: string; items: PortfolioItem[]; wide?: boolean }) {
   const { c } = useTheme();
+  const { t } = useLanguage();
   if (items.length === 0) return null;
 
   return (
@@ -117,7 +149,7 @@ function PortfolioGroup({ title, sub, items }: { title: string; sub: string; ite
         <p className="font-mono text-[13px]" style={{ color: c.dim }}>{sub}</p>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-[18px]">
+      <div className={`grid md:grid-cols-2 ${wide ? 'lg:grid-cols-3' : 'lg:grid-cols-4'} gap-[18px]`}>
         {items.map((item, i) => (
           <m.div
             key={item.link}
@@ -167,6 +199,22 @@ function PortfolioGroup({ title, sub, items }: { title: string; sub: string; ite
               >
                 {item.title}
               </h4>
+              {item.study && (
+                <dl className="mt-3 space-y-2 border-t pt-3" style={{ borderColor: c.borderSoft }}>
+                  {([
+                    ['study.problem', item.study.problem],
+                    ['study.built', item.study.built],
+                    ['study.result', item.study.result],
+                  ] as const).map(([labelKey, text]) => (
+                    <div key={labelKey}>
+                      <dt className="font-mono text-[10px] uppercase tracking-wider mb-0.5" style={{ color: c.dim }}>
+                        {t(labelKey)}
+                      </dt>
+                      <dd className="text-[12px] leading-relaxed" style={{ color: c.muted }}>{text}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
             </div>
           </m.div>
         ))}
